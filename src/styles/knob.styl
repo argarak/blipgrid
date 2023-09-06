@@ -1,0 +1,40 @@
+ui-knob
+  .outline
+    r calc(50% - 2px)
+    cx 50%
+    cy 50%
+    fill #111
+    stroke-width 4px
+    stroke #000
+
+  .marker
+    stroke-width 4px
+    stroke #aaa
+    transform-origin center center
+    stroke-linecap round
+
+    /* controls the percieved length of the marker without
+     * screwing with more trigonometry */
+    stroke-dashoffset -12
+    stroke-dasharray 20
+
+  svg
+    position relative
+    top 0
+    left 0
+    width 50px
+    height 50px
+
+  #knob
+    display inline-flex
+    flex-direction column
+    align-items center
+    margin 10px
+    width 50px
+
+  .label
+    margin-top 2px
+    user-select none
+    font-weight 500
+
+    text-align center

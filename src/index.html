@@ -1,0 +1,89 @@
+<!doctype html>
+<html class="no-js" lang="">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <title>groovebox</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <!-- <link rel="apple-touch-icon" href="/apple-touch-icon.png"> -->
+        <!-- Place favicon.ico in the root directory -->
+
+        <link rel="stylesheet" href="styles/main.styl" type="text/css" media="screen" />
+        <link rel="stylesheet" href="styles/knob.styl" type="text/css" media="screen" />
+        <link rel="stylesheet" href="../node_modules/@material-design-icons/font/index.css" type="text/css" media="screen" />
+
+    </head>
+    <body>
+        <!--[if lt IE 8]>
+            <p class="browserupgrade">
+            You are using an <strong>outdated</strong> browser. Please
+            <a href="http://browsehappy.com/">upgrade your browser</a> to improve
+            your experience.
+            </p>
+        <![endif]-->
+
+        <div id="mainContainer">
+            <div id="headContainer">
+                <button id="btnPlayPause"><span class="material-icons">pause</span></button>
+
+                <input id="bpmSlider" name="bpm" type="number" min="0" max="300" value="120"/>
+                <label for="bpm">bpm</label>
+
+                <input id="algomod1Slider" type="range" name="algomod1" min="0" max="16" />
+            </div>
+
+            <div id="editContainer">
+                <div id="sequenceGrid">
+                    <div class="noteBox"></div>
+                    <div class="noteBox"></div>
+                    <div class="noteBox"></div>
+                    <div class="noteBox"></div>
+                    <div class="noteBox"></div>
+                    <div class="noteBox"></div>
+                    <div class="noteBox"></div>
+                    <div class="noteBox"></div>
+                    <div class="noteBox"></div>
+                    <div class="noteBox"></div>
+                    <div class="noteBox"></div>
+                    <div class="noteBox"></div>
+                    <div class="noteBox"></div>
+                    <div class="noteBox"></div>
+                    <div class="noteBox"></div>
+                    <div class="noteBox"></div>
+                </div>
+
+                <div id="paramContainer">
+                    <label for="ampKnobs">amplitude</label>
+                    <div id="ampKnobs" class="knobSet">
+                        <ui-knob value="0"  marker="#66BB6A" label="attack"></ui-knob>
+                        <ui-knob value="50" marker="#29B6F6" label="decay"></ui-knob>
+                        <ui-knob value="25" marker="#FFA726" label="sustain"></ui-knob>
+                        <ui-knob value="10" marker="#EC407A" label="release"></ui-knob>
+                    </div>
+
+                    <label for="freqKnobs">frequency</label>
+                    <div id="freqKnobs" class="knobSet">
+                        <ui-knob value="0"  marker="#66BB6A" label="attack"></ui-knob>
+                        <ui-knob value="50" marker="#29B6F6" label="decay"></ui-knob>
+                        <ui-knob value="25" marker="#FFA726" label="sustain"></ui-knob>
+                        <ui-knob value="10" marker="#EC407A" label="release"></ui-knob>
+                    </div>
+
+                    <label for="noiseKnobs">noise</label>
+                    <div id="noiseKnobs" class="knobSet">
+                        <ui-knob value="50" marker="#29B6F6" label="decay"></ui-knob>
+                        <ui-knob value="50" marker="#29B6F6" label="cutoff"></ui-knob>
+                        <ui-knob value="50" marker="#29B6F6" label="resonance"></ui-knob>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <script type="module" src="main.js"></script>
+        <script type="module" src="patch.js"></script>
+        <script type="module" src="components/knob.js"></script>
+    </body>
+</html>

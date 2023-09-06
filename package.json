@@ -1,0 +1,10 @@
+{
+  "devDependencies": {
+    "@parcel/transformer-stylus": "2.9.3",
+    "parcel": "^2.9.3",
+    "tone": "^14.7.77"
+  },
+  "dependencies": {
+    "@material-design-icons/font": "^0.14.11"
+  }
+}
