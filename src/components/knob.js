@@ -9,13 +9,9 @@
 // TODO: improved prompt
 // keyboard support?
 
-import knobStyle from "../styles/knob.css";
-
 class Knob extends HTMLElement {
     constructor() {
         super();
-
-        console.log(knobStyle.marker);
 
         this.eventInput = new CustomEvent("input", { knob: this });
 
@@ -28,8 +24,6 @@ class Knob extends HTMLElement {
 
         this.default = this.getAttribute("value") ? parseInt(this.getAttribute("value")) : 0;
         this.pos = this.default;
-
-        //const shadow = this.attachShadow({mode: "open"});
 
         const container = document.createElement("div");
         container.id = "knob";
@@ -51,19 +45,10 @@ class Knob extends HTMLElement {
             </svg>
         `;
 
-        // const linkElem = document.createElement("link");
-        // linkElem.setAttribute("rel", "stylesheet");
-        // linkElem.setAttribute("href", "/styles/knob.css");
-
-        const style = document.createElement("style");
-
-        style.textContent = ``;
-
         this.label = document.createElement("div");
         this.label.classList.add("label");
         this.label.textContent = this.getAttribute("label");
 
-        this.appendChild(style);
         container.appendChild(this.label);
 
         this.marker = this.querySelector(".marker");
@@ -133,7 +118,6 @@ class Knob extends HTMLElement {
         this.dispatchEvent(this.eventInput);
 
         let deg = (this.pos / 100) * (1.5 * Math.PI) + (0.75 * Math.PI);
-        //this.debugCrap.textContent = `d: ${d} :: pos : ${this.pos} :: deg : ${deg/Math.PI}pi`;
 
         this.marker.setAttribute("x2", 50 + Math.cos(deg) * 40 + "%");
         this.marker.setAttribute("y2", 50 + Math.sin(deg) * 40 + "%");
