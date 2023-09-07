@@ -22,8 +22,17 @@ class Knob extends HTMLElement {
         this.maxSpeed = 4;
         this.wheelSpeed = 4;
 
-        this.default = this.getAttribute("value") ? parseInt(this.getAttribute("value")) : 0;
-        this.pos = this.default;
+        this.max = this.getAttribute("max") ? parseInt(this.getAttribute("max")) : 100;
+        this.min = this.getAttribute("min") ? parseInt(this.getAttribute("min")) : 0;
+
+        this.default = this.getAttribute("default") ? parseInt(this.getAttribute("default")) : 0;
+        this.value = this.default;
+
+        // pos is a value that must be between 0 and 100 becaus this dictates
+        // only the position of the knob, and not it's value. this is important
+        // because without this, moving a knob of a high min max difference
+        // would take a long time
+        this.pos = this.map(this.default, this.min, this.max, 0, 100);
 
         const container = document.createElement("div");
         container.id = "knob";
@@ -67,7 +76,7 @@ class Knob extends HTMLElement {
                 self.mouseOrigin = e.pageY;
                 window.inputKnob.update(d);
 
-                window.inputKnob.label.textContent = window.inputKnob.pos;
+                window.inputKnob.label.textContent = window.inputKnob.value;
             }
         });
 
@@ -87,12 +96,12 @@ class Knob extends HTMLElement {
         this.addEventListener("wheel", e => {
             e.preventDefault();
             self.update(e.deltaY > 0 ? -self.wheelSpeed : self.wheelSpeed);
-            self.label.textContent = self.pos;
+            self.label.textContent = self.value;
         });
 
         this.addEventListener("mousedown", e => {
             window.inputKnob = self;
-            self.label.textContent = self.pos;
+            self.label.textContent = self.value;
         });
 
         this.addEventListener("mouseleave", e => {
@@ -110,6 +119,10 @@ class Knob extends HTMLElement {
         });
     }
 
+    map(x, in_min, in_max, out_min, out_max) {
+        return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
+    }
+
     update(d) {
         if (this.pos + d > 100) this.pos = 100;
         else if (this.pos + d < 0) this.pos = 0;
@@ -121,6 +134,8 @@ class Knob extends HTMLElement {
 
         this.marker.setAttribute("x2", 50 + Math.cos(deg) * 40 + "%");
         this.marker.setAttribute("y2", 50 + Math.sin(deg) * 40 + "%");
+
+        this.value = this.map(this.pos, 0, 100, this.min, this.max);
     }
 }
 
