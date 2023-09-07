@@ -1,4 +1,5 @@
 import * as Tone from 'tone';
+import moduleControls from './objects/module-controls.json';
 
 class Patch {
   constructor() {
@@ -26,14 +27,34 @@ class Patch {
   updateControls() {
     let index = 0;
     for (let module of this.modules) {
-      let template = `<label for="knobsGroup${index}">${module.constructor.name}</label>
-                      <div id="knobsGroup${index}" class="knobSet">
-                        <ui-knob value="0"  marker="#66BB6A" label="attack"></ui-knob>
-                        <ui-knob value="50" marker="#29B6F6" label="decay"></ui-knob>
-                        <ui-knob value="25" marker="#FFA726" label="sustain"></ui-knob>
-                        <ui-knob value="10" marker="#EC407A" label="release"></ui-knob>
-                      </div>`;
-      this.paramContainer.innerHTML += template;
+      let groupLabel = document.createElement("label");
+      groupLabel.setAttribute("for", `knobsGroup${index}`);
+      groupLabel.innerText = module.constructor.name;
+
+      let knobsGroup = document.createElement("div");
+      knobsGroup.id = `knobsGroup${index}`;
+      knobsGroup.classList.add("knobSet");
+
+      let controls = module.constructor.name in moduleControls ?
+          moduleControls[module.constructor.name] : [];
+
+      for (let control of controls) {
+        let knob = document.createElement("ui-knob");
+        knob.setAttribute("min", control.min);
+        knob.setAttribute("max", control.max);
+        knob.setAttribute("default", control.default);
+        knob.setAttribute("label", control.label);
+
+        let self = this;
+        knob.addEventListener("input", e => {
+          module.frequency.value = e.target.value;
+        })
+
+        knobsGroup.appendChild(knob);
+      }
+
+      this.paramContainer.appendChild(groupLabel);
+      this.paramContainer.appendChild(knobsGroup);
       index++;
     }
   }
