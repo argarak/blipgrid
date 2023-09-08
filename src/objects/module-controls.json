@@ -1,10 +1,51 @@
 {
   "Filter": [
     {
+      "type": "knob",
       "label": "cutoff",
+      "property": "frequency",
       "min": 0,
       "max": 10000,
       "default": 2000
+    },
+
+    {
+      "type": "knob",
+      "label": "resonance",
+      "property": "Q",
+      "min": 0,
+      "max": 20,
+      "default": 0
+    }
+  ],
+
+  "Oscillator": [
+    {
+      "type": "knob",
+      "label": "volume",
+      "property": "volume",
+      "min": -80,
+      "max": -6,
+      "default": -8
+    },
+
+    {
+      "type": "knob",
+      "label": "frequency",
+      "property": "frequency",
+      "min": 0,
+      "max": 4000,
+      "default": 2000
+    },
+
+    {
+      "type": "select",
+      "label": "waveform",
+      "property": "type",
+      "select": [
+        "sine", "square", "triangle", "sawtooth"
+      ],
+      "default": "sine"
     }
   ]
 }

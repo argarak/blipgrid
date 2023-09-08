@@ -39,18 +39,40 @@ class Patch {
           moduleControls[module.constructor.name] : [];
 
       for (let control of controls) {
-        let knob = document.createElement("ui-knob");
-        knob.setAttribute("min", control.min);
-        knob.setAttribute("max", control.max);
-        knob.setAttribute("default", control.default);
-        knob.setAttribute("label", control.label);
 
-        let self = this;
-        knob.addEventListener("input", e => {
-          module.frequency.value = e.target.value;
-        })
+        switch (control.type) {
+          case "knob":
+            let knob = document.createElement("ui-knob");
+            knob.setAttribute("min", control.min);
+            knob.setAttribute("max", control.max);
+            knob.setAttribute("default", control.default);
+            knob.setAttribute("label", control.label);
 
-        knobsGroup.appendChild(knob);
+            let self = this;
+            knob.addEventListener("input", e => {
+              module[control.property].value = e.target.value;
+            });
+
+            knobsGroup.appendChild(knob);
+            break;
+          case "select":
+            let select = document.createElement("select");
+
+            for (let option of control.select) {
+              let optionElement = document.createElement("option");
+              optionElement.value = option;
+              optionElement.textContent = option;
+              select.appendChild(optionElement);
+            }
+
+            select.addEventListener("input", e => {
+              module[control.property] = e.target.value;
+            });
+
+            knobsGroup.appendChild(select);
+
+            break;
+        }
       }
 
       this.paramContainer.appendChild(groupLabel);
@@ -62,7 +84,7 @@ class Patch {
 
 let test = new Patch();
 test.loadModules([
-  new Tone.Noise(),
+  new Tone.Oscillator(),
   new Tone.Filter()
 ]);
 
