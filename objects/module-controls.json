@@ -1,4 +1,24 @@
 {
+  "AmplitudeEnvelope": [
+    {
+      "type": "knob",
+      "label": "attack",
+      "property": "attack",
+      "min": 0.01,
+      "max": 1,
+      "default": 0.01
+    },
+
+    {
+      "type": "knob",
+      "label": "decay",
+      "property": "decay",
+      "min": 0.01,
+      "max": 1,
+      "default": 0.5
+    }
+  ],
+
   "Filter": [
     {
       "type": "knob",

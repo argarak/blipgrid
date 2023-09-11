@@ -1,54 +1,7 @@
 import * as Tone from 'tone';
+import Patch from './patch.js';
 
 // TODO: note release
-
-class Module {
-  constructor() {}
-}
-
-const synth = new Tone.Synth().toDestination();
-
-const env = new Tone.AmplitudeEnvelope({
-  attack: 0.01,
-  decay: 0.21,
-  sustain: 0,
-  release: 1.2
-}).toDestination();
-
-const osc = new Tone.Oscillator({
-  partials: [3, 2, 1],
-  type: "custom",
-  frequency: "C#4",
-  volume: -8,
-}).connect(env).start();
-
-const osc2 = new Tone.Oscillator({
-  partials: [3, 2, 1],
-  type: "custom",
-  frequency: "C#4",
-  volume: -8,
-}).connect(env).start();
-
-const freqEnv = new Tone.FrequencyEnvelope({
-  attack: 0,
-  decay: 0.2,
-  sustain: 0.1,
-  release: 0.2,
-  baseFrequency: "C0",
-  octaves: 3
-});
-freqEnv.connect(osc.frequency);
-
-const noiseEnv = new Tone.AmplitudeEnvelope({
-  attack: 0.01,
-  decay: 0.21,
-  sustain: 0,
-  release: 0
-}).toDestination();
-
-const noise = new Tone.Noise("white");
-const filter = new Tone.Filter(1500, "lowpass");
-noise.chain(filter, noiseEnv, Tone.Destination).start();
 
 let sequence_length = 16;
 
@@ -107,16 +60,36 @@ document.addEventListener("DOMContentLoaded", e => {
 
   noteboxes[(index + 15) % 16].classList.toggle("marker");
 
+  document.createElement("ui-knob");
+
+  let test = new Patch();
+  test.loadModules([
+    new Tone.Oscillator(),
+    new Tone.Filter(),
+    new Tone.AmplitudeEnvelope()
+  ]);
+
+  test.addConnect(test.modules[0],
+                  test.modules[1])
+
+  test.addConnect(test.modules[1],
+                  test.modules[2])
+
+  test.modules[2].sustain = 0;
+
+  test.modules[0].start();
+  test.modules[2].toDestination();
+
   Tone.Transport.scheduleRepeat((time) => {
     noteboxes[index].classList.toggle("marker");
 
     noteboxes[(index + 15) % 16].classList.toggle("marker");
 
     if (noteboxes[index].classList.contains("active")) {
-      env.triggerAttack(time);
-      freqEnv.triggerAttack(time);
-      noiseEnv.triggerAttack(time);
-      freqEnv.triggerRelease(time + 1);
+
+      for (let module of test.modules) {
+        if (module.name === "AmplitudeEnvelope") module.triggerAttack(time);
+      }
     }
 
     index = (index + 1) % 16;
