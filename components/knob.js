@@ -1,4 +1,4 @@
-import * as knobStyle from '/styles/knob.styl';
+import * as knobStyle from "/styles/knob.styl?inline";
 
 // TODO: disable ability (cannot be modified)
 // TODO: custom events : input, change
@@ -19,8 +19,8 @@ class Knob extends HTMLElement {
          * observer looks for changes in element attribute to updates class
          * properties, reload the text element and set the knob position
          */
-        let observer = new MutationObserver(function(mutations) {
-            mutations.forEach(function(mutation) {
+        let observer = new MutationObserver(mutations => {
+            mutations.forEach(() => {
                 self.max = self.getAttribute("max") ?
                     parseFloat(self.getAttribute("max")) : 100;
 
@@ -75,7 +75,7 @@ class Knob extends HTMLElement {
         // would take a long time
         this.pos = this.map(this.default, this.min, this.max, 0, 100);
 
-        let shadow = this.attachShadow({mode: 'open'});
+        let shadow = this.attachShadow({mode: "open"});
 
         const container = document.createElement("div");
         container.id = "knob";
@@ -131,13 +131,13 @@ class Knob extends HTMLElement {
             }
         });
 
-        window.addEventListener("mouseup", e => {
+        window.addEventListener("mouseup", () => {
             window.inputKnob = null;
             self.mouseOrigin = null;
             self.labelElement.textContent = self.label;
         });
 
-        this.addEventListener("dblclick", e => {
+        this.addEventListener("dblclick", () => {
             self.pos = self.default;
             self.update(0);
         });
@@ -148,12 +148,12 @@ class Knob extends HTMLElement {
             self.labelElement.textContent = self.value.toFixed(2);
         });
 
-        this.addEventListener("mousedown", e => {
+        this.addEventListener("mousedown", () => {
             window.inputKnob = self;
             self.labelElement.textContent = self.value.toFixed(2);
         });
 
-        this.addEventListener("mouseleave", e => {
+        this.addEventListener("mouseleave", () => {
             self.labelElement.textContent = self.label;
         });
 
