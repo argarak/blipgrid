@@ -2,7 +2,7 @@
 
 m-font = "GohuFont uni-14 Nerd Font Propo"
 m-font-size = 14px
-m-border-radius = 7px
+m-border-radius = 0px
 
 h1
   color #f44336
@@ -51,7 +51,7 @@ input[type="number"]
 
 #headContainer
   padding 10px
-  background #111111
+  background #000
 
   display flex
   flex-direction row
@@ -65,11 +65,12 @@ input[type="number"]
   align-items center
   justify-content center
   flex-direction row
-  background-color #212121
+  background-color #111
   height 100%
 
 #paramContainer
-  background #0004
+  background #0000
+  border-left 2px solid #000
   height 100%
 
   flex 1
@@ -91,22 +92,22 @@ input[type="number"]
 
   display grid
   grid-template-columns repeat(4, 52px)
-  grid-auto-rows minmax(42px, auto)
+  grid-auto-rows minmax(0px, auto)
   justify-content center
 
 .noteBox
   width 32px
   height 32px
-  background-color rgb(66, 66, 66)
+  background-color #222
   border-radius m-border-radius
-  margin 10px
+  margin 8px 10px
   border 2px solid rgb(66, 66, 66)
-  transition all .1s ease-in-out
+  transition all .1s linear
 
   &.active
     background-color rgb(67, 160, 71)
     border-color rgb(67, 160, 71)
-    box-shadow 0px 0px 10px rgba(67, 160, 71, 0.5)
+    //box-shadow 0px 0px 10px rgba(67, 160, 71, 0.5)
 
   &.marker
     border-bottom-color #BDBDBD

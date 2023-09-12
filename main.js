@@ -3,10 +3,10 @@ import Patch from "./patch.js";
 
 // TODO: note release
 
-let sequence_length = 16;
+let sequence_length = 32;
 
 function cool_algo1(t, mod1) {
-    return Math.sin(t ** mod1) > mod1 / 16;
+    return Math.sin(t ** mod1*2) > mod1 / sequence_length;
 }
 
 function generate_sequence(algo, mod1) {
@@ -52,7 +52,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     let index = 0;
 
-    noteboxes[(index + 15) % 16].classList.toggle("marker");
+    noteboxes[(index + (sequence_length - 1)) % sequence_length].classList.toggle("marker");
 
     document.createElement("ui-knob");
 
@@ -77,7 +77,7 @@ document.addEventListener("DOMContentLoaded", () => {
     Tone.Transport.scheduleRepeat((time) => {
         noteboxes[index].classList.toggle("marker");
 
-        noteboxes[(index + 15) % 16].classList.toggle("marker");
+        noteboxes[(index + (sequence_length - 1)) % sequence_length].classList.toggle("marker");
 
         if (noteboxes[index].classList.contains("active")) {
 
@@ -86,7 +86,7 @@ document.addEventListener("DOMContentLoaded", () => {
             }
         }
 
-        index = (index + 1) % 16;
+        index = (index + 1) % sequence_length;
     }, "16n");
 
     Tone.Transport.start();
