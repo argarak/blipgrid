@@ -79,6 +79,8 @@ class Patch {
             knobsGroup.id = `knobsGroup${index}`;
             knobsGroup.classList.add("knobSet");
 
+            knobsGroup.appendChild(groupLabel);
+
             let controls = moduleName in moduleControls ?
                 moduleControls[moduleName] : [];
 
@@ -88,7 +90,6 @@ class Patch {
                 );
             }
 
-            this.paramContainer.appendChild(groupLabel);
             this.paramContainer.appendChild(knobsGroup);
             index++;
         }

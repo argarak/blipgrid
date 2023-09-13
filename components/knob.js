@@ -112,7 +112,7 @@ class Knob extends HTMLElement {
 
         this.marker = shadow.querySelector(".marker");
         this.marker.style.stroke = this.getAttribute("marker") ?
-            this.getAttribute("marker") : "#aaa";
+            this.getAttribute("marker") : "#444";
 
         window.addEventListener("mousemove", e => {
             if (window.inputKnob) {
