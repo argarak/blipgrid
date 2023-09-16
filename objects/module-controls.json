@@ -19,6 +19,53 @@
     }
   ],
 
+  "FrequencyEnvelope": [
+    {
+      "type": "knob",
+      "label": "attack",
+      "property": "attack",
+      "min": 0.01,
+      "max": 1,
+      "default": 0.01
+    },
+
+    {
+      "type": "knob",
+      "label": "decay",
+      "property": "decay",
+      "min": 0.01,
+      "max": 1,
+      "default": 0.5
+    },
+
+    {
+      "type": "knob",
+      "label": "sustain",
+      "property": "sustain",
+      "min": 0,
+      "max": 1,
+      "default": 0.5
+    },
+
+    {
+      "type": "knob",
+      "label": "octave",
+      "property": "octave",
+      "min": 0,
+      "max": 5,
+      "default": 1
+    },
+
+    {
+      "type": "knob",
+      "label": "base",
+      "property": "baseFrequency",
+      "min": 0,
+      "max": 500,
+      "default": 200
+    }
+  ],
+
   "Filter": [
     {
       "type": "knob",
@@ -36,6 +83,48 @@
       "min": 0,
       "max": 20,
       "default": 0
+    },
+
+    {
+      "type": "select",
+      "label": "type",
+      "property": "type",
+      "select": [
+        "lowpass", "highpass", "bandpass",
+        "lowshelf", "highshelf", "notch",
+        "allpass", "peaking"
+      ],
+      "default": "lowpass"
+    }
+  ],
+
+  "Noise": [
+    {
+      "type": "knob",
+      "label": "volume",
+      "property": "volume",
+      "min": -80,
+      "max": -6,
+      "default": -8
+    },
+
+    {
+      "type": "knob",
+      "label": "frequency",
+      "property": "playbackRate",
+      "min": 0,
+      "max": 10,
+      "default": 0
+    },
+
+    {
+      "type": "select",
+      "label": "waveform",
+      "property": "type",
+      "select": [
+        "white", "brown", "pink"
+      ],
+      "default": "white"
     }
   ],
 

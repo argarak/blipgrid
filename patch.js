@@ -68,8 +68,7 @@ class Patch {
         for (let module of this.modules) {
             // for some reason, the module name can have a underscore at the start,
             // if it does, then we slice it off
-            let moduleName = module.constructor.name.startsWith("_") ?
-                module.constructor.name.slice(1) : module.constructor.name;
+            let moduleName = module.name;
 
             let groupLabel = document.createElement("label");
             groupLabel.setAttribute("for", `knobsGroup${index}`);

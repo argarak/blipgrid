@@ -104,7 +104,7 @@ input[type="number"]
 
 #editContainer
   display flex
-  align-items center
+  align-items start
   justify-content center
   flex-direction row
   background-color #000
@@ -125,16 +125,14 @@ input[type="number"]
 #paramContainer
   background #0000
   border-left 0px solid #222
-  height 100%
 
   flex 1
   display grid
 
-  grid-template-columns repeat(3, 2fr)
+  grid-template-columns repeat(3, min-content)
 
   flex-direction column
-  justify-content center
-  align-items start
+  justify-content right
 
   label
     text-decoration underline
@@ -144,6 +142,7 @@ input[type="number"]
   display flex
   margin 10px
   align-items center
+  width 150px
 
   flex-direction column
   border m-border-size solid #222

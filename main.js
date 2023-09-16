@@ -58,21 +58,44 @@ document.addEventListener("DOMContentLoaded", () => {
 
     let test = new Patch();
     test.loadModules([
-        new Tone.Oscillator(),
-        new Tone.Filter(),
-        new Tone.AmplitudeEnvelope()
+        new Tone.FrequencyEnvelope(), // 0
+        new Tone.Oscillator(),        // 1
+        new Tone.Oscillator(),        // 2
+        new Tone.AmplitudeEnvelope(), // 3
+        new Tone.AmplitudeEnvelope(), // 4
+        new Tone.Noise(),             // 5
+        new Tone.Filter()             // 6
     ]);
 
-    test.addConnect(test.modules[0],
-        test.modules[1]);
+    // test.addConnect(test.modules[0],
+    //     test.modules[1]);
 
-    test.addConnect(test.modules[1],
-        test.modules[2]);
+    // test.addConnect(test.modules[1],
+    //     test.modules[2]);
 
-    test.modules[2].sustain = 0;
+    // test.modules[2].sustain = 0;
 
-    test.modules[0].start();
-    test.modules[2].toDestination();
+    // test.modules[0].start();
+    // test.modules[2].toDestination();
+
+    test.addConnect(test.modules[0], test.modules[1].frequency);
+    test.addConnect(test.modules[0], test.modules[1].frequency);
+
+    test.addConnect(test.modules[1], test.modules[3]);
+    test.addConnect(test.modules[2], test.modules[3]);
+
+    test.addConnect(test.modules[5], test.modules[4]);
+    test.addConnect(test.modules[4], test.modules[6]);
+
+    test.modules[1].start();
+    test.modules[2].start();
+    test.modules[5].start();
+
+    test.modules[3].toDestination();
+    test.modules[6].toDestination();
+
+    test.modules[3].sustain = 0;
+    test.modules[4].sustain = 0;
 
     Tone.Transport.scheduleRepeat((time) => {
         noteboxes[index].classList.toggle("marker");
@@ -83,6 +106,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
             for (let module of test.modules) {
                 if (module.name === "AmplitudeEnvelope") module.triggerAttack(time);
+                if (module.name === "FrequencyEnvelope") module.triggerAttack(time);
             }
         }
 
