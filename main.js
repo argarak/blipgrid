@@ -52,9 +52,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     let index = 0;
 
-    noteboxes[(index + (sequence_length - 1)) % sequence_length].classList.toggle("marker");
-
-    document.createElement("ui-knob");
+    //noteboxes[(index + (sequence_length - 1)) % sequence_length].classList.toggle("marker");
 
     let test = new Patch();
     test.loadModules([

@@ -160,28 +160,3 @@ input[type="number"]
     color #fff
     border-radius 20px
     padding 2px 10px
-
-#sequenceGrid
-  flex 1
-
-  display grid
-  grid-template-columns repeat(4, 52px)
-  grid-auto-rows minmax(0px, auto)
-  justify-content center
-
-.noteBox
-  width 32px
-  height 32px
-  background-color #222
-  border-radius m-border-radius
-  margin 8px 10px
-  border 1px solid rgb(66, 66, 66)
-  transition all .1s linear
-
-  &.active
-    background-color note-active-color
-    border-color note-active-color
-    //box-shadow 0px 0px 10px rgba(67, 160, 71, 0.5)
-
-  &.marker
-    border-color #fff
