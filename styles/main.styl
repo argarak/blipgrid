@@ -1,11 +1,6 @@
 //@import '@material-design-icons/font'
-
-m-font = "GohuFont uni-14 Nerd Font Propo"
-m-font-size = 14px
-m-border-radius = 0px
-
-m-border-size = 1px
-note-active-color = #aaa
+@require "defines.styl"
+@require "input-common.styl"
 
 h1
   color #f44336
@@ -42,41 +37,6 @@ button
 
 .hfill
   width 100%
-
-input[type="range"]
-  appearance none
-  background #444
-  height 70%
-
-  &::-webkit-slider-thumb
-    -webkit-appearance none
-    appearance none
-    background #222
-    border none
-
-  &::-moz-range-thumb
-    background #222
-    border none
-    border-radius 0px
-    height 100%
-    width 5px
-
-input[type="number"]
-  -moz-appearance textfield
-  appearance textfield
-
-  border none
-  background #fff1
-  color #fff
-  padding 5px
-  border-radius m-border-radius
-
-  width 30px
-  text-align center
-  font-family m-font
-  font-size m-font-size
-
-  margin-right 5px
 
 #headContainer
   padding 5px

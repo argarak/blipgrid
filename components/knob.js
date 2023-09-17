@@ -30,8 +30,6 @@ class Knob extends HTMLElement {
                 self.default = self.getAttribute("default") ?
                     parseFloat(self.getAttribute("default")) : 0;
 
-                console.log(self.default);
-
                 self.value = self.default;
                 self.pos = self.map(self.value, self.min, self.max, 0, 100);
                 self.update(0);

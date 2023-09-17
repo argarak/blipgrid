@@ -1,17 +1,12 @@
-
-m-font = "GohuFont uni-14 Nerd Font Propo"
-m-font-size = 14px
-m-border-radius = 0px
-
-m-border-size = 1px
-note-active-color = #aaa
+@require "defines.styl"
+@require "input-common.styl"
 
 #sequenceGrid
   flex 1
 
   display grid
   grid-template-columns repeat(4, 52px)
-  grid-auto-rows minmax(0px, auto)
+  grid-template-rows repeat(16, 50px)
   justify-content center
 
   height 800px
