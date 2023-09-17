@@ -1,9 +1,24 @@
 import * as sequencerStyle from "/styles/sequencer.styl?inline";
+import defaultAlgorithms from "../sequence-algorithms.js";
 
 class Sequencer extends HTMLElement {
+    #sequenceLength;
+
     constructor() {
         super();
         let self = this;
+
+        // all algorithms registered by this sequencer
+        this.algorithms = defaultAlgorithms;
+
+        // select first algorithm by default
+        this.algorithm = this.algorithms[0];
+
+        // holds sequence modulation values
+        this.mod = [32];
+
+        // holds list of notebox DOM elements
+        this.noteboxes = [];
 
         let shadow = this.attachShadow({mode: "open"});
 
@@ -16,7 +31,6 @@ class Sequencer extends HTMLElement {
         shadow.appendChild(container);
 
         this.container = container;
-        this.sequenceLength = 64;
 
         const steps = document.createElement("input");
         steps.id = "seqSteps";
@@ -33,22 +47,58 @@ class Sequencer extends HTMLElement {
         stepsLabel.setAttribute("for", "seqSteps");
         stepsLabel.textContent = "steps";
 
+        this.sequenceLength = 64;
+
         shadow.appendChild(steps);
         shadow.appendChild(stepsLabel);
     }
 
     set sequenceLength(length) {
-        this.populateGrid(length);
+        this.#sequenceLength = length;
+        this.populateGrid();
     }
 
-    populateGrid(length) {
+    registerAlgorithm(name, fn) {
+        this.algorithms.push({
+            "name": name,
+            "fn": fn
+        });
+    }
+
+    generate_sequence() {
+        let sequence = [];
+        for (let index = 0; index < this.#sequenceLength; index++) {
+            sequence.push(this.algorithm.fn(index, this.#sequenceLength, this.mod));
+        }
+        return sequence;
+    }
+
+    update() {
+        let new_sequence = this.generate_sequence();
+        console.log(this.noteboxes);
+
+        let index = 0;
+        for (let notebox of this.noteboxes) {
+            if (new_sequence[index]) notebox.classList.add("active");
+            else notebox.classList.remove("active");
+            ++index;
+        }
+    }
+
+    populateGrid() {
+        console.log(this.#sequenceLength);
+
+        this.noteboxes = [];
         this.container.innerHTML = "";
 
-        for (let noteIndex = 0; noteIndex < length; noteIndex++) {
+        for (let noteIndex = 0; noteIndex < this.#sequenceLength; noteIndex++) {
             let noteBox = document.createElement("div");
             noteBox.classList.add("noteBox");
             this.container.appendChild(noteBox);
+            this.noteboxes.push(noteBox);
         }
+
+        this.update();
     }
 }
 

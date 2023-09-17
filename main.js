@@ -3,29 +3,6 @@ import Patch from "./patch.js";
 
 // TODO: note release
 
-let sequence_length = 32;
-
-function cool_algo1(t, mod1) {
-    return Math.sin(t ** mod1*2) > mod1 / sequence_length;
-}
-
-function generate_sequence(algo, mod1) {
-    let sequence = [];
-    for (let index = 0; index < sequence_length; index++) {
-        sequence.push(algo(index, mod1));
-    }
-    return sequence;
-}
-
-function update_sequence(noteboxes, new_sequence) {
-    let index = 0;
-    for (let notebox of noteboxes) {
-        if (new_sequence[index]) notebox.classList.add("active");
-        else notebox.classList.remove("active");
-        ++index;
-    }
-}
-
 document.addEventListener("DOMContentLoaded", () => {
     document.getElementById("btnPlayPause").addEventListener("click", () => {
         Tone.start();
@@ -44,12 +21,6 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-    let mod1 = document.getElementById("algomod1Slider");
-
-    mod1.addEventListener("input", e => {
-        update_sequence(noteboxes, generate_sequence(cool_algo1, e.target.value));
-    });
-
     let index = 0;
 
     //noteboxes[(index + (sequence_length - 1)) % sequence_length].classList.toggle("marker");
@@ -64,17 +35,6 @@ document.addEventListener("DOMContentLoaded", () => {
         new Tone.Noise(),             // 5
         new Tone.Filter()             // 6
     ]);
-
-    // test.addConnect(test.modules[0],
-    //     test.modules[1]);
-
-    // test.addConnect(test.modules[1],
-    //     test.modules[2]);
-
-    // test.modules[2].sustain = 0;
-
-    // test.modules[0].start();
-    // test.modules[2].toDestination();
 
     test.addConnect(test.modules[0], test.modules[1].frequency);
     test.addConnect(test.modules[0], test.modules[1].frequency);
