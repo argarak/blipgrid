@@ -21,10 +21,6 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-    let index = 0;
-
-    //noteboxes[(index + (sequence_length - 1)) % sequence_length].classList.toggle("marker");
-
     let test = new Patch();
     test.loadModules([
         new Tone.FrequencyEnvelope(), // 0
@@ -55,20 +51,16 @@ document.addEventListener("DOMContentLoaded", () => {
     test.modules[3].sustain = 0;
     test.modules[4].sustain = 0;
 
+    let sequencer = document.querySelector("ui-sequencer");
+
     Tone.Transport.scheduleRepeat((time) => {
-        noteboxes[index].classList.toggle("marker");
-
-        noteboxes[(index + (sequence_length - 1)) % sequence_length].classList.toggle("marker");
-
-        if (noteboxes[index].classList.contains("active")) {
-
+        let trig = sequencer.next();
+        if (trig) {
             for (let module of test.modules) {
                 if (module.name === "AmplitudeEnvelope") module.triggerAttack(time);
                 if (module.name === "FrequencyEnvelope") module.triggerAttack(time);
             }
         }
-
-        index = (index + 1) % sequence_length;
     }, "16n");
 
     Tone.Transport.start();

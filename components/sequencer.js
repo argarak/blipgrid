@@ -20,15 +20,18 @@ class Sequencer extends HTMLElement {
         // holds list of notebox DOM elements
         this.noteboxes = [];
 
-        let shadow = this.attachShadow({mode: "open"});
+        // holds currently programmed sequencer
+        this.sequence = [];
+
+        this.shadow = this.attachShadow({mode: "open"});
 
         const style = document.createElement("style");
         style.textContent = sequencerStyle.default;
-        shadow.appendChild(style);
+        this.shadow.appendChild(style);
 
         const container = document.createElement("div");
         container.id = "sequenceGrid";
-        shadow.appendChild(container);
+        this.shadow.appendChild(container);
 
         this.container = container;
 
@@ -49,8 +52,21 @@ class Sequencer extends HTMLElement {
 
         this.sequenceLength = 64;
 
-        shadow.appendChild(steps);
-        shadow.appendChild(stepsLabel);
+        // keeps track of the current step position
+        this.step = this.#sequenceLength;
+
+        this.shadow.appendChild(steps);
+        this.shadow.appendChild(stepsLabel);
+    }
+
+    next() {
+        this.step = (this.step + 1) % this.#sequenceLength;
+
+        let markerStep = this.shadow.querySelector(".marker");
+        if (markerStep) markerStep.classList.remove("marker");
+
+        this.noteboxes[this.step].classList.add("marker");
+        return this.sequence[this.step];
     }
 
     set sequenceLength(length) {
@@ -74,12 +90,11 @@ class Sequencer extends HTMLElement {
     }
 
     update() {
-        let new_sequence = this.generate_sequence();
-        console.log(this.noteboxes);
+        this.sequence = this.generate_sequence();
 
         let index = 0;
         for (let notebox of this.noteboxes) {
-            if (new_sequence[index]) notebox.classList.add("active");
+            if (this.sequence[index]) notebox.classList.add("active");
             else notebox.classList.remove("active");
             ++index;
         }
