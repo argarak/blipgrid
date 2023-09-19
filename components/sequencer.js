@@ -29,6 +29,22 @@ class Sequencer extends HTMLElement {
         style.textContent = sequencerStyle.default;
         this.shadow.appendChild(style);
 
+        this.algorithmSelect = document.createElement("select");
+        this.algorithmSelect.id = "algorithmSelect";
+        this.populateAlgorithmSelect();
+        this.shadow.appendChild(this.algorithmSelect);
+
+        this.algorithmSelect.addEventListener("input", e => {
+            self.algorithm = self.algorithms[e.target.value];
+            self.update();
+            self.algorithmControls();
+        });
+
+        let algorithmSelectLabel = document.createElement("label");
+        algorithmSelectLabel.setAttribute("for", "algorithmSelect");
+        algorithmSelectLabel.textContent = "algorithm";
+        this.shadow.appendChild(algorithmSelectLabel);
+
         const container = document.createElement("div");
         container.id = "sequenceGrid";
         this.shadow.appendChild(container);
@@ -55,8 +71,11 @@ class Sequencer extends HTMLElement {
         // keeps track of the current step position
         this.step = this.#sequenceLength;
 
-        this.shadow.appendChild(steps);
-        this.shadow.appendChild(stepsLabel);
+        let stepsContainer = document.createElement("div");
+        stepsContainer.id = "stepsContainer";
+        stepsContainer.appendChild(steps);
+        stepsContainer.appendChild(stepsLabel);
+        this.shadow.appendChild(stepsContainer);
 
         this.knobContainer = document.createElement("div");
         this.algorithmControls();
@@ -91,10 +110,12 @@ class Sequencer extends HTMLElement {
     }
 
     algorithmControls() {
+        this.knobContainer.innerHTML = "";
+
         for (let modIndex = 0; modIndex < this.algorithm.mods; modIndex++) {
             let knob = document.createElement("ui-knob");
             knob.setAttribute("min", 0);
-            knob.setAttribute("max", 100);
+            knob.setAttribute("max", 10);
             knob.setAttribute("default", 0);
             knob.setAttribute("label", `mod${modIndex}`);
 
@@ -102,6 +123,16 @@ class Sequencer extends HTMLElement {
                 this.onControlInput(e, modIndex));
 
             this.knobContainer.appendChild(knob);
+        }
+    }
+
+    populateAlgorithmSelect() {
+        this.algorithmSelect.innerHTML = "";
+        for (let alIndex = 0; alIndex < this.algorithms.length; alIndex++) {
+            let optionElement = document.createElement("option");
+            optionElement.value = alIndex;
+            optionElement.textContent = this.algorithms[alIndex].name;
+            this.algorithmSelect.appendChild(optionElement);
         }
     }
 
