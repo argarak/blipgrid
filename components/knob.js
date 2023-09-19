@@ -67,7 +67,7 @@ class Knob extends HTMLElement {
 
         this.value = this.default;
 
-        // pos is a value that must be between 0 and 100 becaus this dictates
+        // pos is a value that must be between 0 and 100 because this dictates
         // only the position of the knob, and not it's value. this is important
         // because without this, moving a knob of a high min max difference
         // would take a long time

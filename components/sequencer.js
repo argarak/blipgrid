@@ -1,6 +1,14 @@
 import * as sequencerStyle from "/styles/sequencer.styl?inline";
 import defaultAlgorithms from "../sequence-algorithms.js";
 
+/**
+ * sequencer web component
+ * creates a sequencer which consists of
+ * - a grid of triggers (by default 64)
+ * - a select element to choose the algorithm used to generate the sequence
+ * - an input element to change the number of steps the sequencer has
+ * - a set of controls to manipulate the sequence algorithm
+ */
 class Sequencer extends HTMLElement {
     #sequenceLength;
 
@@ -25,10 +33,14 @@ class Sequencer extends HTMLElement {
 
         this.shadow = this.attachShadow({mode: "open"});
 
+        // create the style element which contains all local CSS for this
+        // component
         const style = document.createElement("style");
         style.textContent = sequencerStyle.default;
         this.shadow.appendChild(style);
 
+        // create the algorithm select element to choose the algorithm the
+        // sequencer will use
         this.algorithmSelect = document.createElement("select");
         this.algorithmSelect.id = "algorithmSelect";
         this.populateAlgorithmSelect();
@@ -45,12 +57,13 @@ class Sequencer extends HTMLElement {
         algorithmSelectLabel.textContent = "algorithm";
         this.shadow.appendChild(algorithmSelectLabel);
 
+        // create a container for the sequence grid
         const container = document.createElement("div");
         container.id = "sequenceGrid";
         this.shadow.appendChild(container);
-
         this.container = container;
 
+        // create an input to change the number of steps in the sequence
         const steps = document.createElement("input");
         steps.id = "seqSteps";
         steps.type = "number";
@@ -69,6 +82,8 @@ class Sequencer extends HTMLElement {
         this.sequenceLength = 64;
 
         // keeps track of the current step position
+        // initially at the end of the sequence so that the sequence can start
+        // at step zero when the first next() method is called
         this.step = this.#sequenceLength;
 
         let stepsContainer = document.createElement("div");
@@ -77,11 +92,26 @@ class Sequencer extends HTMLElement {
         stepsContainer.appendChild(stepsLabel);
         this.shadow.appendChild(stepsContainer);
 
+        // create container to hold algorithm specific controls
         this.knobContainer = document.createElement("div");
         this.algorithmControls();
         this.shadow.appendChild(this.knobContainer);
     }
 
+    /**
+     * setter for the private sequenceLength property. automatically
+     * updates the note grid when this property is changed.
+     * @param length : new integer length (must be less than or equal to 64)
+     **/
+    set sequenceLength(length) {
+        this.#sequenceLength = length;
+        this.populateGrid();
+    }
+
+    /**
+     * increments the sequencer, looping back to the start if necessary
+     * @return whether the next step is active or inactive
+     **/
     next() {
         this.step = (this.step + 1) % this.#sequenceLength;
 
@@ -92,16 +122,13 @@ class Sequencer extends HTMLElement {
         return this.sequence[this.step];
     }
 
-    set sequenceLength(length) {
-        this.#sequenceLength = length;
-        this.populateGrid();
-    }
-
     registerAlgorithm(name, fn) {
         this.algorithms.push({
             "name": name,
             "fn": fn
         });
+
+        this.populateAlgorithmSelect();
     }
 
     onControlInput(e, modIndex) {
