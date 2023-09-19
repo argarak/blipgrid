@@ -57,6 +57,10 @@ class Sequencer extends HTMLElement {
 
         this.shadow.appendChild(steps);
         this.shadow.appendChild(stepsLabel);
+
+        this.knobContainer = document.createElement("div");
+        this.algorithmControls();
+        this.shadow.appendChild(this.knobContainer);
     }
 
     next() {
@@ -79,6 +83,26 @@ class Sequencer extends HTMLElement {
             "name": name,
             "fn": fn
         });
+    }
+
+    onControlInput(e, modIndex) {
+        this.mod[modIndex] = e.target.value;
+        this.update();
+    }
+
+    algorithmControls() {
+        for (let modIndex = 0; modIndex < this.algorithm.mods; modIndex++) {
+            let knob = document.createElement("ui-knob");
+            knob.setAttribute("min", 0);
+            knob.setAttribute("max", 100);
+            knob.setAttribute("default", 0);
+            knob.setAttribute("label", `mod${modIndex}`);
+
+            knob.addEventListener("input", e =>
+                this.onControlInput(e, modIndex));
+
+            this.knobContainer.appendChild(knob);
+        }
     }
 
     generate_sequence() {
