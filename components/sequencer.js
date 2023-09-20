@@ -145,6 +145,7 @@ class Sequencer extends HTMLElement {
             knob.setAttribute("max", 10);
             knob.setAttribute("default", 0);
             knob.setAttribute("label", `mod${modIndex}`);
+            knob.setAttribute("integer-mode", true);
 
             knob.addEventListener("input", e =>
                 this.onControlInput(e, modIndex));

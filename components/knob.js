@@ -30,7 +30,12 @@ class Knob extends HTMLElement {
                 self.default = self.getAttribute("default") ?
                     parseFloat(self.getAttribute("default")) : 0;
 
-                self.value = self.default;
+                self.integerMode = this.getAttribute("integer-mode") ?
+                    this.getAttribute("integer-mode") : false;
+
+                self.value = self.integerMode ? Math.round(self.default) :
+                    self.default;
+
                 self.pos = self.map(self.value, self.min, self.max, 0, 100);
                 self.update(0);
 
@@ -65,7 +70,11 @@ class Knob extends HTMLElement {
         this.default = this.getAttribute("default") ?
             parseFloat(this.getAttribute("default")) : 0;
 
-        this.value = this.default;
+        this.integerMode = this.getAttribute("integer-mode") ?
+            this.getAttribute("integer-mode") : false;
+
+        this.value = this.integerMode ? Math.round(this.default) :
+            this.default;
 
         // pos is a value that must be between 0 and 100 because this dictates
         // only the position of the knob, and not it's value. this is important
@@ -143,12 +152,16 @@ class Knob extends HTMLElement {
         this.addEventListener("wheel", e => {
             e.preventDefault();
             self.update(e.deltaY > 0 ? -self.wheelSpeed : self.wheelSpeed);
-            self.labelElement.textContent = self.value.toFixed(2);
+            self.labelElement.textContent = self.value.toFixed(
+                self.integerMode ? 0 : 2
+            );
         });
 
         this.addEventListener("mousedown", () => {
             window.inputKnob = self;
-            self.labelElement.textContent = self.value.toFixed(2);
+            self.labelElement.textContent = self.value.toFixed(
+                self.integerMode ? 0 : 2
+            );
         });
 
         this.addEventListener("mouseleave", () => {
@@ -158,7 +171,13 @@ class Knob extends HTMLElement {
         this.addEventListener("contextmenu", e => {
             e.preventDefault();
             let inputValue = prompt("enter value:::");
-            self.value = inputValue ? parseInt(inputValue) : self.value;
+
+            if (!self.integerMode) {
+                self.value = inputValue ? parseFloat(inputValue) : self.value;
+            } else {
+                self.value = inputValue ? parseInt(inputValue) : self.value;
+            }
+
             self.pos = self.map(self.value, self.min, self.max, 0, 100);
 
             self.update(0);
@@ -184,6 +203,7 @@ class Knob extends HTMLElement {
         this.marker.setAttribute("y2", 50 + Math.sin(deg) * 40 + "%");
 
         this.value = this.map(this.pos, 0, 100, this.min, this.max);
+        if (this.integerMode) this.value = Math.round(this.value);
     }
 }
 
