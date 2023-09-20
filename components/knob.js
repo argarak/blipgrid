@@ -70,8 +70,8 @@ class Knob extends HTMLElement {
         this.default = this.getAttribute("default") ?
             parseFloat(this.getAttribute("default")) : 0;
 
-        this.integerMode = this.getAttribute("integer-mode") ?
-            this.getAttribute("integer-mode") : false;
+        this.integerMode = this.getAttribute("integer-mode") === "true" ?
+            true : false;
 
         this.value = this.integerMode ? Math.round(this.default) :
             this.default;

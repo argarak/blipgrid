@@ -3,7 +3,8 @@ export default [
         "name": "worble",
         "mods": [
             {
-                name: "x"
+                name: "x",
+                integerMode: false
             }
         ],
         "fn": (t, seqlen, mod) => {
@@ -15,10 +16,12 @@ export default [
         "name": "modulo",
         "mods": [
             {
-                name: "dividend"
+                name: "dividend",
+                integerMode: true
             },
             {
-                name: "divisor"
+                name: "divisor",
+                integerMode: true
             }
         ],
         "fn": (t, seqlen, mod) => {
@@ -30,10 +33,12 @@ export default [
         "name": "euclidean",
         "mods": [
             {
-                name: "triggers"
+                name: "triggers",
+                integerMode: true
             },
             {
-                name: "rotation"
+                name: "rotation",
+                integerMode: true
             }
         ],
         "fn": (t, seqlen, mod) => {
