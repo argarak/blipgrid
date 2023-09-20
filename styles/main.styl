@@ -9,10 +9,11 @@ h1
 
 body
   background-color #212121
-  height 100vh
   margin 0
   font-family m-font
   font-size m-font-size
+
+  height 100vh
 
   color #fff
 
@@ -83,10 +84,9 @@ button
   align-items center
 
 #paramContainer
-  background #0000
+  background #aaa0
   border-left 0px solid #222
 
-  flex 1
   display grid
 
   grid-template-columns repeat(3, min-content)
@@ -94,8 +94,19 @@ button
   flex-direction column
   justify-content right
 
+  // this is a bad hack :(
+  height calc(100% - 36px)
+
+  overflow-y scroll
+
   label
     color #aaa
+
+ui-sequencer
+  // this is a bad hack :(
+  height calc(100% - 36px)
+  overflow auto
+
 
 .knobSet
   display flex
