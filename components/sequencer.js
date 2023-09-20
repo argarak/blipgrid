@@ -142,7 +142,7 @@ class Sequencer extends HTMLElement {
         for (let modIndex = 0; modIndex < this.algorithm.mods; modIndex++) {
             let knob = document.createElement("ui-knob");
             knob.setAttribute("min", 0);
-            knob.setAttribute("max", 10);
+            knob.setAttribute("max", 64);
             knob.setAttribute("default", 0);
             knob.setAttribute("label", `mod${modIndex}`);
             knob.setAttribute("integer-mode", true);

@@ -69,7 +69,7 @@ button
   justify-content center
   flex-direction row
   background-color #000
-  height 100%
+  height calc(100% - 36px)
 
 #sideContainer
   background #0000
@@ -94,19 +94,15 @@ button
   flex-direction column
   justify-content right
 
-  // this is a bad hack :(
-  height calc(100% - 36px)
-
+  height 100%
   overflow-y scroll
 
   label
     color #aaa
 
 ui-sequencer
-  // this is a bad hack :(
-  height calc(100% - 36px)
+  height 100%
   overflow auto
-
 
 .knobSet
   display flex
