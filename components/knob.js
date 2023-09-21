@@ -30,8 +30,8 @@ class Knob extends HTMLElement {
                 self.default = self.getAttribute("default") ?
                     parseFloat(self.getAttribute("default")) : 0;
 
-                self.integerMode = this.getAttribute("integer-mode") ?
-                    this.getAttribute("integer-mode") : false;
+                this.integerMode = this.getAttribute("integer-mode") === "true" ?
+                    true : false;
 
                 self.value = self.integerMode ? Math.round(self.default) :
                     self.default;
@@ -134,7 +134,9 @@ class Knob extends HTMLElement {
                 window.inputKnob.update(d);
 
                 window.inputKnob.labelElement.textContent =
-                    window.inputKnob.value.toFixed(2);
+                    window.inputKnob.value.toFixed(
+                        window.inputKnob.integerMode ? 0 : 2
+                    );
             }
         });
 
