@@ -1,0 +1,77 @@
+{
+    "name": "basic percussive synth",
+    "modules": [
+        {
+            "id": 0,
+            "type": "FrequencyEnvelope",
+            "start": false,
+            "toDestination": false
+        },
+        {
+            "id": 1,
+            "type": "Oscillator",
+            "start": true,
+            "toDestination": false
+        },
+        {
+            "id": 2,
+            "type": "Oscillator",
+            "start": true,
+            "toDestination": false
+        },
+        {
+            "id": 3,
+            "type": "AmplitudeEnvelope",
+            "start": false,
+            "toDestination": true
+        },
+        {
+            "id": 4,
+            "type": "AmplitudeEnvelope",
+            "start": false,
+            "toDestination": false
+        },
+        {
+            "id": 5,
+            "type": "Noise",
+            "start": true,
+            "toDestination": false
+        },
+        {
+            "id": 6,
+            "type": "Filter",
+            "start": false,
+            "toDestination": true
+        }
+    ],
+    "connects": [
+        {
+            "input":  { "id": 0, "property": null },
+            "output": { "id": 1, "property": "frequency" }
+        },
+
+        {
+            "input":  { "id": 1, "property": null },
+            "output": { "id": 3, "property": null }
+        },
+
+        {
+            "input":  { "id": 2, "property": null },
+            "output": { "id": 3, "property": null }
+        },
+
+        {
+            "input":  { "id": 5, "property": null },
+            "output": { "id": 4, "property": null }
+        },
+
+        {
+            "input":  { "id": 4, "property": null },
+            "output": { "id": 6, "property": null }
+        }
+    ],
+    "defaults": [
+        { "id": 3, "property": "sustain", "value": 0 },
+        { "id": 4, "property": "sustain", "value": 0 }
+    ]
+}

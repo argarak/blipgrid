@@ -1,16 +1,69 @@
+import * as Tone from "tone";
 import * as moduleControls from "./objects/module-controls.json";
 
+const modulesTable = {
+    "FrequencyEnvelope": Tone.FrequencyEnvelope,
+    "Oscillator": Tone.Oscillator,
+    "AmplitudeEnvelope": Tone.AmplitudeEnvelope,
+    "Noise": Tone.Noise,
+    "Filter": Tone.Filter
+};
+
 class Patch {
-    constructor() {
+    constructor(patchObject) {
         this.modules = [];
         this.connects = [];
 
         this.paramContainer = document.getElementById("paramContainer");
+
+        if (!patchObject) return;
+
+        // -- load patch object --
+        // load modules
+        for (let moduleObject of patchObject.modules) {
+            let module = new modulesTable[moduleObject.type]();
+
+            if (moduleObject.start) module.start();
+            if (moduleObject.toDestination) module.toDestination();
+
+            this.addModule(module);
+        }
+
+        // connect modules
+        // FIXME :: ids are currently the index of the modules array
+        // this should not be the case. we need a lookup method and
+        // probably store each module as part of an object w/ id
+        for (let connectObject of patchObject.connects) {
+            let input;
+            if (connectObject.input.property) {
+                input = this.modules[connectObject.input.id][
+                    connectObject.input.property];
+            } else {
+                input = this.modules[connectObject.input.id];
+            }
+
+            let output;
+            if (connectObject.output.property) {
+                output = this.modules[connectObject.output.id][
+                    connectObject.output.property];
+            } else {
+                output = this.modules[connectObject.output.id];
+            }
+
+            this.addConnect(input, output);
+        }
+
+        // set defaults
+        for (let defaultObject of patchObject.defaults) {
+            this.modules[defaultObject.id][defaultObject.property] =
+                defaultObject.value;
+        }
+
+        this.updateControls();
     }
 
     addModule(module) {
         this.modules.push(module);
-        this.updateControls();
     }
 
     loadModules(modulesList) {
@@ -64,6 +117,8 @@ class Patch {
     }
 
     updateControls() {
+        this.paramContainer.innerHTML = "";
+
         let index = 0;
         for (let module of this.modules) {
             // for some reason, the module name can have a underscore at the start,

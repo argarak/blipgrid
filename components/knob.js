@@ -10,6 +10,9 @@ import * as knobStyle from "/styles/knob.styl?inline";
 // TODO: improved prompt
 // keyboard support?
 
+// BUG? running patch.updateControls many times changes knob speed:
+// requires investigation
+
 class Knob extends HTMLElement {
     constructor() {
         super();
@@ -57,7 +60,7 @@ class Knob extends HTMLElement {
         // from 0 to 100
         this.pos = 0;
         this.mouseOrigin = null;
-        this.knobSpeed = 1;
+        this.knobSpeed = 0.25;
         this.maxSpeed = 4;
         this.wheelSpeed = 4;
 
