@@ -1,3 +1,6 @@
+import "/styles/main.styl";
+import "@material-design-icons/font";
+
 import * as Tone from "tone";
 import Patch from "./patch.js";
 
