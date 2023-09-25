@@ -14,9 +14,12 @@ class Patch {
         this.modules = [];
         this.connects = [];
 
-        this.paramContainer = document.getElementById("paramContainer");
+        this.patchControls = document.getElementById("patchControls");
+        this.patchNameElement = document.getElementById("patchName");
 
         if (!patchObject) return;
+
+        this.patchNameElement.textContent = patchObject.name;
 
         // -- load patch object --
         // load modules
@@ -117,7 +120,7 @@ class Patch {
     }
 
     updateControls() {
-        this.paramContainer.innerHTML = "";
+        this.patchControls.innerHTML = "";
 
         let index = 0;
         for (let module of this.modules) {
@@ -144,7 +147,7 @@ class Patch {
                 );
             }
 
-            this.paramContainer.appendChild(knobsGroup);
+            this.patchControls.appendChild(knobsGroup);
             index++;
         }
     }

@@ -21,18 +21,27 @@
 
         <div id="mainContainer">
             <div id="headContainer">
+                <div class="hfill"></div>
+
                 <button id="btnPlayPause"><span class="material-icons">pause</span></button>
 
                 <input id="bpmSlider" name="bpm" type="number" min="0" max="300" value="120"/>
                 <label for="bpm">bpm</label>
-
-                <div class="hfill"></div>
             </div>
 
             <div id="editContainer">
                 <div id="sideContainer"></div>
                 <ui-sequencer></ui-sequencer>
-                <div id="paramContainer"></div>
+                <div id="paramContainer">
+                    <div id="loadControls">
+                        <div id="patchUpload">
+                            <label for="avatar">Load Patch:</label>
+                            <input type="file" id="patchLoad" name="patchLoad" accept="text/json" />
+                        </div>
+                        <div id="patchName"></div>
+                    </div>
+                    <div id="patchControls"></div>
+                </div>
             </div>
         </div>
 
