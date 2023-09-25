@@ -70,6 +70,7 @@ class Sequencer extends HTMLElement {
         steps.min = 1;
         steps.max = 64;
         steps.value = 64;
+        steps.size = 2;
 
         steps.addEventListener("input", e => {
             self.sequenceLength = e.target.value;
