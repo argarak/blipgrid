@@ -27,10 +27,13 @@ class Patch {
         if (!patchObject) return;
 
         this.loadPatch(patchObject);
-        this.updateControls();
     }
 
     loadPatch(patchObject) {
+        // should this be cleared differently? what about garbage collection?
+        this.modules = [];
+        this.connects = [];
+
         this.patchNameElement.textContent = patchObject.name;
 
         // -- load patch object --
@@ -73,6 +76,8 @@ class Patch {
             this.modules[defaultObject.id][defaultObject.property] =
                 defaultObject.value;
         }
+
+        this.updateControls();
     }
 
     uploadPatch() {
@@ -81,6 +86,8 @@ class Patch {
         fileInput.type = "file";
         fileInput.accept = "text/json";
 
+        // TODO errors should show up in a some dialog box
+        // maybe we need a new component?
         fileInput.addEventListener("change", e => {
             if (e.target.files.length === 0 ||
                 e.target.files.length > 1) {
