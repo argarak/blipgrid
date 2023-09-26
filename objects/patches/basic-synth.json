@@ -1,0 +1,37 @@
+{
+    "name": "basic melodic synth",
+    "modules": [
+        {
+            "id": 0,
+            "type": "Oscillator",
+            "start": true,
+            "toDestination": false
+        },
+        {
+            "id": 1,
+            "type": "AmplitudeEnvelope",
+            "start": false,
+            "toDestination": true
+        },
+        {
+            "id": 2,
+            "type": "Filter",
+            "start": false,
+            "toDestination": false
+        }
+    ],
+    "connects": [
+        {
+            "input":  { "id": 0, "property": null },
+            "output": { "id": 2, "property": null }
+        },
+
+        {
+            "input":  { "id": 2, "property": null },
+            "output": { "id": 1, "property": null }
+        }
+    ],
+    "defaults": [
+        { "id": 1, "property": "sustain", "value": 0 }
+    ]
+}
