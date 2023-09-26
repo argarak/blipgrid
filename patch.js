@@ -16,9 +16,21 @@ class Patch {
 
         this.patchControls = document.getElementById("patchControls");
         this.patchNameElement = document.getElementById("patchName");
+        this.patchUploadButton = document.getElementById("patchUploadBtn");
+
+        let self = this;
+
+        this.patchUploadButton.addEventListener("click", () => {
+            self.uploadPatch();
+        });
 
         if (!patchObject) return;
 
+        this.loadPatch(patchObject);
+        this.updateControls();
+    }
+
+    loadPatch(patchObject) {
         this.patchNameElement.textContent = patchObject.name;
 
         // -- load patch object --
@@ -61,8 +73,35 @@ class Patch {
             this.modules[defaultObject.id][defaultObject.property] =
                 defaultObject.value;
         }
+    }
 
-        this.updateControls();
+    uploadPatch() {
+        let self = this;
+        let fileInput = document.createElement("input");
+        fileInput.type = "file";
+        fileInput.accept = "text/json";
+
+        fileInput.addEventListener("change", e => {
+            if (e.target.files.length === 0 ||
+                e.target.files.length > 1) {
+                // error: select one file
+            }
+
+            if (e.target.files[0].size > 10e6) {
+                // error: file too large
+            }
+
+            let reader = new FileReader();
+
+            reader.onload = function () {
+                let patchObject = JSON.parse(reader.result);
+                self.loadPatch(patchObject);
+            };
+
+            reader.readAsText(e.target.files[0]);
+        });
+
+        fileInput.click();
     }
 
     addModule(module) {
