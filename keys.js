@@ -1,3 +1,4 @@
+// TODO use keynames
 
 class KeyHandler {
     constructor() {
@@ -54,7 +55,5 @@ class KeyHandler {
 }
 
 let keyHandler = new KeyHandler();
-keyHandler.registerKey(["Shift", "p"], () => {console.log("hello!");});
-keyHandler.registerKey(["control", "x"], () => {console.log("cut!");});
-keyHandler.registerKey(["control", "c"], () => {console.log("copy!");});
-keyHandler.registerKey(["control", "p"], () => {console.log("paste");});
+
+export default keyHandler;
