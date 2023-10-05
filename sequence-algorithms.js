@@ -44,5 +44,26 @@ export default [
         "fn": (t, seqlen, mod) => {
             return (((mod[0] * (t + mod[1])) % seqlen) + mod[0]) >= seqlen;
         }
+    },
+
+    {
+        "name": "sine threshold",
+        "mods": [
+            {
+                name: "threshold",
+                integerMode: false
+            },
+            {
+                name: "frequency",
+                integerMode: false
+            },
+            {
+                name: "FM level",
+                integerMode: false
+            }
+        ],
+        "fn": (t, seqlen, mod) => {
+            return Math.sin(t * mod[1] * (Math.sin(t * mod[1]) * mod[2])) * 64 > mod[0];
+        }
     }
 ];
