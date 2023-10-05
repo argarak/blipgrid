@@ -1,15 +1,21 @@
 @require "defines.styl"
 @require "input-common.styl"
 
+#sequenceGridContainer
+  flex 1
+  display flex
+  align-items center
+  overflow-y hidden
+  margin 10px 0px
+
 #sequenceGrid
   flex 1
 
   display grid
   grid-template-columns repeat(4, 52px)
-  grid-template-rows repeat(16, 50px)
+  //grid-template-rows repeat(16, 50px)
   justify-content center
-
-  height 800px
+  height 100%
 
 .noteBox
   width 32px

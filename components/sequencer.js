@@ -57,10 +57,15 @@ class Sequencer extends HTMLElement {
         algorithmSelectLabel.textContent = "algorithm";
         this.shadow.appendChild(algorithmSelectLabel);
 
+        // create a container for the container.....
+        const superContainer = document.createElement("div");
+        superContainer.id = "sequenceGridContainer";
+        this.shadow.appendChild(superContainer);
+
         // create a container for the sequence grid
         const container = document.createElement("div");
         container.id = "sequenceGrid";
-        this.shadow.appendChild(container);
+        superContainer.appendChild(container);
         this.container = container;
 
         // create an input to change the number of steps in the sequence
@@ -120,6 +125,7 @@ class Sequencer extends HTMLElement {
         if (markerStep) markerStep.classList.remove("marker");
 
         this.noteboxes[this.step].classList.add("marker");
+        this.noteboxes[this.step].scrollIntoView();
         return this.sequence[this.step];
     }
 
