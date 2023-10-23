@@ -55,7 +55,7 @@ class Sequencer extends HTMLElement {
         let algorithmSelectLabel = document.createElement("label");
         algorithmSelectLabel.setAttribute("for", "algorithmSelect");
         algorithmSelectLabel.textContent = "algorithm";
-        this.shadow.appendChild(algorithmSelectLabel);
+        //this.shadow.appendChild(algorithmSelectLabel);
 
         // create a container for the container.....
         const superContainer = document.createElement("div");
@@ -100,6 +100,7 @@ class Sequencer extends HTMLElement {
 
         // create container to hold algorithm specific controls
         this.knobContainer = document.createElement("div");
+        this.knobContainer.id = "knobContainer";
         this.algorithmControls();
         this.shadow.appendChild(this.knobContainer);
     }

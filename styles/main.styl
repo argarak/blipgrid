@@ -2,7 +2,7 @@
 @require "input-common.styl"
 
 body
-  background-color #212121
+  background-color #000
   margin 0
   font-family m-font
   font-size m-font-size
@@ -11,37 +11,24 @@ body
 
   color #fff
 
-button
-  appearance none
-  font-family default-font
-  font-size m-font-size
-  border none
-  background #fff1
-  border-radius m-border-radius
-
-  color #fff
-  transition all .1s ease-in-out
-
-  font-family m-font
-  display flex
-  align-items center
-
-  &:hover
-    background #fff2
-
 #mainContainer
   display flex
   flex-direction column
   height 100%
 
+  align-items center
+
 .hfill
   width 100%
 
 #headContainer
+  box-sizing border-box
   padding 5px
   background #111
   border-bottom m-border-size solid #222
 
+  width 100%
+  height 40px
   display flex
   flex-direction row
   align-items center
@@ -50,8 +37,8 @@ button
     display flex
     align-items center
     justify-content center
-    height 100%
-    padding 0px 0px
+
+    padding 3px
     margin 0px 5px
 
     color #ffff
@@ -87,7 +74,10 @@ button
   justify-content center
   flex-direction row
   background-color #000
-  height calc(100% - 36px)
+  height calc(100% - 40px)
+
+  width 80vw
+  max-width 150ch
 
 #sideContainer
   background #0000
@@ -103,12 +93,13 @@ button
   overflow-x auto
 
 #paramContainer
-  background #aaa0
+  background m-background-color-alt
   border-left 0px solid #222
 
   flex 1
 
-  max-height 100%
+  height 100%
+
   overflow-y scroll
   overflow-x clip
 
@@ -139,6 +130,10 @@ ui-sequencer
   height 100%
   display flex
   flex-direction column
+
+  background m-background-color
+
+  flex 1
 
 .knobSet
   display flex

@@ -1,5 +1,23 @@
 @require "defines.styl"
 
+button
+  appearance none
+  font-family default-font
+  font-size m-font-size
+  border none
+  background #fff1
+  border-radius m-border-radius
+
+  color #fff
+  transition all .1s ease-in-out
+
+  font-family m-font
+  display flex
+  align-items center
+
+  &:hover
+    background #fff2
+
 input[type="range"]
   appearance none
   background #444
@@ -25,7 +43,7 @@ input[type="number"], input[type="text"]
   border none
   background #fff1
   color #fff
-  padding 5px
+  padding 6px 10px
   border-radius m-border-radius
 
   text-align center

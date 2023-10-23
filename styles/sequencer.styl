@@ -12,17 +12,18 @@
   flex 1
 
   display grid
-  grid-template-columns repeat(4, 52px)
-  //grid-template-rows repeat(16, 50px)
+  grid-template-columns repeat(4, 32px)
   justify-content center
-  height 100%
+  max-height 100%
+
+  margin 0px 12px
+  gap 15px
 
 .noteBox
   width 32px
   height 32px
   background-color #222
   border-radius m-border-radius
-  margin 8px 10px
   border 1px solid rgb(66, 66, 66)
   transition all .1s linear
 
@@ -34,10 +35,13 @@
   &.marker
     border-color #fff
 
-#stepsContainer, #algorithmSelect
-  margin-left 10px
-
 #algorithmSelect
-  width 100px
+  width 100%
   margin-top 5px
   margin-right 5px
+
+#knobContainer
+  width 100%
+  min-height 120px
+  ui-knob
+    margin 0px 5px
