@@ -31,6 +31,9 @@ class Sequencer extends HTMLElement {
         // holds currently programmed sequencer
         this.sequence = [];
 
+        // TODO: have this hold useful data
+        this.tracks = [1, 2, 3, 4, 5, 6, 7, 8];
+
         this.shadow = this.attachShadow({mode: "open"});
 
         // create the style element which contains all local CSS for this
@@ -38,6 +41,9 @@ class Sequencer extends HTMLElement {
         const style = document.createElement("style");
         style.textContent = sequencerStyle.default;
         this.shadow.appendChild(style);
+
+        // add track tabs
+        this.shadow.appendChild(this.createTabs());
 
         // create the algorithm select element to choose the algorithm the
         // sequencer will use
@@ -113,6 +119,20 @@ class Sequencer extends HTMLElement {
     set sequenceLength(length) {
         this.#sequenceLength = length;
         this.populateGrid();
+    }
+
+    createTabs() {
+        let tabContainer = document.createElement("div");
+        tabContainer.id = "trackTabs";
+
+        for (let trackName of this.tracks) {
+            let tab = document.createElement("div");
+            tab.classList.add("trackTab");
+            tab.innerText = trackName;
+            tabContainer.appendChild(tab);
+        }
+
+        return tabContainer;
     }
 
     /**

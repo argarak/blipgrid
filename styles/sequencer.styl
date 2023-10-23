@@ -1,6 +1,28 @@
 @require "defines.styl"
 @require "input-common.styl"
 
+#trackTabs
+  display flex
+  flex-direction row
+  width 100%
+  margin-bottom 10px
+  justify-content space-around
+
+  :first-child
+    background #222
+    color #fff
+    border-color primary-color
+
+.trackTab
+  background #111
+  height 100%
+  padding 5px 25px
+  width 100%
+  display flex
+  align-items center
+  justify-content center
+  border-bottom 1px #222 solid
+
 #sequenceGridContainer
   flex 1
   display flex
