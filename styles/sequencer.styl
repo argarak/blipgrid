@@ -8,7 +8,7 @@
   margin-bottom 10px
   justify-content space-around
 
-  :first-child
+  .active
     background #222
     color #fff
     border-color primary-color
@@ -23,10 +23,13 @@
   justify-content center
   border-bottom 1px #222 solid
 
+  transition all .1s ease-in-out
+  cursor pointer
+
 #sequenceGridContainer
   flex 1
   display flex
-  align-items center
+  align-items start
   overflow-y hidden
   margin 10px 0px
 
@@ -34,18 +37,18 @@
   flex 1
 
   display grid
-  grid-template-columns repeat(4, 32px)
+  grid-template-columns repeat(4, notebox-size)
   justify-content center
   max-height 100%
 
-  margin 0px 12px
-  gap 15px
+  margin 0px notebox-gap
+  gap notebox-gap + 3px
 
 .noteBox
-  width 32px
-  height 32px
+  width notebox-size
+  height notebox-size
   background-color #222
-  border-radius m-border-radius
+  border-radius 2px
   border 1px solid rgb(66, 66, 66)
   transition all .1s linear
 
@@ -59,11 +62,19 @@
 
 #algorithmSelect
   width 100%
+  max-width 40ch
   margin-top 5px
   margin-right 5px
 
 #knobContainer
+  display flex
+  flex-direction row
+  justify-content center
+  align-items start
+
   width 100%
   min-height 120px
   ui-knob
-    margin 0px 5px
+    width 100%
+    max-width 15ch
+    margin 0px 15px

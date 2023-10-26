@@ -18,7 +18,9 @@ class KeyHandler {
 
     handleKeyUp(e) {
         // remove the keys from currentlyPressed
-        this.currentlyPressed = this.currentlyPressed.filter(kp => kp == e.key);
+        console.log(`removing ${e.key} from ${this.currentlyPressed}`);
+        this.currentlyPressed = this.currentlyPressed.filter(kp => kp !== e.key);
+        console.log(this.currentlyPressed);
     }
 
     handleKeyDown(e) {

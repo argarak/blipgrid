@@ -2,6 +2,7 @@ import * as Tone from "tone";
 import * as moduleControls from "./objects/module-controls.json";
 
 const modulesTable = {
+    "Envelope": Tone.Envelope,
     "FrequencyEnvelope": Tone.FrequencyEnvelope,
     "Oscillator": Tone.Oscillator,
     "AmplitudeEnvelope": Tone.AmplitudeEnvelope,
@@ -39,6 +40,12 @@ class Patch {
         // -- load patch object --
         // load modules
         for (let moduleObject of patchObject.modules) {
+            if (!(moduleObject.type in modulesTable)) {
+                // TODO: show errors to the user
+                console.error(`module ${moduleObject.type} not supported!`);
+                return;
+            }
+
             let module = new modulesTable[moduleObject.type]();
 
             if (moduleObject.start) module.start();

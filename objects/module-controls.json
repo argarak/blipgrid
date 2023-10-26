@@ -19,6 +19,35 @@
     }
   ],
 
+  "Envelope": [
+    {
+      "type": "knob",
+      "label": "attack",
+      "property": "attack",
+      "min": 0.01,
+      "max": 1,
+      "default": 0.01
+    },
+
+    {
+      "type": "knob",
+      "label": "decay",
+      "property": "decay",
+      "min": 0.01,
+      "max": 1,
+      "default": 0.2
+    },
+
+    {
+      "type": "knob",
+      "label": "sustain",
+      "property": "sustain",
+      "min": 0,
+      "max": 1,
+      "default": 0
+    }
+  ],
+
   "FrequencyEnvelope": [
     {
       "type": "knob",

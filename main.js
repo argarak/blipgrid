@@ -28,6 +28,7 @@ document.addEventListener("DOMContentLoaded", () => {
         for (let module of modules) {
             if (module.name === "AmplitudeEnvelope") module.triggerAttack(time);
             if (module.name === "FrequencyEnvelope") module.triggerAttack(time);
+            if (module.name === "Envelope") module.triggerAttack(time);
         }
     }
 
@@ -37,6 +38,12 @@ document.addEventListener("DOMContentLoaded", () => {
         console.log("pew!");
         trigger(test.modules, Tone.now());
     });
+
+    for (let trackIndex = 1; trackIndex <= sequencer.numTracks; trackIndex++) {
+        keyHandler.registerKey([`${trackIndex}`], () => {
+            sequencer.switchTrack(trackIndex - 1);
+        });
+    }
 
     Tone.Transport.scheduleRepeat((time) => {
         let trig = sequencer.next();

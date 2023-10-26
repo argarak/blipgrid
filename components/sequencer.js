@@ -16,6 +16,9 @@ class Sequencer extends HTMLElement {
         super();
         let self = this;
 
+        this.numTracks = 8;
+        this.selectedTrack = 0;
+
         // all algorithms registered by this sequencer
         this.algorithms = defaultAlgorithms;
 
@@ -29,10 +32,11 @@ class Sequencer extends HTMLElement {
         this.noteboxes = [];
 
         // holds currently programmed sequencer
-        this.sequence = [];
+        this.sequence = {};
 
-        // TODO: have this hold useful data
-        this.tracks = [1, 2, 3, 4, 5, 6, 7, 8];
+        for (let trackIndex = 0; trackIndex < this.numTracks; trackIndex++) {
+            this.sequence[trackIndex] = [];
+        }
 
         this.shadow = this.attachShadow({mode: "open"});
 
@@ -43,7 +47,8 @@ class Sequencer extends HTMLElement {
         this.shadow.appendChild(style);
 
         // add track tabs
-        this.shadow.appendChild(this.createTabs());
+        this.tabContainer = this.createTabs();
+        this.shadow.appendChild(this.tabContainer);
 
         // create the algorithm select element to choose the algorithm the
         // sequencer will use
@@ -121,14 +126,36 @@ class Sequencer extends HTMLElement {
         this.populateGrid();
     }
 
+    switchTrack(trackIndex) {
+        let tabs = this.tabContainer.children;
+        for (let tab of tabs) {
+            tab.classList.remove("active");
+        }
+        tabs[trackIndex % this.numTracks].classList.add("active");
+    }
+
+    onTabSelect(self, e) {
+        let tabs = self.tabContainer.children;
+
+        for (let tab of tabs) {
+            tab.classList.remove("active");
+        }
+
+        e.target.classList.add("active");
+    }
+
     createTabs() {
         let tabContainer = document.createElement("div");
         tabContainer.id = "trackTabs";
 
-        for (let trackName of this.tracks) {
+        for (let trackIndex = 0; trackIndex < this.numTracks; trackIndex++) {
             let tab = document.createElement("div");
             tab.classList.add("trackTab");
-            tab.innerText = trackName;
+            tab.innerText = trackIndex;
+
+            tab.addEventListener("click", e =>
+                this.onTabSelect(this, e));
+
             tabContainer.appendChild(tab);
         }
 
@@ -141,12 +168,13 @@ class Sequencer extends HTMLElement {
      **/
     next() {
         this.step = (this.step + 1) % this.#sequenceLength;
+        let thisNotebox = this.noteboxes[this.step];
 
         let markerStep = this.shadow.querySelector(".marker");
         if (markerStep) markerStep.classList.remove("marker");
 
-        this.noteboxes[this.step].classList.add("marker");
-        this.noteboxes[this.step].scrollIntoView();
+        thisNotebox.classList.add("marker");
+        thisNotebox.scrollIntoView();
         return this.sequence[this.step];
     }
 
@@ -201,7 +229,7 @@ class Sequencer extends HTMLElement {
         }
     }
 
-    generate_sequence() {
+    generateSequence() {
         let sequence = [];
         for (let index = 0; index < this.#sequenceLength; index++) {
             sequence.push(this.algorithm.fn(index, this.#sequenceLength, this.mod));
@@ -210,7 +238,7 @@ class Sequencer extends HTMLElement {
     }
 
     update() {
-        this.sequence = this.generate_sequence();
+        this.sequence = this.generateSequence();
 
         let index = 0;
         for (let notebox of this.noteboxes) {
