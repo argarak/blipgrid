@@ -83,8 +83,6 @@ class Patch {
             this.modules[defaultObject.id][defaultObject.property] =
                 defaultObject.value;
         }
-
-        this.updateControls();
     }
 
     uploadPatch() {
@@ -124,7 +122,7 @@ class Patch {
 
     loadModules(modulesList) {
         this.modules = modulesList;
-        this.updateControls();
+        this.drawControls();
     }
 
     addConnect(input, output) {
@@ -172,7 +170,7 @@ class Patch {
         }
     }
 
-    updateControls() {
+    drawControls() {
         this.patchControls.innerHTML = "";
 
         let index = 0;

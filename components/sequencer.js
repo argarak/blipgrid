@@ -22,20 +22,28 @@ class Sequencer extends HTMLElement {
         // all algorithms registered by this sequencer
         this.algorithms = defaultAlgorithms;
 
-        // select first algorithm by default
-        this.algorithm = this.algorithms[0];
+        // // select first algorithm by default
+        // this.algorithm = this.algorithms[0];
 
-        // holds sequence modulation values
-        this.mod = [32];
+        // // holds sequence modulation values
+        // this.mod = [32];
 
         // holds list of notebox DOM elements
         this.noteboxes = [];
+
+        let defaultLength = 64;
 
         // holds currently programmed sequencer
         this.sequence = {};
 
         for (let trackIndex = 0; trackIndex < this.numTracks; trackIndex++) {
-            this.sequence[trackIndex] = [];
+            this.sequence[trackIndex] = {
+                mod: [],
+                patch: null,
+                length: defaultLength,
+                sequence: [],
+                algorithm: this.algorithms[0]
+            };
         }
 
         this.shadow = this.attachShadow({mode: "open"});
@@ -126,7 +134,23 @@ class Sequencer extends HTMLElement {
         this.populateGrid();
     }
 
+    assignPatch(trackIndex, patch) {
+        this.sequence[trackIndex].patch = patch;
+    }
+
     switchTrack(trackIndex) {
+        this.selectedTrack = trackIndex;
+
+        const switchTrackEvent = new CustomEvent("trackSwitch", {
+            detail: this.sequence[this.selectedTrack]
+        });
+
+        document.dispatchEvent(switchTrackEvent);
+
+        this.algorithmControls();
+
+        console.log(this.sequence[this.selectedTrack]);
+
         let tabs = this.tabContainer.children;
         for (let tab of tabs) {
             tab.classList.remove("active");
@@ -162,20 +186,26 @@ class Sequencer extends HTMLElement {
         return tabContainer;
     }
 
+    nextStep() {
+        this.step += 1;
+    }
+
     /**
      * increments the sequencer, looping back to the start if necessary
      * @return whether the next step is active or inactive
      **/
-    next() {
-        this.step = (this.step + 1) % this.#sequenceLength;
-        let thisNotebox = this.noteboxes[this.step];
+    next(trackIndex) {
+        let length = this.sequence[trackIndex].length;
 
-        let markerStep = this.shadow.querySelector(".marker");
-        if (markerStep) markerStep.classList.remove("marker");
+        if (this.selectedTrack === trackIndex) {
+            let thisNotebox = this.noteboxes[this.step % length];
+            let markerStep = this.shadow.querySelector(".marker");
+            if (markerStep) markerStep.classList.remove("marker");
+            thisNotebox.classList.add("marker");
+            thisNotebox.scrollIntoView();
+        }
 
-        thisNotebox.classList.add("marker");
-        thisNotebox.scrollIntoView();
-        return this.sequence[this.step];
+        return this.sequence[trackIndex % this.numTracks].sequence[this.step % length];
     }
 
     registerAlgorithm(name, fn) {
@@ -188,28 +218,30 @@ class Sequencer extends HTMLElement {
     }
 
     onControlInput(e, modIndex) {
-        this.mod[modIndex] = e.target.value;
+        this.sequence[this.selectedTrack].mod[modIndex] = e.target.value;
         this.update();
     }
 
     algorithmControls() {
         this.knobContainer.innerHTML = "";
 
-        for (let modIndex = 0;
-            modIndex < this.algorithm.mods.length;
-            modIndex++) {
+        const algoMods = this.sequence[this.selectedTrack].algorithm.mods;
 
+        for (let modIndex = 0; modIndex < algoMods.length; modIndex++) {
             let knob = document.createElement("ui-knob");
             knob.setAttribute("min", 0);
             knob.setAttribute("max", 64);
-            knob.setAttribute("default", 0);
+
+            let currentMod = this.sequence[this.selectedTrack].mod[modIndex];
+
+            knob.setAttribute("default", currentMod ? currentMod : 0);
             knob.setAttribute(
-                "label", this.algorithm.mods[modIndex].name
+                "label", algoMods[modIndex].name
             );
 
             knob.setAttribute(
                 "integer-mode",
-                this.algorithm.mods[modIndex].integerMode
+                algoMods[modIndex].integerMode
             );
 
             knob.addEventListener("input", e =>
@@ -232,17 +264,24 @@ class Sequencer extends HTMLElement {
     generateSequence() {
         let sequence = [];
         for (let index = 0; index < this.#sequenceLength; index++) {
-            sequence.push(this.algorithm.fn(index, this.#sequenceLength, this.mod));
+            sequence.push(
+                this.sequence[this.selectedTrack]
+                    .algorithm.fn(index,
+                        this.sequence[this.selectedTrack].length,
+                        this.sequence[this.selectedTrack].mod)
+            );
         }
         return sequence;
     }
 
     update() {
-        this.sequence = this.generateSequence();
+        this.sequence[this.selectedTrack].sequence = this.generateSequence();
 
         let index = 0;
         for (let notebox of this.noteboxes) {
-            if (this.sequence[index]) notebox.classList.add("active");
+            if (this.sequence[this.selectedTrack].sequence[index]) {
+                notebox.classList.add("active");
+            }
             else notebox.classList.remove("active");
             ++index;
         }

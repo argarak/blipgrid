@@ -1,4 +1,5 @@
 // TODO use keynames
+// TODO add support for shift, ctrl, alt modifiers
 
 class KeyHandler {
     constructor() {
@@ -18,9 +19,7 @@ class KeyHandler {
 
     handleKeyUp(e) {
         // remove the keys from currentlyPressed
-        console.log(`removing ${e.key} from ${this.currentlyPressed}`);
         this.currentlyPressed = this.currentlyPressed.filter(kp => kp !== e.key);
-        console.log(this.currentlyPressed);
     }
 
     handleKeyDown(e) {

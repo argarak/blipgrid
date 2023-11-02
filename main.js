@@ -7,8 +7,18 @@ import Patch from "./patch.js";
 import keyHandler from "./keys.js";
 
 import * as basicPatch from "./objects/patches/basic.json";
+import * as basicSynthPatch from "./objects/patches/basic-synth.json";
 
 // TODO: note release
+
+document.addEventListener("trackSwitch", e => {
+    let track = e.detail;
+
+    if (track.patch) {
+        console.log(track.patch);
+        track.patch.drawControls();
+    }
+});
 
 document.addEventListener("DOMContentLoaded", () => {
     document.getElementById("btnPlayPause").addEventListener("click", () => {
@@ -21,8 +31,15 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     let test = new Patch(basicPatch);
+    let test2 = new Patch(basicSynthPatch);
+
+    console.log(test);
+    console.log(test2);
 
     let sequencer = document.querySelector("ui-sequencer");
+
+    sequencer.assignPatch(0, test);
+    sequencer.assignPatch(1, test2);
 
     function trigger(modules, time) {
         for (let module of modules) {
@@ -46,8 +63,13 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     Tone.Transport.scheduleRepeat((time) => {
-        let trig = sequencer.next();
+        sequencer.nextStep();
+
+        let trig = sequencer.next(0);
         if (trig) trigger(test.modules, time);
+
+        trig = sequencer.next(1);
+        if (trig) trigger(test2.modules, time);
     }, "16n");
 
     Tone.Transport.start();
