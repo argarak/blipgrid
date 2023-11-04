@@ -13,6 +13,33 @@ import * as knobStyle from "/styles/knob.styl?inline";
 // BUG? running patch.updateControls many times changes knob speed:
 // requires investigation
 
+window.addEventListener("mousemove", e => {
+    let currentKnob = window.inputKnob;
+    if (!currentKnob) return;
+
+    if (!currentKnob.mouseOrigin) currentKnob.mouseOrigin = e.pageY;
+
+    let d = -(e.pageY - currentKnob.mouseOrigin) / 4 * currentKnob.knobSpeed;
+
+    if (d > currentKnob.maxSpeed) d = currentKnob.maxSpeed;
+    else if (d < -currentKnob.maxSpeed) d = -currentKnob.maxSpeed;
+
+    currentKnob.mouseOrigin = e.pageY;
+    currentKnob.update(d);
+
+    currentKnob.labelElement.textContent =
+        currentKnob.value.toFixed(
+            currentKnob.integerMode ? 0 : 2
+        );
+});
+
+window.addEventListener("mouseup", () => {
+    if (!window.inputKnob) return;
+    window.inputKnob.mouseOrigin = null;
+    window.inputKnob.labelElement.textContent = window.inputKnob.label;
+    window.inputKnob = null;
+});
+
 class Knob extends HTMLElement {
     constructor() {
         super();
@@ -60,9 +87,9 @@ class Knob extends HTMLElement {
         // from 0 to 100
         this.pos = 0;
         this.mouseOrigin = null;
-        this.knobSpeed = 0.25;
+        this.knobSpeed = 2;
         this.maxSpeed = 4;
-        this.wheelSpeed = 4;
+        this.wheelSpeed = 8;
 
         this.max = this.getAttribute("max") ?
             parseFloat(this.getAttribute("max")) : 100;
@@ -123,31 +150,6 @@ class Knob extends HTMLElement {
         this.marker = shadow.querySelector(".marker");
         this.marker.style.stroke = this.getAttribute("marker") ?
             this.getAttribute("marker") : "#444";
-
-        window.addEventListener("mousemove", e => {
-            if (window.inputKnob) {
-                if (!self.mouseOrigin) self.mouseOrigin = e.pageY;
-
-                let d = -(e.pageY - self.mouseOrigin)/4 * self.knobSpeed;
-
-                if (d > self.maxSpeed) d = self.maxSpeed;
-                else if (d < -this.maxSpeed) d = -self.maxSpeed;
-
-                self.mouseOrigin = e.pageY;
-                window.inputKnob.update(d);
-
-                window.inputKnob.labelElement.textContent =
-                    window.inputKnob.value.toFixed(
-                        window.inputKnob.integerMode ? 0 : 2
-                    );
-            }
-        });
-
-        window.addEventListener("mouseup", () => {
-            window.inputKnob = null;
-            self.mouseOrigin = null;
-            self.labelElement.textContent = self.label;
-        });
 
         this.addEventListener("dblclick", () => {
             self.pos = self.default;
