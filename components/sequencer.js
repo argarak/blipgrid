@@ -158,16 +158,6 @@ class Sequencer extends HTMLElement {
         tabs[trackIndex % this.numTracks].classList.add("active");
     }
 
-    onTabSelect(self, e) {
-        let tabs = self.tabContainer.children;
-
-        for (let tab of tabs) {
-            tab.classList.remove("active");
-        }
-
-        e.target.classList.add("active");
-    }
-
     createTabs() {
         let tabContainer = document.createElement("div");
         tabContainer.id = "trackTabs";
@@ -178,7 +168,7 @@ class Sequencer extends HTMLElement {
             tab.innerText = trackIndex;
 
             tab.addEventListener("click", e =>
-                this.onTabSelect(this, e));
+                this.switchTrack(trackIndex));
 
             tabContainer.appendChild(tab);
         }

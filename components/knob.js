@@ -191,6 +191,8 @@ class Knob extends HTMLElement {
 
             return false;
         });
+
+        this.update(0);
     }
 
     map(x, in_min, in_max, out_min, out_max) {
@@ -202,7 +204,7 @@ class Knob extends HTMLElement {
         else if (this.pos + d < 0) this.pos = 0;
         else this.pos += d;
 
-        this.dispatchEvent(this.eventInput);
+        if (d !== 0) this.dispatchEvent(this.eventInput);
 
         let deg = (this.pos / 100) * (1.5 * Math.PI) + (0.75 * Math.PI);
 
