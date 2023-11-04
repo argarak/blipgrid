@@ -21,19 +21,14 @@
 
         <div id="mainContainer">
             <div id="headContainer">
-                <button class="btn"><span class="material-icons">save</span></button>
-                <button class="btn"><span class="material-icons">upload</span></button>
-                <button class="btn"><span class="material-icons">download</span></button>
-
-                <input type="text" id="projectName" name="projectName" required minlength="4" maxlength="32" spellcheck="false" value="untitled" size="12" placeholder="project name..."/>
-                <label for="name">project</label>
+                <input id="bpmSlider" name="bpm" type="number" min="0" max="300" value="120" size="3"/>
+                <label for="bpm">bpm</label>
 
                 <div class="hfill"></div>
 
-                <button class="btn" id="btnPlayPause"><span class="material-icons">pause</span></button>
-
-                <input id="bpmSlider" name="bpm" type="number" min="0" max="300" value="120" size="3"/>
-                <label for="bpm">bpm</label>
+                <button class="btn" id="btnPlay"><span class="material-icons">play_arrow</span></button>
+                <button class="btn" id="btnLoop"><span class="material-icons">repeat</span></button>
+                <button class="btn" id="btnStop"><span class="material-icons">stop</span></button>
             </div>
 
             <div id="editContainer">

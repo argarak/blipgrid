@@ -21,9 +21,12 @@ document.addEventListener("trackSwitch", e => {
 });
 
 document.addEventListener("DOMContentLoaded", () => {
-    document.getElementById("btnPlayPause").addEventListener("click", () => {
+    let btnPlay = document.getElementById("btnPlay");
+    btnPlay.addEventListener("click", e => {
         Tone.start();
         Tone.Transport.toggle();
+        if (Tone.Transport.state === "started") btnPlay.classList.add("active");
+        else btnPlay.classList.remove("active");
     });
 
     document.getElementById("bpmSlider").addEventListener("input", e => {
