@@ -1,5 +1,6 @@
 import * as sequencerStyle from "/styles/sequencer.styl?inline";
 import defaultAlgorithms from "../sequence-algorithms.js";
+import util from "../util.js";
 
 /**
  * sequencer web component
@@ -21,12 +22,6 @@ class Sequencer extends HTMLElement {
 
         // all algorithms registered by this sequencer
         this.algorithms = defaultAlgorithms;
-
-        // // select first algorithm by default
-        // this.algorithm = this.algorithms[0];
-
-        // // holds sequence modulation values
-        // this.mod = [32];
 
         // holds list of notebox DOM elements
         this.noteboxes = [];
@@ -66,7 +61,17 @@ class Sequencer extends HTMLElement {
         this.shadow.appendChild(this.algorithmSelect);
 
         this.algorithmSelect.addEventListener("input", e => {
-            self.algorithm = self.algorithms[e.target.value];
+            let algorithm = null;
+            for (algorithm of self.algorithms) {
+                if (parseInt(e.target.value) ===
+                    util.hashCode(algorithm.fn.toString())) {
+                    break;
+                }
+                // TODO: error if not found
+            }
+
+            self.sequence[self.selectedTrack].algorithm = algorithm;
+
             self.update();
             self.algorithmControls();
         });
@@ -122,6 +127,8 @@ class Sequencer extends HTMLElement {
         this.knobContainer.id = "knobContainer";
         this.algorithmControls();
         this.shadow.appendChild(this.knobContainer);
+
+        this.switchTrack(0);
     }
 
     /**
@@ -145,6 +152,8 @@ class Sequencer extends HTMLElement {
             detail: this.sequence[this.selectedTrack]
         });
 
+        let hash = util.hashCode(this.sequence[this.selectedTrack].algorithm.fn.toString());
+        this.algorithmSelect.value = hash;
         document.dispatchEvent(switchTrackEvent);
 
         this.algorithmControls();
@@ -168,7 +177,7 @@ class Sequencer extends HTMLElement {
             tab.classList.add("trackTab");
             tab.innerText = trackIndex;
 
-            tab.addEventListener("click", e =>
+            tab.addEventListener("click", () =>
                 this.switchTrack(trackIndex));
 
             tabContainer.appendChild(tab);
@@ -246,7 +255,7 @@ class Sequencer extends HTMLElement {
         this.algorithmSelect.innerHTML = "";
         for (let alIndex = 0; alIndex < this.algorithms.length; alIndex++) {
             let optionElement = document.createElement("option");
-            optionElement.value = alIndex;
+            optionElement.value = util.hashCode(this.algorithms[alIndex].fn.toString());
             optionElement.textContent = this.algorithms[alIndex].name;
             this.algorithmSelect.appendChild(optionElement);
         }

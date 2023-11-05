@@ -22,7 +22,7 @@ document.addEventListener("trackSwitch", e => {
 
 document.addEventListener("DOMContentLoaded", () => {
     let btnPlay = document.getElementById("btnPlay");
-    btnPlay.addEventListener("click", e => {
+    btnPlay.addEventListener("click", () => {
         Tone.start();
         Tone.Transport.toggle();
         if (Tone.Transport.state === "started") btnPlay.classList.add("active");
@@ -36,8 +36,7 @@ document.addEventListener("DOMContentLoaded", () => {
     let test = new Patch(basicPatch);
     let test2 = new Patch(basicSynthPatch);
 
-    console.log(test);
-    console.log(test2);
+    test.drawControls();
 
     let sequencer = document.querySelector("ui-sequencer");
 
