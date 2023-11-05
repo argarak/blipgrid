@@ -139,12 +139,19 @@ class Patch {
         module[control.property] = target.value;
     }
 
+    getControlValue(module, control) {
+        if (typeof module[control.property] === "object") {
+            return module[control.property].value;
+        }
+        return module[control.property];
+    }
+
     createControlElement(module, control) {
         if (control.type == "knob") {
             let knob = document.createElement("ui-knob");
             knob.setAttribute("min", control.min);
             knob.setAttribute("max", control.max);
-            knob.setAttribute("default", control.default);
+            knob.setAttribute("default", this.getControlValue(module, control));
             knob.setAttribute("label", control.label);
 
             knob.addEventListener("input", e =>

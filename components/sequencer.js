@@ -148,6 +148,7 @@ class Sequencer extends HTMLElement {
         document.dispatchEvent(switchTrackEvent);
 
         this.algorithmControls();
+        this.update();
 
         console.log(this.sequence[this.selectedTrack]);
 
