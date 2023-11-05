@@ -1,14 +1,18 @@
 export default [
     {
-        "name": "worble",
+        "name": "euclidean",
         "mods": [
             {
-                name: "x",
-                integerMode: false
+                name: "triggers",
+                integerMode: true
+            },
+            {
+                name: "rotation",
+                integerMode: true
             }
         ],
         "fn": (t, seqlen, mod) => {
-            return Math.sin(t ** mod[0]*2) > mod[0] / seqlen;
+            return (((mod[0] * (t + mod[1])) % seqlen) + mod[0]) >= seqlen;
         }
     },
 
@@ -30,23 +34,6 @@ export default [
     },
 
     {
-        "name": "euclidean",
-        "mods": [
-            {
-                name: "triggers",
-                integerMode: true
-            },
-            {
-                name: "rotation",
-                integerMode: true
-            }
-        ],
-        "fn": (t, seqlen, mod) => {
-            return (((mod[0] * (t + mod[1])) % seqlen) + mod[0]) >= seqlen;
-        }
-    },
-
-    {
         "name": "sine threshold",
         "mods": [
             {
@@ -64,6 +51,19 @@ export default [
         ],
         "fn": (t, seqlen, mod) => {
             return Math.sin(t * mod[1] * (Math.sin(t * mod[1]) * mod[2])) * 64 > mod[0];
+        }
+    },
+
+    {
+        "name": "worble",
+        "mods": [
+            {
+                name: "x",
+                integerMode: false
+            }
+        ],
+        "fn": (t, seqlen, mod) => {
+            return Math.sin(t ** mod[0]*2) > mod[0] / seqlen;
         }
     }
 ];

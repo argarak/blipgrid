@@ -145,6 +145,10 @@ class Sequencer extends HTMLElement {
         this.sequence[trackIndex].patch = patch;
     }
 
+    getCurrentTrack() {
+        return this.sequence[this.selectedTrack];
+    }
+
     switchTrack(trackIndex) {
         this.selectedTrack = trackIndex;
 
@@ -175,7 +179,7 @@ class Sequencer extends HTMLElement {
         for (let trackIndex = 0; trackIndex < this.numTracks; trackIndex++) {
             let tab = document.createElement("div");
             tab.classList.add("trackTab");
-            tab.innerText = trackIndex;
+            tab.innerText = trackIndex + 1;
 
             tab.addEventListener("click", () =>
                 this.switchTrack(trackIndex));

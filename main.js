@@ -33,15 +33,13 @@ document.addEventListener("DOMContentLoaded", () => {
         Tone.Transport.bpm.value = e.target.value;
     });
 
-    let test = new Patch(basicPatch);
-    let test2 = new Patch(basicSynthPatch);
-
-    test.drawControls();
-
     let sequencer = document.querySelector("ui-sequencer");
 
-    sequencer.assignPatch(0, test);
-    sequencer.assignPatch(1, test2);
+    for (let trackIndex = 0; trackIndex < sequencer.numTracks; trackIndex++) {
+        let patch = new Patch(trackIndex % 2 == 0 ? basicSynthPatch : basicPatch);
+        sequencer.assignPatch(trackIndex, patch);
+        if (trackIndex === sequencer.selectedTrack) patch.drawControls();
+    }
 
     function trigger(modules, time) {
         for (let module of modules) {
@@ -54,8 +52,7 @@ document.addEventListener("DOMContentLoaded", () => {
     // FIXME currently the keys "roll", as is default OS behaviour
     // not sure whether we should deal with it somehow
     keyHandler.registerKey(["a"], () => {
-        console.log("pew!");
-        trigger(test.modules, Tone.now());
+        trigger(sequencer.getCurrentTrack().patch.modules, Tone.now());
     });
 
     for (let trackIndex = 1; trackIndex <= sequencer.numTracks; trackIndex++) {
@@ -67,11 +64,10 @@ document.addEventListener("DOMContentLoaded", () => {
     Tone.Transport.scheduleRepeat((time) => {
         sequencer.nextStep();
 
-        let trig = sequencer.next(0);
-        if (trig) trigger(test.modules, time);
-
-        trig = sequencer.next(1);
-        if (trig) trigger(test2.modules, time);
+        for (let trackIndex = 0; trackIndex < sequencer.numTracks; trackIndex++) {
+            let trig = sequencer.next(trackIndex);
+            if (trig) trigger(sequencer.sequence[trackIndex].patch.modules, time);
+        }
     }, "16n");
 
     Tone.Transport.start();
