@@ -34,33 +34,6 @@
   overflow-y hidden
   margin 10px 0px
 
-#sequenceGrid
-  flex 1
-
-  display grid
-  grid-template-columns repeat(4, notebox-size)
-  justify-content center
-  max-height 100%
-
-  margin 0px notebox-gap
-  gap notebox-gap + 3px
-
-.noteBox
-  width notebox-size
-  height notebox-size
-  background-color #222
-  border-radius 2px
-  border 1px solid rgb(66, 66, 66)
-  transition all .1s linear
-
-  &.active
-    background-color note-active-color
-    border-color note-active-color
-    //box-shadow 0px 0px 10px rgba(67, 160, 71, 0.5)
-
-  &.marker
-    border-color #fff
-
 #algorithmSelect
   width 100%
   max-width 40ch
@@ -75,6 +48,7 @@
 
   width 100%
   min-height 120px
+
   ui-knob
     width 100%
     max-width 15ch

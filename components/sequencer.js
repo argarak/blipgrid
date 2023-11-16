@@ -1,3 +1,6 @@
+import { LitElement, html, css, unsafeCSS } from "lit";
+import { ref, createRef } from "lit/directives/ref.js";
+
 import * as sequencerStyle from "/styles/sequencer.styl?inline";
 import defaultAlgorithms from "../sequence-algorithms.js";
 import util from "../util.js";
@@ -10,12 +13,66 @@ import util from "../util.js";
  * - an input element to change the number of steps the sequencer has
  * - a set of controls to manipulate the sequence algorithm
  */
-class Sequencer extends HTMLElement {
-    #sequenceLength;
+class Sequencer extends LitElement {
+    triggerGrid = createRef();
+
+    static properties = {
+        selectedAlgorithm: { type: Number, state: true },
+        selectedTrack: { type: Number, state: true }
+    };
+
+    _onAlgorithmSelectInput(e) {
+        let algorithm = null;
+        for (algorithm of this.algorithms) {
+            if (parseInt(e.target.value) ===
+                util.hashCode(algorithm.fn.toString())) {
+                break;
+            }
+            // TODO: error if not found
+        }
+
+        this.sequence[this.selectedTrack].algorithm = algorithm;
+    }
+
+    _onStepsInput(e) {
+        this.sequenceLength = e.target.value;
+    }
+
+    _onControlInput(e, modIndex) {
+        this.sequence[this.selectedTrack].mod[modIndex] = e.target.value;
+        this.sequence[this.selectedTrack].sequence = this.generateSequence();
+        this.triggerGrid.value.sequence = this.sequence[this.selectedTrack].sequence;
+    }
+
+    render() {
+        const tabs = this.createTabs();
+        const algorithmOptions = this.algorithmSelectOptions();
+        const algorithmControls = this.algorithmControls();
+        return html`
+            ${tabs}
+            <select id="algorithmSelect" @input=${this._onAlgorithmSelectInput}
+                    value="${this.selectedAlgorithm}">
+                ${algorithmOptions}
+            </select>
+            <div id="sequenceGridContainer">
+                <ui-trigger-grid ${ref(this.triggerGrid)}
+                 sequence="${this.sequence[this.selectedTrack].sequence}">
+                </ui-trigger-grid>
+            </div>
+            <div id="stepsContainer">
+                <input id="seqSteps" type="number"
+                       min="1" max="64" value="64" size="2"
+                       @input="${this._onStepsInput}"/>
+                <label for="seqSteps">steps</label>
+            </div>
+            <div id="knobContainer">${algorithmControls}</div>
+        `;
+    }
+
+    static styles = css`${unsafeCSS(sequencerStyle.default)}`;
 
     constructor() {
         super();
-        let self = this;
 
         this.numTracks = 8;
         this.selectedTrack = 0;
@@ -26,10 +83,10 @@ class Sequencer extends HTMLElement {
         // holds list of notebox DOM elements
         this.noteboxes = [];
 
-        let defaultLength = 64;
-
         // holds currently programmed sequencer
         this.sequence = {};
+
+        let defaultLength = 64;
 
         for (let trackIndex = 0; trackIndex < this.numTracks; trackIndex++) {
             this.sequence[trackIndex] = {
@@ -41,104 +98,17 @@ class Sequencer extends HTMLElement {
             };
         }
 
-        this.shadow = this.attachShadow({mode: "open"});
+        this.selectedAlgorithm =
+            util.hashCode(this.sequence[this.selectedTrack].algorithm.fn.toString());
 
-        // create the style element which contains all local CSS for this
-        // component
-        const style = document.createElement("style");
-        style.textContent = sequencerStyle.default;
-        this.shadow.appendChild(style);
-
-        // add track tabs
-        this.tabContainer = this.createTabs();
-        this.shadow.appendChild(this.tabContainer);
-
-        // create the algorithm select element to choose the algorithm the
-        // sequencer will use
-        this.algorithmSelect = document.createElement("select");
-        this.algorithmSelect.id = "algorithmSelect";
-        this.populateAlgorithmSelect();
-        this.shadow.appendChild(this.algorithmSelect);
-
-        this.algorithmSelect.addEventListener("input", e => {
-            let algorithm = null;
-            for (algorithm of self.algorithms) {
-                if (parseInt(e.target.value) ===
-                    util.hashCode(algorithm.fn.toString())) {
-                    break;
-                }
-                // TODO: error if not found
-            }
-
-            self.sequence[self.selectedTrack].algorithm = algorithm;
-
-            self.update();
-            self.algorithmControls();
-        });
-
-        let algorithmSelectLabel = document.createElement("label");
-        algorithmSelectLabel.setAttribute("for", "algorithmSelect");
-        algorithmSelectLabel.textContent = "algorithm";
-        //this.shadow.appendChild(algorithmSelectLabel);
-
-        // create a container for the container.....
-        const superContainer = document.createElement("div");
-        superContainer.id = "sequenceGridContainer";
-        this.shadow.appendChild(superContainer);
-
-        // create a container for the sequence grid
-        const container = document.createElement("div");
-        container.id = "sequenceGrid";
-        superContainer.appendChild(container);
-        this.container = container;
-
-        // create an input to change the number of steps in the sequence
-        const steps = document.createElement("input");
-        steps.id = "seqSteps";
-        steps.type = "number";
-        steps.min = 1;
-        steps.max = 64;
-        steps.value = 64;
-        steps.size = 2;
-
-        steps.addEventListener("input", e => {
-            self.sequenceLength = e.target.value;
-        });
-
-        const stepsLabel = document.createElement("label");
-        stepsLabel.setAttribute("for", "seqSteps");
-        stepsLabel.textContent = "steps";
-
-        this.sequenceLength = 64;
+        this.sequenceLength = defaultLength;
 
         // keeps track of the current step position
         // initially at the end of the sequence so that the sequence can start
         // at step zero when the first next() method is called
-        this.step = this.#sequenceLength;
-
-        let stepsContainer = document.createElement("div");
-        stepsContainer.id = "stepsContainer";
-        stepsContainer.appendChild(steps);
-        stepsContainer.appendChild(stepsLabel);
-        this.shadow.appendChild(stepsContainer);
-
-        // create container to hold algorithm specific controls
-        this.knobContainer = document.createElement("div");
-        this.knobContainer.id = "knobContainer";
-        this.algorithmControls();
-        this.shadow.appendChild(this.knobContainer);
+        this.step = this.sequenceLength;
 
         this.switchTrack(0);
-    }
-
-    /**
-     * setter for the private sequenceLength property. automatically
-     * updates the note grid when this property is changed.
-     * @param length : new integer length (must be less than or equal to 64)
-     **/
-    set sequenceLength(length) {
-        this.#sequenceLength = length;
-        this.populateGrid();
     }
 
     assignPatch(trackIndex, patch) {
@@ -156,38 +126,13 @@ class Sequencer extends HTMLElement {
             detail: this.sequence[this.selectedTrack]
         });
 
-        let hash = util.hashCode(this.sequence[this.selectedTrack].algorithm.fn.toString());
-        this.algorithmSelect.value = hash;
+        if ("value" in this.triggerGrid) {
+            this.triggerGrid.value.sequence = this.sequence[this.selectedTrack].sequence;
+        }
+
+        this.selectedAlgorithm =
+            util.hashCode(this.sequence[this.selectedTrack].algorithm.fn.toString());
         document.dispatchEvent(switchTrackEvent);
-
-        this.algorithmControls();
-        this.update();
-
-        console.log(this.sequence[this.selectedTrack]);
-
-        let tabs = this.tabContainer.children;
-        for (let tab of tabs) {
-            tab.classList.remove("active");
-        }
-        tabs[trackIndex % this.numTracks].classList.add("active");
-    }
-
-    createTabs() {
-        let tabContainer = document.createElement("div");
-        tabContainer.id = "trackTabs";
-
-        for (let trackIndex = 0; trackIndex < this.numTracks; trackIndex++) {
-            let tab = document.createElement("div");
-            tab.classList.add("trackTab");
-            tab.innerText = trackIndex + 1;
-
-            tab.addEventListener("click", () =>
-                this.switchTrack(trackIndex));
-
-            tabContainer.appendChild(tab);
-        }
-
-        return tabContainer;
     }
 
     nextStep() {
@@ -202,11 +147,7 @@ class Sequencer extends HTMLElement {
         let length = this.sequence[trackIndex].length;
 
         if (this.selectedTrack === trackIndex) {
-            let thisNotebox = this.noteboxes[this.step % length];
-            let markerStep = this.shadow.querySelector(".marker");
-            if (markerStep) markerStep.classList.remove("marker");
-            thisNotebox.classList.add("marker");
-            thisNotebox.scrollIntoView();
+            this.triggerGrid.value.setStep(this.step % length);
         }
 
         return this.sequence[trackIndex % this.numTracks].sequence[this.step % length];
@@ -217,17 +158,30 @@ class Sequencer extends HTMLElement {
             "name": name,
             "fn": fn
         });
-
-        this.populateAlgorithmSelect();
     }
 
-    onControlInput(e, modIndex) {
-        this.sequence[this.selectedTrack].mod[modIndex] = e.target.value;
-        this.update();
+    createTabs() {
+        let tabContainer = document.createElement("div");
+        tabContainer.id = "trackTabs";
+
+        for (let trackIndex = 0; trackIndex < this.numTracks; trackIndex++) {
+            let tab = document.createElement("div");
+            tab.classList.add("trackTab");
+            tab.innerText = trackIndex + 1;
+
+            if (trackIndex === this.selectedTrack) tab.classList.add("active");
+
+            tab.addEventListener("click", () =>
+                this.switchTrack(trackIndex));
+
+            tabContainer.appendChild(tab);
+        }
+
+        return tabContainer;
     }
 
     algorithmControls() {
-        this.knobContainer.innerHTML = "";
+        let knobs = [];
 
         const algoMods = this.sequence[this.selectedTrack].algorithm.mods;
 
@@ -249,25 +203,28 @@ class Sequencer extends HTMLElement {
             );
 
             knob.addEventListener("input", e =>
-                this.onControlInput(e, modIndex));
+                this._onControlInput(e, modIndex));
 
-            this.knobContainer.appendChild(knob);
+            knobs.push(knob);
         }
+
+        return knobs;
     }
 
-    populateAlgorithmSelect() {
-        this.algorithmSelect.innerHTML = "";
+    algorithmSelectOptions() {
+        let options = [];
         for (let alIndex = 0; alIndex < this.algorithms.length; alIndex++) {
             let optionElement = document.createElement("option");
             optionElement.value = util.hashCode(this.algorithms[alIndex].fn.toString());
             optionElement.textContent = this.algorithms[alIndex].name;
-            this.algorithmSelect.appendChild(optionElement);
+            options.push(optionElement);
         }
+        return options;
     }
 
     generateSequence() {
         let sequence = [];
-        for (let index = 0; index < this.#sequenceLength; index++) {
+        for (let index = 0; index < this.sequenceLength; index++) {
             sequence.push(
                 this.sequence[this.selectedTrack]
                     .algorithm.fn(index,
@@ -276,35 +233,6 @@ class Sequencer extends HTMLElement {
             );
         }
         return sequence;
-    }
-
-    update() {
-        this.sequence[this.selectedTrack].sequence = this.generateSequence();
-
-        let index = 0;
-        for (let notebox of this.noteboxes) {
-            if (this.sequence[this.selectedTrack].sequence[index]) {
-                notebox.classList.add("active");
-            }
-            else notebox.classList.remove("active");
-            ++index;
-        }
-    }
-
-    populateGrid() {
-        console.log(this.#sequenceLength);
-
-        this.noteboxes = [];
-        this.container.innerHTML = "";
-
-        for (let noteIndex = 0; noteIndex < this.#sequenceLength; noteIndex++) {
-            let noteBox = document.createElement("div");
-            noteBox.classList.add("noteBox");
-            this.container.appendChild(noteBox);
-            this.noteboxes.push(noteBox);
-        }
-
-        this.update();
     }
 }
 
