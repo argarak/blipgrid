@@ -51,12 +51,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // FIXME currently the keys "roll", as is default OS behaviour
     // not sure whether we should deal with it somehow
-    keyHandler.registerKey(["a"], () => {
+    keyHandler.registerKey("a", [], () => {
         trigger(sequencer.getCurrentTrack().patch.modules, Tone.now());
     });
 
     for (let trackIndex = 1; trackIndex <= sequencer.numTracks; trackIndex++) {
-        keyHandler.registerKey([`${trackIndex}`], () => {
+        keyHandler.registerKey(`${trackIndex}`, [], () => {
             sequencer.switchTrack(trackIndex - 1);
         });
     }

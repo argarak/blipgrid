@@ -1,60 +1,43 @@
-// TODO use keynames
-// TODO add support for shift, ctrl, alt modifiers
-
 class KeyHandler {
     constructor() {
         this.registeredKeys = [];
-        this.currentlyPressed = [];
-
-        let self = this;
-
+        this.paused = false;
         document.addEventListener("keydown", e => {
-            self.handleKeyDown(e);
-        });
-
-        document.addEventListener("keydown", e => {
-            self.handleKeyUp(e);
+            this.handleKeyDown(e);
         });
     }
 
-    handleKeyUp(e) {
-        // remove the keys from currentlyPressed
-        this.currentlyPressed = this.currentlyPressed.filter(kp => kp !== e.key);
+    pause() {
+        this.paused = true;
+    }
+
+    resume() {
+        this.paused = false;
     }
 
     handleKeyDown(e) {
-        if (this.currentlyPressed.includes(e.key)) return;
-
-        // add the key into currentlyPressed
-        this.currentlyPressed.push(e.key);
-
-        for (let registeredKey of this.registeredKeys) {
-            if (registeredKey.keys.length !==
-                this.currentlyPressed.length) continue;
-
-            let keyIndex = 0;
-            while (registeredKey.keys[keyIndex].toLowerCase() ===
-                   this.currentlyPressed[keyIndex].toLowerCase()) {
-                keyIndex++;
-
-                if (keyIndex === registeredKey.keys.length) {
-                    e.preventDefault();
-                    registeredKey.fn();
-                    this.currentlyPressed = [];
-                    break;
-                }
-            }
+        if (this.target !== document.body && this.paused) return;
+        let keyCombinations = this.registeredKeys.filter(
+            kp => kp.key.toLowerCase() === e.key.toLowerCase()
+        );
+        for (let combination of keyCombinations) {
+            let mod = 0;
+            if (combination.mod.includes("shift")) mod = e.shiftKey ? mod + 1 : mod;
+            if (combination.mod.includes("ctrl")) mod = e.ctrlKey ? mod + 1 : mod;
+            if (combination.mod.includes("alt")) mod = e.altKey ? mod + 1 : mod;
+            e.preventDefault();
+            if (mod === combination.mod.length) combination.fn();
         }
     }
 
-    registerKey(keys, fn) {
+    registerKey(key, mod, fn) {
         this.registeredKeys.push({
-            "keys": keys,
+            "key": key,
+            "mod": mod,
             "fn": fn
         });
     }
 }
 
 let keyHandler = new KeyHandler();
-
 export default keyHandler;

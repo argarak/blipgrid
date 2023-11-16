@@ -170,8 +170,8 @@ class Knob extends LitElement {
 
         this.marker = "#fff";
 
-        this.addEventListener("mouseleave", this._handleMouseLeave);
         this.addEventListener("contextmenu", this._handleContextMenu);
+        this.addEventListener("mouseleave", this._handleMouseLeave);
         this.addEventListener("mousedown", this._handleMouseDown);
         this.addEventListener("mouseup", this._handleMouseLeave);
         this.addEventListener("dblclick", this._handleDblClick);
