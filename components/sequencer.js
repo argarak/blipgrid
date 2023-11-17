@@ -16,6 +16,7 @@ import util from "../util.js";
 class Sequencer extends LitElement {
     triggerGrid = createRef();
     progress = createRef();
+    stepsInput = createRef();
 
     static properties = {
         selectedAlgorithm: { type: Number, state: true },
@@ -38,19 +39,34 @@ class Sequencer extends LitElement {
     }
 
     _onStepsInput(e) {
-        this.sequenceLength = e.target.value;
+        e.target.value.replace(/[^\d]/, "");
+        let value = parseInt(e.target.value);
+        if (value < 1) {
+            e.target.value = 1;
+            return;
+        }
+        if (value > 64) {
+            e.target.value = 64;
+            return;
+        }
+        //this.stepLabel.value.innerText = `${value} steps`;
+        this.sequence[this.selectedTrack].length = value;
+        this.sequence[this.selectedTrack].sequence = this.generateSequence();
+        this.triggerGrid.value.apply(this.sequence[this.selectedTrack].sequence, value);
     }
 
     _onControlInput(e, modIndex) {
         this.sequence[this.selectedTrack].mod[modIndex] = e.target.value;
         this.sequence[this.selectedTrack].sequence = this.generateSequence();
-        this.triggerGrid.value.sequence = this.sequence[this.selectedTrack].sequence;
+        this.triggerGrid.value.apply(this.sequence[this.selectedTrack].sequence,
+            this.sequence[this.selectedTrack].length);
     }
 
     render() {
         const tabs = this.createTabs();
         const algorithmOptions = this.algorithmSelectOptions();
         const algorithmControls = this.algorithmControls();
+        const length = this.sequence[this.selectedTrack].length;
         return html`
             ${tabs}
             <select id="algorithmSelect" @input=${this._onAlgorithmSelectInput}>
@@ -63,7 +79,7 @@ class Sequencer extends LitElement {
             </div>
             <div id="stepsContainer">
                 <input id="seqSteps" type="number"
-                       min="1" max="64" value="64" size="2"
+                       min="1" max="64" .value="${length}" size="2"
                        @input="${this._onStepsInput}"/>
                 <label for="seqSteps">steps</label>
             </div>
@@ -104,12 +120,10 @@ class Sequencer extends LitElement {
         this.selectedAlgorithm =
             util.hashCode(this.sequence[this.selectedTrack].algorithm.fn.toString());
 
-        this.sequenceLength = defaultLength;
-
         // keeps track of the current step position
         // initially at the end of the sequence so that the sequence can start
         // at step zero when the first next() method is called
-        this.step = this.sequenceLength;
+        this.step = defaultLength;
 
         this.switchTrack(0);
     }
@@ -130,12 +144,14 @@ class Sequencer extends LitElement {
         });
 
         if ("value" in this.triggerGrid) {
-            this.triggerGrid.value.sequence = this.sequence[this.selectedTrack].sequence;
+            this.triggerGrid.value.apply(this.sequence[this.selectedTrack].sequence,
+                this.sequence[this.selectedTrack].length);
         }
 
         this.selectedAlgorithm =
             util.hashCode(this.sequence[this.selectedTrack].algorithm.fn.toString());
         document.dispatchEvent(switchTrackEvent);
+        this.requestUpdate();
     }
 
     nextStep() {
@@ -143,7 +159,7 @@ class Sequencer extends LitElement {
         if ("value" in this.progress) {
             const length = this.sequence[this.selectedTrack].length;
             this.progress.value.style.width =
-                util.map(this.step % length, 0, 64, 0, 100) + "%";
+                util.map(this.step % length, 0, length, 0, 100) + "%";
         }
     }
 
@@ -155,6 +171,7 @@ class Sequencer extends LitElement {
         let length = this.sequence[trackIndex].length;
 
         if (this.selectedTrack === trackIndex) {
+            console.log(length);
             this.triggerGrid.value.setStep(this.step % length);
         }
 
@@ -234,12 +251,11 @@ class Sequencer extends LitElement {
 
     generateSequence() {
         let sequence = [];
-        for (let index = 0; index < this.sequenceLength; index++) {
+        let thisSequence = this.sequence[this.selectedTrack];
+        for (let index = 0; index < thisSequence.length; index++) {
             sequence.push(
-                this.sequence[this.selectedTrack]
-                    .algorithm.fn(index,
-                        this.sequence[this.selectedTrack].length,
-                        this.sequence[this.selectedTrack].mod)
+                thisSequence
+                    .algorithm.fn(index, thisSequence.length, thisSequence.mod)
             );
         }
         return sequence;

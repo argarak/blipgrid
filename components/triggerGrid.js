@@ -3,25 +3,33 @@ import * as triggerGridStyle from "/styles/triggerGrid.styl?inline";
 
 class TriggerGrid extends LitElement {
     static properties = {
-        sequence: { type: Array, hasChanged: this._onSequenceChanged },
+        sequence: { type: Array },
         length: { type: Number },
         step: { type: Number }
     };
 
-    set sequence(s) {
-        if (s === null) return;
-        if (s.length === 0) {
+    apply(sequence, length) {
+        if (length !== this.length) {
+            this.length = length;
+            this.noteboxes = this.populateGrid();
+            this.requestUpdate();
+        }
+
+        if (sequence.length === 0) {
             this.noteboxes.forEach(n => n.classList.remove("active"));
             return;
         }
-        for (let noteIndex = 0; noteIndex < s.length; noteIndex++) {
+
+        for (let noteIndex = 0; noteIndex < this.length; noteIndex++) {
             let noteBox = this.noteboxes[noteIndex];
 
-            if (s[noteIndex]) {
+            if (sequence[noteIndex]) {
                 noteBox.classList.add("active");
             }
             else noteBox.classList.remove("active");
         }
+
+        this.sequence = sequence;
     }
 
     render() {
@@ -40,8 +48,9 @@ class TriggerGrid extends LitElement {
     }
 
     setStep(s) {
-        for (let noteIndex = 0; noteIndex < this.noteboxes.length; noteIndex++) {
+        for (let noteIndex = 0; noteIndex < this.length; noteIndex++) {
             let noteBox = this.noteboxes[noteIndex];
+            if (!noteBox) break;
 
             if (noteIndex === s) {
                 noteBox.classList.add("marker");
