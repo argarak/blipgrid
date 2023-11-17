@@ -45,7 +45,10 @@
             </div>
 
             <div id="editContainer">
-                <ui-sequencer></ui-sequencer>
+                <div id="sequencerContainer">
+                    <ui-sequencer></ui-sequencer>
+                    <ui-arpeggiator></ui-arpeggiator>
+                </div>
                 <div id="paramContainer">
                     <div id="loadControls">
                         <div id="patchUpload">
@@ -60,6 +63,7 @@
 
         <script type="module" src="util.js"></script>
         <script type="module" src="components/triggerGrid.js"></script>
+        <script type="module" src="components/arpeggiator.js"></script>
         <script type="module" src="components/sequencer.js"></script>
         <script type="module" src="components/knob.js"></script>
         <script type="module" src="main.js"></script>

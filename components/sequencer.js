@@ -15,6 +15,7 @@ import util from "../util.js";
  */
 class Sequencer extends LitElement {
     triggerGrid = createRef();
+    progress = createRef();
 
     static properties = {
         selectedAlgorithm: { type: Number, state: true },
@@ -22,6 +23,7 @@ class Sequencer extends LitElement {
     };
 
     _onAlgorithmSelectInput(e) {
+        e.preventDefault();
         let algorithm = null;
         for (algorithm of this.algorithms) {
             if (parseInt(e.target.value) ===
@@ -32,6 +34,7 @@ class Sequencer extends LitElement {
         }
 
         this.sequence[this.selectedTrack].algorithm = algorithm;
+        this.selectedAlgorithm = util.hashCode(algorithm.fn.toString());
     }
 
     _onStepsInput(e) {
@@ -50,8 +53,7 @@ class Sequencer extends LitElement {
         const algorithmControls = this.algorithmControls();
         return html`
             ${tabs}
-            <select id="algorithmSelect" @input=${this._onAlgorithmSelectInput}
-                    value="${this.selectedAlgorithm}">
+            <select id="algorithmSelect" @input=${this._onAlgorithmSelectInput}>
                 ${algorithmOptions}
             </select>
             <div id="sequenceGridContainer">
@@ -66,6 +68,7 @@ class Sequencer extends LitElement {
                 <label for="seqSteps">steps</label>
             </div>
             <div id="knobContainer">${algorithmControls}</div>
+            <div id="progress"><div ${ref(this.progress)}></div></div>
         `;
     }
 
@@ -137,6 +140,11 @@ class Sequencer extends LitElement {
 
     nextStep() {
         this.step += 1;
+        if ("value" in this.progress) {
+            const length = this.sequence[this.selectedTrack].length;
+            this.progress.value.style.width =
+                util.map(this.step % length, 0, 64, 0, 100) + "%";
+        }
     }
 
     /**
@@ -215,7 +223,9 @@ class Sequencer extends LitElement {
         let options = [];
         for (let alIndex = 0; alIndex < this.algorithms.length; alIndex++) {
             let optionElement = document.createElement("option");
-            optionElement.value = util.hashCode(this.algorithms[alIndex].fn.toString());
+            let hash = util.hashCode(this.algorithms[alIndex].fn.toString());
+            optionElement.value = hash;
+            if (hash == this.selectedAlgorithm) optionElement.selected = true;
             optionElement.textContent = this.algorithms[alIndex].name;
             options.push(optionElement);
         }

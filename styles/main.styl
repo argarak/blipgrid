@@ -21,6 +21,11 @@ body
 .hfill
   width 100%
 
+#sequencerContainer
+  display flex
+  flex-direction column
+  height 100%
+
 #headContainer
   box-sizing border-box
   padding 5px
@@ -108,14 +113,13 @@ body
   label
     color #aaa
 
-ui-sequencer
-  height 100%
+ui-sequencer,
+ui-arpeggiator
   display flex
   flex-direction column
   align-items center
-
+  max-height 60%
   background m-background-color
-
   flex 1
 
 .knobSet

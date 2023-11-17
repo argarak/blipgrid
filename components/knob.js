@@ -40,6 +40,8 @@ window.addEventListener("mouseup", () => {
 });
 
 class Knob extends LitElement {
+    #default;
+
     static properties = {
         max: {
             type: Number
@@ -48,8 +50,7 @@ class Knob extends LitElement {
             type: Number
         },
         default: {
-            type: Number,
-            hasChanged: this._setDefault
+            type: Number
         },
         integerMode: {
             attribute: "integer-mode",
@@ -91,15 +92,16 @@ class Knob extends LitElement {
         </div>`;
     }
 
-    _setDefault() {
-        this.value = this.integerMode ? Math.round(this.default) : this.default;
-        this.pos = util.map(this.default, this.min, this.max, 0, 100);
+    set default(d) {
+        this.value = this.integerMode ? Math.round(d) : d;
+        this.pos = util.map(d, this.min, this.max, 0, 100);
         this.apply(0);
+        this.#default = d;
     }
 
     /* -- event handlers -- */
     _handleDblClick() {
-        this.pos = util.map(this.default, this.min, this.max, 0, 100);
+        this.pos = util.map(this.#default, this.min, this.max, 0, 100);
         this.apply(0);
     }
 
@@ -158,7 +160,7 @@ class Knob extends LitElement {
         this.labelContent = this.label;
 
         this.integerMode = false;
-        this.value = this.integerMode ? Math.round(this.default) :
+        this.value = this.integerMode ? Math.round(this.#default) :
             this.default;
 
         // pos is a value that must be between 0 and 100 because this dictates
