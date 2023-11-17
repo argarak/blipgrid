@@ -13,10 +13,8 @@ import util from "../util.js";
  * - an input element to change the number of steps the sequencer has
  * - a set of controls to manipulate the sequence algorithm
  */
-class Sequencer extends LitElement {
+class Arpeggiator extends LitElement {
     triggerGrid = createRef();
-    progress = createRef();
-    stepsInput = createRef();
 
     static properties = {
         selectedAlgorithm: { type: Number, state: true },
@@ -24,7 +22,6 @@ class Sequencer extends LitElement {
     };
 
     _onAlgorithmSelectInput(e) {
-        e.preventDefault();
         let algorithm = null;
         for (algorithm of this.algorithms) {
             if (parseInt(e.target.value) ===
@@ -35,50 +32,28 @@ class Sequencer extends LitElement {
         }
 
         this.sequence[this.selectedTrack].algorithm = algorithm;
-        this.selectedAlgorithm = util.hashCode(algorithm.fn.toString());
     }
 
     _onStepsInput(e) {
-        let value = parseInt(e.target.value);
-        if (isNaN(value)) { value = 1; e.target.value = 1; }
-        if (value < 1) value = 1;
-        if (value > 64) value = 64;
-
-        this.sequence[this.selectedTrack].length = value;
-        this.sequence[this.selectedTrack].sequence = this.generateSequence();
-        this.triggerGrid.value.apply(this.sequence[this.selectedTrack].sequence, value);
+        this.sequenceLength = e.target.value;
     }
 
     _onControlInput(e, modIndex) {
         this.sequence[this.selectedTrack].mod[modIndex] = e.target.value;
         this.sequence[this.selectedTrack].sequence = this.generateSequence();
-        this.triggerGrid.value.apply(this.sequence[this.selectedTrack].sequence,
-            this.sequence[this.selectedTrack].length);
+        this.triggerGrid.value.sequence = this.sequence[this.selectedTrack].sequence;
     }
 
     render() {
-        const tabs = this.createTabs();
+
         const algorithmOptions = this.algorithmSelectOptions();
         const algorithmControls = this.algorithmControls();
-        const length = this.sequence[this.selectedTrack].length;
         return html`
-            ${tabs}
-            <select id="algorithmSelect" @input=${this._onAlgorithmSelectInput}>
+            <select id="algorithmSelect" @input=${this._onAlgorithmSelectInput}
+                    value="${this.selectedAlgorithm}">
                 ${algorithmOptions}
             </select>
-            <div id="sequenceGridContainer">
-                <ui-trigger-grid ${ref(this.triggerGrid)}
-                 sequence="${this.sequence[this.selectedTrack].sequence}">
-                </ui-trigger-grid>
-            </div>
-            <div id="stepsContainer">
-                <input id="seqSteps" type="number"
-                       min="1" max="64" .value="${length}" size="2"
-                       @input="${this._onStepsInput}"/>
-                <label for="seqSteps">steps</label>
-            </div>
             <div id="knobContainer">${algorithmControls}</div>
-            <div id="progress"><div ${ref(this.progress)}></div></div>
         `;
     }
 
@@ -114,10 +89,12 @@ class Sequencer extends LitElement {
         this.selectedAlgorithm =
             util.hashCode(this.sequence[this.selectedTrack].algorithm.fn.toString());
 
+        this.sequenceLength = defaultLength;
+
         // keeps track of the current step position
         // initially at the end of the sequence so that the sequence can start
         // at step zero when the first next() method is called
-        this.step = defaultLength;
+        this.step = this.sequenceLength;
 
         this.switchTrack(0);
     }
@@ -138,23 +115,16 @@ class Sequencer extends LitElement {
         });
 
         if ("value" in this.triggerGrid) {
-            this.triggerGrid.value.apply(this.sequence[this.selectedTrack].sequence,
-                this.sequence[this.selectedTrack].length);
+            this.triggerGrid.value.sequence = this.sequence[this.selectedTrack].sequence;
         }
 
         this.selectedAlgorithm =
             util.hashCode(this.sequence[this.selectedTrack].algorithm.fn.toString());
         document.dispatchEvent(switchTrackEvent);
-        this.requestUpdate();
     }
 
     nextStep() {
         this.step += 1;
-        if ("value" in this.progress) {
-            const length = this.sequence[this.selectedTrack].length;
-            this.progress.value.style.width =
-                util.map(this.step % length, 0, length, 0, 100) + "%";
-        }
     }
 
     /**
@@ -165,7 +135,6 @@ class Sequencer extends LitElement {
         let length = this.sequence[trackIndex].length;
 
         if (this.selectedTrack === trackIndex) {
-            console.log(length);
             this.triggerGrid.value.setStep(this.step % length);
         }
 
@@ -179,25 +148,6 @@ class Sequencer extends LitElement {
         });
     }
 
-    createTabs() {
-        let tabContainer = document.createElement("div");
-        tabContainer.id = "trackTabs";
-
-        for (let trackIndex = 0; trackIndex < this.numTracks; trackIndex++) {
-            let tab = document.createElement("div");
-            tab.classList.add("trackTab");
-            tab.innerText = trackIndex + 1;
-
-            if (trackIndex === this.selectedTrack) tab.classList.add("active");
-
-            tab.addEventListener("click", () =>
-                this.switchTrack(trackIndex));
-
-            tabContainer.appendChild(tab);
-        }
-
-        return tabContainer;
-    }
 
     algorithmControls() {
         let knobs = [];
@@ -234,9 +184,7 @@ class Sequencer extends LitElement {
         let options = [];
         for (let alIndex = 0; alIndex < this.algorithms.length; alIndex++) {
             let optionElement = document.createElement("option");
-            let hash = util.hashCode(this.algorithms[alIndex].fn.toString());
-            optionElement.value = hash;
-            if (hash == this.selectedAlgorithm) optionElement.selected = true;
+            optionElement.value = util.hashCode(this.algorithms[alIndex].fn.toString());
             optionElement.textContent = this.algorithms[alIndex].name;
             options.push(optionElement);
         }
@@ -245,17 +193,18 @@ class Sequencer extends LitElement {
 
     generateSequence() {
         let sequence = [];
-        let thisSequence = this.sequence[this.selectedTrack];
-        for (let index = 0; index < thisSequence.length; index++) {
+        for (let index = 0; index < this.sequenceLength; index++) {
             sequence.push(
-                thisSequence
-                    .algorithm.fn(index, thisSequence.length, thisSequence.mod)
+                this.sequence[this.selectedTrack]
+                    .algorithm.fn(index,
+                        this.sequence[this.selectedTrack].length,
+                        this.sequence[this.selectedTrack].mod)
             );
         }
         return sequence;
     }
 }
 
-customElements.define("ui-sequencer", Sequencer);
+customElements.define("ui-arpeggiator", Arpeggiator);
 
-export default Sequencer;
+export default Arpeggiator;
