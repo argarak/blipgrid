@@ -170,6 +170,8 @@ class Patch {
                 select.appendChild(optionElement);
             }
 
+            select.value = this.getControlValue(module, control);
+
             select.addEventListener("input", e =>
                 this.onControlInput(e, module, control));
 

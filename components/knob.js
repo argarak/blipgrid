@@ -96,6 +96,7 @@ class Knob extends LitElement {
         this.value = this.integerMode ? Math.round(d) : d;
         this.pos = util.map(d, this.min, this.max, 0, 100);
         this.apply(0);
+        this.dispatchEvent(this.eventInput);
         this.#default = d;
     }
 

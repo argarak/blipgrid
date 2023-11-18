@@ -8,7 +8,8 @@ export default [
             },
             {
                 name: "rotation",
-                integerMode: true
+                integerMode: true,
+                min: 1
             }
         ],
         "fn": (t, seqlen, mod) => {

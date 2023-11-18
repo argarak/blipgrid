@@ -165,7 +165,6 @@ class Sequencer extends LitElement {
         let length = this.sequence[trackIndex].length;
 
         if (this.selectedTrack === trackIndex) {
-            console.log(length);
             this.triggerGrid.value.setStep(this.step % length);
         }
 
@@ -206,12 +205,14 @@ class Sequencer extends LitElement {
 
         for (let modIndex = 0; modIndex < algoMods.length; modIndex++) {
             let knob = document.createElement("ui-knob");
-            knob.setAttribute("min", 0);
-            knob.setAttribute("max", 64);
-
             let currentMod = this.sequence[this.selectedTrack].mod[modIndex];
 
-            knob.setAttribute("default", currentMod ? currentMod : 0);
+            let min = algoMods[modIndex].min ? algoMods[modIndex].min : 0;
+            let max = algoMods[modIndex].max ? algoMods[modIndex].min : 64;
+            knob.setAttribute("min", min);
+            knob.setAttribute("max", max);
+
+            knob.setAttribute("default", currentMod ? currentMod : min);
             knob.setAttribute(
                 "label", algoMods[modIndex].name
             );
