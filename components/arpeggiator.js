@@ -1,7 +1,6 @@
 import { LitElement, html, css, unsafeCSS } from "lit";
-import { ref, createRef } from "lit/directives/ref.js";
 
-import * as sequencerStyle from "/styles/sequencer.styl?inline";
+import * as arpeggiatorStyle from "/styles/arpeggiator.styl?inline";
 import defaultAlgorithms from "../sequence-algorithms.js";
 import util from "../util.js";
 
@@ -14,8 +13,6 @@ import util from "../util.js";
  * - a set of controls to manipulate the sequence algorithm
  */
 class Arpeggiator extends LitElement {
-    triggerGrid = createRef();
-
     static properties = {
         selectedAlgorithm: { type: Number, state: true },
         selectedTrack: { type: Number, state: true }
@@ -34,10 +31,6 @@ class Arpeggiator extends LitElement {
         this.sequence[this.selectedTrack].algorithm = algorithm;
     }
 
-    _onStepsInput(e) {
-        this.sequenceLength = e.target.value;
-    }
-
     _onControlInput(e, modIndex) {
         this.sequence[this.selectedTrack].mod[modIndex] = e.target.value;
         this.sequence[this.selectedTrack].sequence = this.generateSequence();
@@ -45,19 +38,36 @@ class Arpeggiator extends LitElement {
     }
 
     render() {
-
         const algorithmOptions = this.algorithmSelectOptions();
         const algorithmControls = this.algorithmControls();
+
+        const noteIndicators = this.generateIndicators(this.notesPerOctave);
+        const octaveIndicators = this.generateIndicators(this.octaves);
+
         return html`
             <select id="algorithmSelect" @input=${this._onAlgorithmSelectInput}
                     value="${this.selectedAlgorithm}">
                 ${algorithmOptions}
             </select>
+            <div id="octaveIndicatorContainer">${octaveIndicators}</div>
+            <div id="noteIndicatorContainer">${noteIndicators}</div>
             <div id="knobContainer">${algorithmControls}</div>
         `;
     }
 
-    static styles = css`${unsafeCSS(sequencerStyle.default)}`;
+    generateIndicators(length) {
+        let indicators = [];
+
+        for (let noteIndex = 0; noteIndex < length; noteIndex++) {
+            let indicator = document.createElement("div");
+            indicator.classList.add("indicator");
+            indicators.push(indicator);
+        }
+
+        return indicators;
+    }
+
+    static styles = css`${unsafeCSS(arpeggiatorStyle.default)}`;
 
     constructor() {
         super();
@@ -73,6 +83,9 @@ class Arpeggiator extends LitElement {
 
         // holds currently programmed sequencer
         this.sequence = {};
+
+        this.notesPerOctave = 12;
+        this.octaves = 5;
 
         let defaultLength = 64;
 
@@ -99,24 +112,12 @@ class Arpeggiator extends LitElement {
         this.switchTrack(0);
     }
 
-    assignPatch(trackIndex, patch) {
-        this.sequence[trackIndex].patch = patch;
-    }
-
-    getCurrentTrack() {
-        return this.sequence[this.selectedTrack];
-    }
-
     switchTrack(trackIndex) {
         this.selectedTrack = trackIndex;
 
         const switchTrackEvent = new CustomEvent("trackSwitch", {
             detail: this.sequence[this.selectedTrack]
         });
-
-        if ("value" in this.triggerGrid) {
-            this.triggerGrid.value.sequence = this.sequence[this.selectedTrack].sequence;
-        }
 
         this.selectedAlgorithm =
             util.hashCode(this.sequence[this.selectedTrack].algorithm.fn.toString());
@@ -147,7 +148,6 @@ class Arpeggiator extends LitElement {
             "fn": fn
         });
     }
-
 
     algorithmControls() {
         let knobs = [];
@@ -189,19 +189,6 @@ class Arpeggiator extends LitElement {
             options.push(optionElement);
         }
         return options;
-    }
-
-    generateSequence() {
-        let sequence = [];
-        for (let index = 0; index < this.sequenceLength; index++) {
-            sequence.push(
-                this.sequence[this.selectedTrack]
-                    .algorithm.fn(index,
-                        this.sequence[this.selectedTrack].length,
-                        this.sequence[this.selectedTrack].mod)
-            );
-        }
-        return sequence;
     }
 }
 
