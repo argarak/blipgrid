@@ -4,7 +4,8 @@ export default [
         "mods": [
             {
                 name: "loop",
-                integerMode: true
+                integerMode: true,
+                min: 1
             },
             {
                 name: "octave",

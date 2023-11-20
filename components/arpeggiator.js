@@ -40,7 +40,6 @@ class Arpeggiator extends LitElement {
         const algorithmOptions = this.algorithmSelectOptions();
         const algorithmControls = this.algorithmControls();
 
-        const noteIndicators = this.generateIndicators(this.notesPerOctave);
         const octaveIndicators = this.generateIndicators(this.octaves);
 
         return html`
@@ -49,7 +48,7 @@ class Arpeggiator extends LitElement {
                 ${algorithmOptions}
             </select>
             <div id="octaveIndicatorContainer">${octaveIndicators}</div>
-            <div id="noteIndicatorContainer">${noteIndicators}</div>
+            <div id="noteIndicatorContainer">${this.noteIndicators}</div>
             <div id="knobContainer">${algorithmControls}</div>
         `;
     }
@@ -89,6 +88,8 @@ class Arpeggiator extends LitElement {
         this.notesPerOctave = 12;
         this.octaves = 5;
 
+        this.noteIndicators = this.generateIndicators(this.notesPerOctave);
+
         let defaultLength = 64;
 
         for (let trackIndex = 0; trackIndex < this.numTracks; trackIndex++) {
@@ -119,6 +120,17 @@ class Arpeggiator extends LitElement {
             util.hashCode(this.sequence[this.selectedTrack].algorithm.fn.toString());
     }
 
+    updateNoteIndicators(noteIndex) {
+        console.log(noteIndex);
+        for (let indicatorIndex = 0;
+            indicatorIndex < this.noteIndicators.length;
+            indicatorIndex++) {
+            let indicator = this.noteIndicators[indicatorIndex];
+            if (indicatorIndex === noteIndex) indicator.classList.add("active");
+            else indicator.classList.remove("active");
+        }
+    }
+
     /**
      * increments the sequencer, looping back to the start if necessary
      * @return whether the next step is active or inactive
@@ -128,6 +140,7 @@ class Arpeggiator extends LitElement {
             this.scale,
             this.sequence[trackIndex].mod);
         let notes = Tone.Frequency(this.root).harmonize(this.scale);
+        this.updateNoteIndicators(this.scale[selected[0]]);
         return notes[selected[0]];
     }
 
