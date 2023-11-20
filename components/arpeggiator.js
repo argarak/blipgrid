@@ -1,7 +1,8 @@
+import * as Tone from "tone";
 import { LitElement, html, css, unsafeCSS } from "lit";
 
 import * as arpeggiatorStyle from "/styles/arpeggiator.styl?inline";
-import defaultAlgorithms from "../sequence-algorithms.js";
+import defaultAlgorithms from "../arpeggiator-algorithms.js";
 import util from "../util.js";
 
 /**
@@ -33,8 +34,6 @@ class Arpeggiator extends LitElement {
 
     _onControlInput(e, modIndex) {
         this.sequence[this.selectedTrack].mod[modIndex] = e.target.value;
-        this.sequence[this.selectedTrack].sequence = this.generateSequence();
-        this.triggerGrid.value.sequence = this.sequence[this.selectedTrack].sequence;
     }
 
     render() {
@@ -81,6 +80,9 @@ class Arpeggiator extends LitElement {
         // holds list of notebox DOM elements
         this.noteboxes = [];
 
+        this.root = "C4";
+        this.scale = [0, 2, 3, 5, 7, 8, 10];
+
         // holds currently programmed sequencer
         this.sequence = {};
 
@@ -92,7 +94,6 @@ class Arpeggiator extends LitElement {
         for (let trackIndex = 0; trackIndex < this.numTracks; trackIndex++) {
             this.sequence[trackIndex] = {
                 mod: [],
-                patch: null,
                 length: defaultLength,
                 sequence: [],
                 algorithm: this.algorithms[0]
@@ -114,32 +115,20 @@ class Arpeggiator extends LitElement {
 
     switchTrack(trackIndex) {
         this.selectedTrack = trackIndex;
-
-        const switchTrackEvent = new CustomEvent("trackSwitch", {
-            detail: this.sequence[this.selectedTrack]
-        });
-
         this.selectedAlgorithm =
             util.hashCode(this.sequence[this.selectedTrack].algorithm.fn.toString());
-        document.dispatchEvent(switchTrackEvent);
-    }
-
-    nextStep() {
-        this.step += 1;
     }
 
     /**
      * increments the sequencer, looping back to the start if necessary
      * @return whether the next step is active or inactive
      **/
-    next(trackIndex) {
-        let length = this.sequence[trackIndex].length;
-
-        if (this.selectedTrack === trackIndex) {
-            this.triggerGrid.value.setStep(this.step % length);
-        }
-
-        return this.sequence[trackIndex % this.numTracks].sequence[this.step % length];
+    next(trackIndex, t) {
+        let selected = this.sequence[trackIndex].algorithm.fn(t,
+            this.scale,
+            this.sequence[trackIndex].mod);
+        let notes = Tone.Frequency(this.root).harmonize(this.scale);
+        return notes[selected[0]];
     }
 
     registerAlgorithm(name, fn) {

@@ -34,11 +34,18 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     let sequencer = document.querySelector("ui-sequencer");
+    let arpeggiator = document.querySelector("ui-arpeggiator");
 
     for (let trackIndex = 0; trackIndex < sequencer.numTracks; trackIndex++) {
         let patch = new Patch(trackIndex % 2 == 0 ? basicSynthPatch : basicPatch);
         sequencer.assignPatch(trackIndex, patch);
         if (trackIndex === sequencer.selectedTrack) patch.drawControls();
+    }
+
+    function setFrequency(modules, frequency, time) {
+        for (let module of modules) {
+            if (module.name === "Oscillator") module.frequency.setValueAtTime(frequency, time);
+        }
     }
 
     function trigger(modules, time) {
@@ -62,11 +69,16 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     Tone.Transport.scheduleRepeat((time) => {
-        sequencer.nextStep();
+        let t = sequencer.nextStep();
 
         for (let trackIndex = 0; trackIndex < sequencer.numTracks; trackIndex++) {
             let trig = sequencer.next(trackIndex);
-            if (trig) trigger(sequencer.sequence[trackIndex].patch.modules, time);
+            if (trig) {
+                let frequency = arpeggiator.next(trackIndex, t);
+                console.log(frequency);
+                setFrequency(sequencer.sequence[trackIndex].patch.modules, frequency, time);
+                trigger(sequencer.sequence[trackIndex].patch.modules, time);
+            }
         }
     }, "16n");
 

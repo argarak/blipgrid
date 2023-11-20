@@ -155,6 +155,7 @@ class Sequencer extends LitElement {
             this.progress.value.style.width =
                 util.map(this.step % length, 0, length, 0, 100) + "%";
         }
+        return this.step;
     }
 
     /**
