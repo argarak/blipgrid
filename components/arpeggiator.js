@@ -30,6 +30,8 @@ class Arpeggiator extends LitElement {
         }
 
         this.sequence[this.selectedTrack].algorithm = algorithm;
+        this.selectedAlgorithm =
+            util.hashCode(this.sequence[this.selectedTrack].algorithm.fn.toString());
     }
 
     _onControlInput(e, modIndex) {
@@ -79,7 +81,7 @@ class Arpeggiator extends LitElement {
         // holds list of notebox DOM elements
         this.noteboxes = [];
 
-        this.root = "C4";
+        this.root = "F3";
         this.scale = [0, 2, 3, 5, 7, 8, 10];
 
         // holds currently programmed sequencer
@@ -121,7 +123,6 @@ class Arpeggiator extends LitElement {
     }
 
     updateNoteIndicators(noteIndex) {
-        console.log(noteIndex);
         for (let indicatorIndex = 0;
             indicatorIndex < this.noteIndicators.length;
             indicatorIndex++) {
@@ -140,7 +141,9 @@ class Arpeggiator extends LitElement {
             this.scale,
             this.sequence[trackIndex].mod);
         let notes = Tone.Frequency(this.root).harmonize(this.scale);
-        this.updateNoteIndicators(this.scale[selected[0]]);
+        if (this.selectedTrack === trackIndex) {
+            this.updateNoteIndicators(this.scale[selected[0]]);
+        }
         return notes[selected[0]];
     }
 

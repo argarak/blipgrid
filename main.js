@@ -3,6 +3,7 @@ import "@material-design-icons/font";
 
 import * as Tone from "tone";
 import Patch from "./patch.js";
+import Mixer from "./mixer.js";
 
 import keyHandler from "./keys.js";
 
@@ -36,8 +37,13 @@ document.addEventListener("DOMContentLoaded", () => {
     let sequencer = document.querySelector("ui-sequencer");
     let arpeggiator = document.querySelector("ui-arpeggiator");
 
+    const mixer = new Mixer(sequencer.numTracks);
+
     for (let trackIndex = 0; trackIndex < sequencer.numTracks; trackIndex++) {
-        let patch = new Patch(trackIndex % 2 == 0 ? basicSynthPatch : basicPatch);
+        let patch = new Patch(
+            trackIndex % 2 == 0 ? basicSynthPatch : basicPatch,
+            mixer, trackIndex
+        );
         sequencer.assignPatch(trackIndex, patch);
         if (trackIndex === sequencer.selectedTrack) patch.drawControls();
     }
@@ -63,7 +69,18 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     for (let trackIndex = 1; trackIndex <= sequencer.numTracks; trackIndex++) {
-        keyHandler.registerKey(`${trackIndex}`, [], () => {
+        keyHandler.registerKey(`Digit${trackIndex}`, ["shift"], () => {
+            console.debug(`muting channel ${trackIndex - 1}`);
+            mixer.toggleMute(trackIndex - 1);
+        });
+
+        keyHandler.registerKey(`Digit${trackIndex}`, ["ctrl"], () => {
+            console.debug(`soloing channel ${trackIndex - 1}`);
+            mixer.toggleSolo(trackIndex - 1);
+        });
+
+        keyHandler.registerKey(`Digit${trackIndex}`, [], () => {
+            console.debug(`switching to track ${trackIndex - 1}`);
             sequencer.switchTrack(trackIndex - 1);
         });
     }
@@ -75,7 +92,6 @@ document.addEventListener("DOMContentLoaded", () => {
             let trig = sequencer.next(trackIndex);
             if (trig) {
                 let frequency = arpeggiator.next(trackIndex, t);
-                console.log(frequency);
                 setFrequency(sequencer.sequence[trackIndex].patch.modules, frequency, time);
                 trigger(sequencer.sequence[trackIndex].patch.modules, time);
             }

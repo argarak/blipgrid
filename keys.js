@@ -16,17 +16,22 @@ class KeyHandler {
     }
 
     handleKeyDown(e) {
+        console.debug(e);
         if (this.target !== document.body && this.paused) return;
         let keyCombinations = this.registeredKeys.filter(
-            kp => kp.key.toLowerCase() === e.key.toLowerCase()
+            kp => kp.key === e.code
         );
         for (let combination of keyCombinations) {
             let mod = 0;
             if (combination.mod.includes("shift")) mod = e.shiftKey ? mod + 1 : mod;
             if (combination.mod.includes("ctrl")) mod = e.ctrlKey ? mod + 1 : mod;
             if (combination.mod.includes("alt")) mod = e.altKey ? mod + 1 : mod;
+            console.debug(combination, mod);
             e.preventDefault();
-            if (mod === combination.mod.length) combination.fn();
+            if (mod === combination.mod.length) {
+                combination.fn();
+                return;
+            }
         }
     }
 

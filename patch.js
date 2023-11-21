@@ -11,9 +11,12 @@ const modulesTable = {
 };
 
 class Patch {
-    constructor(patchObject) {
+    constructor(patchObject, mixer, track) {
         this.modules = [];
         this.connects = [];
+
+        this.mixer = mixer;
+        this.track = track;
 
         this.patchControls = document.getElementById("patchControls");
         this.patchNameElement = document.getElementById("patchName");
@@ -48,8 +51,8 @@ class Patch {
 
             let module = new modulesTable[moduleObject.type]();
 
+            if (moduleObject.toDestination) this.mixer.attach(this.track, module);
             if (moduleObject.start) module.start();
-            if (moduleObject.toDestination) module.toDestination();
 
             this.addModule(module);
         }
