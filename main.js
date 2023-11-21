@@ -37,7 +37,7 @@ document.addEventListener("DOMContentLoaded", () => {
     let sequencer = document.querySelector("ui-sequencer");
     let arpeggiator = document.querySelector("ui-arpeggiator");
 
-    const mixer = new Mixer(sequencer.numTracks);
+    const mixer = new Mixer(sequencer);
 
     for (let trackIndex = 0; trackIndex < sequencer.numTracks; trackIndex++) {
         let patch = new Patch(

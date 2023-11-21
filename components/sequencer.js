@@ -107,7 +107,10 @@ class Sequencer extends LitElement {
                 patch: null,
                 length: defaultLength,
                 sequence: [],
-                algorithm: this.algorithms[0]
+                algorithm: this.algorithms[0],
+
+                mute: false,
+                solo: false
             };
         }
 
@@ -128,6 +131,14 @@ class Sequencer extends LitElement {
 
     getCurrentTrack() {
         return this.sequence[this.selectedTrack];
+    }
+
+    setMute(trackIndex, state) {
+        this.sequence[trackIndex].mute = state;
+    }
+
+    setSolo(trackIndex, state) {
+        this.sequence[trackIndex].solo = state;
     }
 
     switchTrack(trackIndex) {
@@ -189,6 +200,8 @@ class Sequencer extends LitElement {
             tab.innerText = trackIndex + 1;
 
             if (trackIndex === this.selectedTrack) tab.classList.add("active");
+            if (this.sequence[trackIndex].mute) tab.classList.add("mute");
+            if (this.sequence[trackIndex].solo) tab.classList.add("solo");
 
             tab.addEventListener("click", () =>
                 this.switchTrack(trackIndex));
