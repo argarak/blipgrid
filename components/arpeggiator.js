@@ -41,6 +41,7 @@ class Arpeggiator extends LitElement {
     render() {
         const algorithmOptions = this.algorithmSelectOptions();
         const algorithmControls = this.algorithmControls();
+        const noteControls = this.noteControls();
 
         const octaveIndicators = this.generateIndicators(this.octaves);
 
@@ -49,6 +50,7 @@ class Arpeggiator extends LitElement {
                     value="${this.selectedAlgorithm}">
                 ${algorithmOptions}
             </select>
+            <div id="controlsContainer">${noteControls}</div>
             <div id="octaveIndicatorContainer">${octaveIndicators}</div>
             <div id="noteIndicatorContainer">${this.noteIndicators}</div>
             <div id="knobContainer">${algorithmControls}</div>
@@ -69,6 +71,40 @@ class Arpeggiator extends LitElement {
 
     static styles = css`${unsafeCSS(arpeggiatorStyle.default)}`;
 
+    generateNoteRange(root, scale) {
+        let range = [];
+
+        for (let note = this.lowestNote; note < root; note++) {
+            let rootDivisor =
+                Math.ceil(Math.abs((note - root) / this.notesPerOctave));
+
+            let octaveRoot = root - (this.notesPerOctave * rootDivisor);
+            let scaleNotes =
+                Tone.Frequency(octaveRoot, "midi").harmonize(scale);
+
+            for (let scaleNote of scaleNotes) {
+                let midiNote = scaleNote.toMidi();
+                if (midiNote == note) range.push(note);
+            }
+        }
+
+        for (let note = root; note <= this.highestNote; note++) {
+            let octaveMultiplier =
+                Math.floor((note - root) / this.notesPerOctave);
+
+            let scaleNotes =
+                Tone.Frequency(root + (12 * octaveMultiplier), "midi")
+                    .harmonize(scale);
+
+            for (let scaleNote of scaleNotes) {
+                let midiNote = scaleNote.toMidi();
+                if (midiNote == note) range.push(note);
+            }
+        }
+
+        return range;
+    }
+
     constructor() {
         super();
 
@@ -81,16 +117,20 @@ class Arpeggiator extends LitElement {
         // holds list of notebox DOM elements
         this.noteboxes = [];
 
-        this.root = "F3";
-        this.scale = [0, 2, 3, 5, 7, 8, 10];
-
-        // holds currently programmed sequencer
-        this.sequence = {};
+        this.lowestNote = 21;
+        this.highestNote = 108;
 
         this.notesPerOctave = 12;
         this.octaves = 5;
 
-        this.noteIndicators = this.generateIndicators(this.scale.length);
+        this.root = 53;
+        this.scale = [0, 2, 3, 5, 7, 8, 10];
+        this.noteRange = this.generateNoteRange(this.root, this.scale);
+
+        // holds currently programmed sequencer
+        this.sequence = {};
+
+        this.noteIndicators = this.generateIndicators(this.noteRange.length);
 
         let defaultLength = 64;
 
@@ -99,7 +139,10 @@ class Arpeggiator extends LitElement {
                 mod: [],
                 length: defaultLength,
                 sequence: [],
-                algorithm: this.algorithms[0]
+                algorithm: this.algorithms[0],
+
+                rangeStart: this.lowestNote,
+                rangeEnd: this.highestNote
             };
         }
 
@@ -137,14 +180,18 @@ class Arpeggiator extends LitElement {
      * @return whether the next step is active or inactive
      **/
     next(trackIndex, t) {
+        let slicedRange = this.noteRange.slice(
+            this.sequence[trackIndex].rangeStart,
+            this.sequence[trackIndex].rangeEnd);
+
         let selected = this.sequence[trackIndex].algorithm.fn(t,
-            this.scale,
+            slicedRange,
             this.sequence[trackIndex].mod);
-        let notes = Tone.Frequency(this.root).harmonize(this.scale);
+
         if (this.selectedTrack === trackIndex) {
             this.updateNoteIndicators(selected[0]);
         }
-        return notes[selected[0]];
+        return Tone.Frequency(slicedRange[selected[0]], "midi");
     }
 
     registerAlgorithm(name, fn) {
@@ -152,6 +199,43 @@ class Arpeggiator extends LitElement {
             "name": name,
             "fn": fn
         });
+    }
+
+    _onNoteControlInput(e, type) {
+        switch (type) {
+        case "start":
+            this.sequence[this.selectedTrack].rangeStart = e.target.value;
+            break;
+        case "end":
+            this.sequence[this.selectedTrack].rangeEnd = e.target.value;
+            break;
+        }
+    }
+
+    noteControls() {
+        let knobs = [];
+
+        let startKnob = document.createElement("ui-knob");
+        startKnob.setAttribute("min", 0);
+        startKnob.setAttribute("max", this.noteRange.length);
+        startKnob.setAttribute("default", 0);
+        startKnob.setAttribute("label", "start note");
+        startKnob.setAttribute("integer-mode", true);
+        startKnob.addEventListener("input", e =>
+            this._onNoteControlInput(e, "start"));
+        knobs.push(startKnob);
+
+        let endKnob = document.createElement("ui-knob");
+        endKnob.setAttribute("min", 0);
+        endKnob.setAttribute("max", this.noteRange.length);
+        endKnob.setAttribute("default", 0);
+        endKnob.setAttribute("label", "end note");
+        endKnob.setAttribute("integer-mode", true);
+        endKnob.addEventListener("input", e =>
+            this._onNoteControlInput(e, "end"));
+        knobs.push(endKnob);
+
+        return knobs;
     }
 
     algorithmControls() {

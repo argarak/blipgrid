@@ -108,6 +108,7 @@ class Sequencer extends LitElement {
                 length: defaultLength,
                 sequence: [],
                 algorithm: this.algorithms[0],
+                index: trackIndex,
 
                 mute: false,
                 solo: false

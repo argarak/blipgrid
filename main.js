@@ -11,15 +11,6 @@ import * as basicSynthPatch from "./objects/patches/basic-synth.json";
 
 // TODO: note release
 
-document.addEventListener("trackSwitch", e => {
-    let track = e.detail;
-
-    if (track.patch) {
-        console.log(track.patch);
-        track.patch.drawControls();
-    }
-});
-
 document.addEventListener("DOMContentLoaded", () => {
     let btnPlay = document.getElementById("btnPlay");
     btnPlay.addEventListener("click", () => {
@@ -37,6 +28,16 @@ document.addEventListener("DOMContentLoaded", () => {
     let arpeggiator = document.querySelector("ui-arpeggiator");
 
     const mixer = new Mixer(sequencer);
+
+    document.addEventListener("trackSwitch", e => {
+        let track = e.detail;
+
+        if (track.patch) {
+            track.patch.drawControls();
+        }
+
+        arpeggiator.switchTrack(e.detail.index);
+    });
 
     for (let trackIndex = 0; trackIndex < sequencer.numTracks; trackIndex++) {
         let patch = new Patch(
@@ -90,7 +91,7 @@ document.addEventListener("DOMContentLoaded", () => {
         for (let trackIndex = 0; trackIndex < sequencer.numTracks; trackIndex++) {
             let trig = sequencer.next(trackIndex);
             if (trig) {
-                let frequency = arpeggiator.next(trackIndex, t);
+                let frequency = arpeggiator.next(trackIndex, t % sequencer.sequence[trackIndex].length);
                 setFrequency(sequencer.sequence[trackIndex].patch.modules, frequency, time);
                 trigger(sequencer.sequence[trackIndex].patch.modules, time);
             }
