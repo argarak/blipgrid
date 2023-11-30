@@ -90,7 +90,7 @@ class Arpeggiator extends LitElement {
         this.notesPerOctave = 12;
         this.octaves = 5;
 
-        this.noteIndicators = this.generateIndicators(this.notesPerOctave);
+        this.noteIndicators = this.generateIndicators(this.scale.length);
 
         let defaultLength = 64;
 
@@ -142,7 +142,7 @@ class Arpeggiator extends LitElement {
             this.sequence[trackIndex].mod);
         let notes = Tone.Frequency(this.root).harmonize(this.scale);
         if (this.selectedTrack === trackIndex) {
-            this.updateNoteIndicators(this.scale[selected[0]]);
+            this.updateNoteIndicators(selected[0]);
         }
         return notes[selected[0]];
     }
