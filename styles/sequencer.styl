@@ -9,25 +9,25 @@
   justify-content space-around
 
   .active
-    background #222
-    color #fff
-    border-color primary-color
+    background var(--surface-active)
+    color var(--primary-text)
+    border-color var(--primary-color)
 
   .solo
-    color #81C784
+    color var(--solo-color)
 
   .mute
-    color #E57373
+    color var(--mute-color)
 
 .trackTab
-  background #111
+  background var(--surface-background)
   height 100%
   padding 5px 25px
   width 100%
   display flex
   align-items center
   justify-content center
-  border-bottom 1px #222 solid
+  border-bottom 1px var(--surface-active) solid
 
   transition all .1s ease-in-out
   cursor pointer
@@ -69,9 +69,9 @@
 #progress
   width 100%
   height 1px
-  background-color #000
+  background-color var(--surface-background-alt)
 
   div
     transition width .1s linear
-    background-color primary-color
+    background-color var(--primary-color)
     height 1px

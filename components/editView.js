@@ -21,20 +21,24 @@ class EditView extends LitElement {
         super();
         this.views = [
             {
-                name: "snd",
-                icon: "cable"
+                name: "sound",
+                icon: "cable",
+                active: true
             },
             {
-                name: "mix",
-                icon: "tune"
+                name: "edit/mix",
+                icon: "tune",
+                active: false
             },
             {
-                name: "sfx",
-                icon: "blur_on"
+                name: "effect",
+                icon: "blur_on",
+                active: false
             },
             {
-                name: "mod",
-                icon: "graphic_eq"
+                name: "modulation",
+                icon: "graphic_eq",
+                active: false
             }
         ];
         this.viewTabs = this.createTabs();
@@ -46,6 +50,8 @@ class EditView extends LitElement {
         for (let view of this.views) {
             let tab = document.createElement("div");
             tab.classList.add("tab");
+
+            if (view.active) tab.classList.add("active");
 
             let icon = document.createElement("span");
             icon.classList.add("material-icons");

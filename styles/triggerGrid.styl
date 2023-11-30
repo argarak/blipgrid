@@ -14,15 +14,15 @@
 .noteBox
   width notebox-size
   height notebox-size
-  background-color #222
+  background-color var(--surface-active)
   border-radius 2px
-  border 1px solid rgb(66, 66, 66)
+  border 1px solid var(--surface-active)
   transition all .1s linear
 
   &.active
-    background-color note-active-color
-    border-color note-active-color
+    background-color var(--note-color)
+    border-color var(--note-color)
     //box-shadow 0px 0px 10px rgba(67, 160, 71, 0.5)
 
   &.marker
-    border-color #fff
+    border-color var(--primary-text)

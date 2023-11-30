@@ -2,14 +2,14 @@
 @require "input-common.styl"
 
 body
-  background-color #000
+  background-color var(--main-background)
   margin 0
   font-family m-font
   font-size m-font-size
 
   height 100vh
 
-  color #fff
+  color var(--primary-text)
 
 #mainContainer
   display flex
@@ -29,8 +29,8 @@ body
 #headContainer
   box-sizing border-box
   padding 5px
-  background #111
-  border-bottom m-border-size solid #222
+  background var(--surface-background)
+  border-bottom m-border-size solid var(--surface-active)
 
   width 100%
   height 40px
@@ -45,7 +45,7 @@ body
     padding 3px
     margin 0px 5px
 
-    color #ffff
+    color var(--primary-text)
 
   input
     margin-left 5px
@@ -60,7 +60,6 @@ body
   align-items start
   justify-content center
   flex-direction row
-  background-color #000
   height calc(100% - 40px)
 
   width 100vw
@@ -68,7 +67,7 @@ body
 
 #sideContainer
   background #0000
-  border-right 0px solid #222
+  border-right 0px solid var(--surface-active)
   height 100%
 
   flex 1
@@ -80,8 +79,8 @@ body
   overflow-x auto
 
 #paramContainer
-  background m-background-color-alt
-  border-left 0px solid #222
+  background var(--surface-background-alt)
+  border-left 0px solid var(--surface-active)
 
   flex 1
 
@@ -111,7 +110,7 @@ body
   justify-content right
 
   label
-    color #aaa
+    color var(--primary-text)
 
 ui-sequencer,
 ui-arpeggiator
@@ -119,7 +118,7 @@ ui-arpeggiator
   flex-direction column
   align-items center
   max-height 60%
-  background m-background-color
+  background var(--surface-background)
   flex 1
 
 .knobSet
@@ -129,12 +128,12 @@ ui-arpeggiator
   width 150px
 
   flex-direction column
-  border m-border-size solid #222
+  border m-border-size solid var(--surface-active)
   border-radius 5px
   padding 5px
-  background-color #111
+  background-color var(--surface-background)
 
-  box-shadow 0px 0px 10px #000a
+  box-shadow 0px 0px 10px var(--shadow-color)
 
   select, ui-knob
     margin 0px 5px

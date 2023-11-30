@@ -2,7 +2,7 @@
 
 .dropdown
   margin 0
-  background #fff1
+  background var(--surface-active)
 
   display flex
   flex-direction column
@@ -31,15 +31,15 @@
     padding 0px 0px
     margin 0
     position relative
-    background #222
-    box-shadow 10px 10px 10px #0003
+    background var(--surface-active)
+    box-shadow 10px 10px 10px var(--shadow-color-alt)
 
     button
       padding 10px
       transition background .2s ease-in-out
       white-space nowrap
 
-      background #222
+      background var(--surface-active)
       cursor pointer
 
       width 100%
@@ -55,10 +55,10 @@
         margin-right 10px
 
     button:hover
-      background #333
+      background var(--on-surface-active)
 
     button:focus
-      background #444
+      background var(--on-surface-focus)
 
   &:hover > .dropmenu,
   &:focus-within > .dropmenu
@@ -74,10 +74,10 @@ button
   font-family default-font
   font-size m-font-size
   border none
-  background #fff1
+  background var(--surface-active)
   border-radius m-border-radius
 
-  color #fff
+  color var(--primary-text)
   transition all .1s ease-in-out
 
   font-family m-font
@@ -85,27 +85,27 @@ button
   align-items center
 
   &.active
-    background #fff5
+    background var(--on-surface-active)
 
   &.active:hover
-    background #fff7
+    background var(--on-surface-focus)
 
   &:hover
-    background #fff2
+    background var(--on-surface-active)
 
 input[type="range"]
   appearance none
-  background #444
+  background var(--on-surface-focus)
   height 70%
 
   &::-webkit-slider-thumb
     -webkit-appearance none
     appearance none
-    background #222
+    background var(--surface-active)
     border none
 
   &::-moz-range-thumb
-    background #222
+    background var(--surface-active)
     border none
     border-radius 0px
     height 100%
@@ -116,8 +116,8 @@ input[type="number"], input[type="text"]
   appearance textfield
 
   border none
-  background #fff1
-  color #fff
+  background var(--surface-active)
+  color var(--primary-text)
   padding 6px 10px
   border-radius m-border-radius
 
@@ -132,8 +132,8 @@ select
   font-size m-font-size
 
   height 30px
-  background #222
+  background var(--surface-active)
   border none
-  color #fff
+  color var(--primary-text)
   border-radius 20px
   padding 2px 10px
