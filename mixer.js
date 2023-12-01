@@ -6,8 +6,15 @@ class Mixer {
         this.soloChannel = null;
         this.sequencer = sequencer;
 
+        this.delay = new Tone.PingPongDelay("16n", 0.1).toDestination();
+
         for (let track = 0; track < sequencer.numTracks; track++) {
             let gainNode = new Tone.Gain(1).toDestination();
+
+            if (track === 0) {
+                gainNode.connect(this.delay);
+            }
+
             this.gainNodes.push(gainNode);
         }
     }

@@ -65,6 +65,11 @@ class Arpeggiator extends LitElement {
         for (let noteIndex = 0; noteIndex < length; noteIndex++) {
             let indicator = document.createElement("div");
             indicator.classList.add("indicator");
+
+            if (this.allRoots.has(this.noteRange[noteIndex])) {
+                indicator.classList.add("root");
+            }
+
             indicators.push(indicator);
         }
 
@@ -84,6 +89,8 @@ class Arpeggiator extends LitElement {
                 Math.ceil(Math.abs((note - root) / this.notesPerOctave));
 
             let octaveRoot = root - (this.notesPerOctave * rootDivisor);
+            this.allRoots.add(octaveRoot);
+
             let scaleNotes =
                 Tone.Frequency(octaveRoot, "midi").harmonize(scale);
 
@@ -96,9 +103,11 @@ class Arpeggiator extends LitElement {
         for (let note = root; note <= this.highestNote; note++) {
             let octaveMultiplier =
                 Math.floor((note - root) / this.notesPerOctave);
+            let octaveRoot = root + (12 * octaveMultiplier);
+            this.allRoots.add(octaveRoot);
 
             let scaleNotes =
-                Tone.Frequency(root + (12 * octaveMultiplier), "midi")
+                Tone.Frequency(octaveRoot, "midi")
                     .harmonize(scale);
 
             for (let scaleNote of scaleNotes) {
@@ -128,6 +137,7 @@ class Arpeggiator extends LitElement {
         this.notesPerOctave = 12;
         this.octaves = 5;
 
+        this.allRoots = new Set();
         this.root = 53;
         this.scale = [0, 2, 3, 5, 7, 8, 10];
         this.noteRange = this.generateNoteRange(this.root, this.scale);
@@ -194,7 +204,9 @@ class Arpeggiator extends LitElement {
             this.sequence[trackIndex].mod);
 
         if (this.selectedTrack === trackIndex) {
-            this.updateNoteIndicators(selected[0]);
+            this.updateNoteIndicators(
+                this.sequence[trackIndex].rangeStart + selected[0]
+            );
         }
         return Tone.Frequency(slicedRange[selected[0]], "midi");
     }
@@ -220,10 +232,13 @@ class Arpeggiator extends LitElement {
     noteControls() {
         let knobs = [];
 
+        let currentStart = this.sequence[this.selectedTrack].rangeStart;
+        let currentEnd = this.sequence[this.selectedTrack].rangeEnd;
+
         let startKnob = document.createElement("ui-knob");
         startKnob.setAttribute("min", 0);
         startKnob.setAttribute("max", this.noteRange.length);
-        startKnob.setAttribute("default", 0);
+        startKnob.setAttribute("default", currentStart);
         startKnob.setAttribute("label", "start note");
         startKnob.setAttribute("integer-mode", true);
         startKnob.addEventListener("input", e =>
@@ -233,7 +248,7 @@ class Arpeggiator extends LitElement {
         let endKnob = document.createElement("ui-knob");
         endKnob.setAttribute("min", 0);
         endKnob.setAttribute("max", this.noteRange.length);
-        endKnob.setAttribute("default", 0);
+        endKnob.setAttribute("default", currentEnd);
         endKnob.setAttribute("label", "end note");
         endKnob.setAttribute("integer-mode", true);
         endKnob.addEventListener("input", e =>
@@ -278,7 +293,9 @@ class Arpeggiator extends LitElement {
         let options = [];
         for (let alIndex = 0; alIndex < this.algorithms.length; alIndex++) {
             let optionElement = document.createElement("option");
-            optionElement.value = util.hashCode(this.algorithms[alIndex].fn.toString());
+            let hash = util.hashCode(this.algorithms[alIndex].fn.toString());
+            if (hash == this.selectedAlgorithm) optionElement.selected = true;
+            optionElement.value = hash;
             optionElement.textContent = this.algorithms[alIndex].name;
             options.push(optionElement);
         }

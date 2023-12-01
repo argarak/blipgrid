@@ -56,6 +56,8 @@ hr
   align-items center
   justify-content space-around
 
+  border 1px solid var(--on-surface-active)
+
   .indicator
     flex 1
     background var(--surface-active)
@@ -67,8 +69,8 @@ hr
   .indicator.active
     background var(--primary-color)
 
-  .indicator:last-child
-    border-right 2px solid var(--surface-background)
+  .indicator.root
+    border 1px solid var(--note-color)
 
 #octaveIndicatorContainer
   margin 10px
