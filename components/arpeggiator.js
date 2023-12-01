@@ -39,6 +39,10 @@ class Arpeggiator extends LitElement {
         this.sequence[this.selectedTrack].mod[modIndex] = e.target.value;
     }
 
+    _onViewTitleClick(e) {
+        e.target.classList.toggle("minimise");
+    }
+
     render() {
         const algorithmOptions = this.algorithmSelectOptions();
         const algorithmControls = this.algorithmControls();
@@ -49,8 +53,9 @@ class Arpeggiator extends LitElement {
                     value="${this.selectedAlgorithm}">
                 ${algorithmOptions}
             </select>
-            <h3 id="viewTitle">
-                <span class="material-icons">music_note</span> pitch
+            <h3 id="viewTitle" @click=${this._onViewTitleClick}>
+                <span class="material-icons">music_note</span>
+                <span class="text">pitch</span>
             </h3>
             <div id="noteIndicatorContainer">${this.noteIndicators}</div>
             <div id="controlsContainer">${noteControls}</div>

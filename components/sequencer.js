@@ -57,6 +57,10 @@ class Sequencer extends LitElement {
             this.sequence[this.selectedTrack].length);
     }
 
+    _onViewTitleClick(e) {
+        e.target.classList.toggle("minimise");
+    }
+
     render() {
         const tabs = this.createTabs();
         const algorithmOptions = this.algorithmSelectOptions();
@@ -64,8 +68,9 @@ class Sequencer extends LitElement {
         const length = this.sequence[this.selectedTrack].length;
         return html`
             ${tabs}
-            <h3 id="viewTitle">
-                <span class="material-icons">grid_view</span> pattern
+            <h3 id="viewTitle" @click=${this._onViewTitleClick}>
+                <span class="material-icons">grid_view</span>
+                <span class="text">pattern</span>
             </h3>
             <select id="algorithmSelect" @input=${this._onAlgorithmSelectInput}>
                 ${algorithmOptions}
