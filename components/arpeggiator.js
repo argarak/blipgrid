@@ -1,6 +1,7 @@
 import * as Tone from "tone";
 import { LitElement, html, css, unsafeCSS } from "lit";
 
+import * as mdiStyle from "@material-design-icons/font/index.css?inline";
 import * as arpeggiatorStyle from "/styles/arpeggiator.styl?inline";
 import defaultAlgorithms from "../arpeggiator-algorithms.js";
 import util from "../util.js";
@@ -43,16 +44,17 @@ class Arpeggiator extends LitElement {
         const algorithmControls = this.algorithmControls();
         const noteControls = this.noteControls();
 
-        const octaveIndicators = this.generateIndicators(this.octaves);
-
         return html`
             <select id="algorithmSelect" @input=${this._onAlgorithmSelectInput}
                     value="${this.selectedAlgorithm}">
                 ${algorithmOptions}
             </select>
-            <div id="controlsContainer">${noteControls}</div>
-            <div id="octaveIndicatorContainer">${octaveIndicators}</div>
+            <h3 id="viewTitle">
+                <span class="material-icons">music_note</span> pitch
+            </h3>
             <div id="noteIndicatorContainer">${this.noteIndicators}</div>
+            <div id="controlsContainer">${noteControls}</div>
+            <hr/>
             <div id="knobContainer">${algorithmControls}</div>
         `;
     }
@@ -69,7 +71,10 @@ class Arpeggiator extends LitElement {
         return indicators;
     }
 
-    static styles = css`${unsafeCSS(arpeggiatorStyle.default)}`;
+    static styles = [
+        css`${unsafeCSS(mdiStyle.default)}`,
+        css`${unsafeCSS(arpeggiatorStyle.default)}`
+    ];
 
     generateNoteRange(root, scale) {
         let range = [];

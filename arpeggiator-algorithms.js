@@ -1,6 +1,6 @@
 export default [
     {
-        "name": "test",
+        "name": "ascending modulo",
         "mods": [
             {
                 name: "loop",
@@ -19,7 +19,7 @@ export default [
     },
 
     {
-        "name": "test2",
+        "name": "sine walk",
         "mods": [
             {
                 name: "frequency",

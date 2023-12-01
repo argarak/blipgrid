@@ -1,6 +1,7 @@
 import { LitElement, html, css, unsafeCSS } from "lit";
 import { ref, createRef } from "lit/directives/ref.js";
 
+import * as mdiStyle from "@material-design-icons/font/index.css?inline";
 import * as sequencerStyle from "/styles/sequencer.styl?inline";
 import defaultAlgorithms from "../sequence-algorithms.js";
 import util from "../util.js";
@@ -63,6 +64,9 @@ class Sequencer extends LitElement {
         const length = this.sequence[this.selectedTrack].length;
         return html`
             ${tabs}
+            <h3 id="viewTitle">
+                <span class="material-icons">grid_view</span> pattern
+            </h3>
             <select id="algorithmSelect" @input=${this._onAlgorithmSelectInput}>
                 ${algorithmOptions}
             </select>
@@ -82,7 +86,10 @@ class Sequencer extends LitElement {
         `;
     }
 
-    static styles = css`${unsafeCSS(sequencerStyle.default)}`;
+    static styles = [
+        css`${unsafeCSS(mdiStyle.default)}`,
+        css`${unsafeCSS(sequencerStyle.default)}`
+    ];
 
     constructor() {
         super();

@@ -1,6 +1,9 @@
 @require "defines.styl"
 @require "input-common.styl"
 
+:host
+  position relative
+
 #trackTabs
   display flex
   flex-direction row
@@ -18,6 +21,26 @@
 
   .mute
     color var(--mute-color)
+
+#viewTitle
+  top 100px
+  left 0
+
+  display flex
+  flex-direction row
+  justify-content start
+  align-items center
+  position absolute
+
+  color var(--note-color)
+  background var(--surface-active)
+
+  border-right 5px solid var(--on-surface-active)
+
+  padding 10px
+
+  span
+    margin-right 10px
 
 .trackTab
   background var(--surface-background)

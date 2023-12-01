@@ -1,6 +1,9 @@
 @require "defines.styl"
 @require "input-common.styl"
 
+:host
+  position relative
+
 #algorithmSelect
   width 100%
   max-width 40ch
@@ -14,12 +17,34 @@
   align-items start
 
   width 100%
-  min-height 120px
 
   ui-knob
     width 100%
     max-width 15ch
     margin 0px 15px
+
+hr
+  width 80%
+
+#viewTitle
+  top 100px
+  left 0
+
+  display flex
+  flex-direction row
+  justify-content start
+  align-items center
+  position absolute
+
+  color var(--note-color)
+  background var(--surface-active)
+
+  border-right 5px solid var(--on-surface-active)
+
+  padding 10px
+
+  span
+    margin-right 10px
 
 #noteIndicatorContainer
   margin 10px
