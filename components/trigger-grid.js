@@ -1,5 +1,5 @@
 import { LitElement, html, css, unsafeCSS } from "lit";
-import * as triggerGridStyle from "/styles/triggerGrid.styl?inline";
+import * as triggerGridStyle from "/styles/components/trigger-grid.styl?inline";
 
 class TriggerGrid extends LitElement {
     static properties = {

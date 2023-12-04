@@ -2,7 +2,7 @@ import { LitElement, html, css, unsafeCSS } from "lit";
 import { ref, createRef } from "lit/directives/ref.js";
 
 import * as mdiStyle from "@material-design-icons/font/index.css?inline";
-import * as sequencerStyle from "/styles/sequencer.styl?inline";
+import * as sequencerStyle from "/styles/components/sequencer.styl?inline";
 import defaultAlgorithms from "../sequence-algorithms.js";
 import util from "../util.js";
 

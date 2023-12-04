@@ -1,0 +1,42 @@
+@require "../defines.styl"
+@require "../input-common.styl"
+
+#loadControls
+  display flex
+  flex-direction row
+  align-items center
+  justify-content end
+  padding-right 2ch
+  padding-top 1ch
+
+  #patchUpload button
+    align-self start
+    margin-right 10px
+
+#patchControls
+  display grid
+
+  grid-template-columns repeat(auto-fill, 180px)
+
+  flex-direction column
+  justify-content center
+
+  label
+    color var(--primary-text)
+
+.knobSet
+  display flex
+  margin 10px
+  align-items center
+  width 150px
+
+  flex-direction column
+  border m-border-size solid var(--surface-active)
+  border-radius 5px
+  padding 5px
+  background-color var(--surface-background)
+
+  box-shadow 0px 0px 10px var(--shadow-color)
+
+  select, ui-knob
+    margin 0px 5px

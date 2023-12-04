@@ -24,18 +24,15 @@ document.addEventListener("DOMContentLoaded", () => {
         Tone.Transport.bpm.value = e.target.value;
     });
 
-    let sequencer = document.querySelector("ui-sequencer");
-    let arpeggiator = document.querySelector("ui-arpeggiator");
+    const sequencer = document.querySelector("ui-sequencer");
+    const arpeggiator = document.querySelector("ui-arpeggiator");
+    const editView = document.querySelector("ui-edit-view");
 
     const mixer = new Mixer(sequencer);
 
     document.addEventListener("trackSwitch", e => {
         let track = e.detail;
-
-        if (track.patch) {
-            track.patch.drawControls();
-        }
-
+        editView.registerTrack(track);
         arpeggiator.switchTrack(e.detail.index);
     });
 
@@ -45,7 +42,7 @@ document.addEventListener("DOMContentLoaded", () => {
             mixer, trackIndex
         );
         sequencer.assignPatch(trackIndex, patch);
-        if (trackIndex === sequencer.selectedTrack) patch.drawControls();
+        //if (trackIndex === sequencer.selectedTrack) patch.drawControls();
     }
 
     function setFrequency(modules, frequency, time) {

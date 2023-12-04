@@ -1,5 +1,5 @@
 import { LitElement, html, css, unsafeCSS } from "lit";
-import * as knobStyle from "/styles/knob.styl?inline";
+import * as knobStyle from "/styles/components/knob.styl?inline";
 import util from "../util.js";
 
 // TODO: disable ability (cannot be modified)

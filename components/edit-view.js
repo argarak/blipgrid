@@ -1,8 +1,11 @@
 import * as mdiStyle from "@material-design-icons/font/index.css?inline";
 import { LitElement, html, css, unsafeCSS } from "lit";
-import * as editViewStyle from "/styles/components/editView.styl?inline";
+import { ref, createRef } from "lit/directives/ref.js";
+import * as editViewStyle from "/styles/components/edit-view.styl?inline";
 
 class EditView extends LitElement {
+    editPatch = createRef();
+
     static properties = {};
 
     render() {
@@ -11,7 +14,7 @@ class EditView extends LitElement {
             ${this.viewTabs}
         </div>
         <div id="editViewContainer">
-            <ui-edit-patch></ui-edit-patch>
+            <ui-edit-patch ${ref(this.editPatch)}></ui-edit-patch>
         </div>`;
     }
 
@@ -47,6 +50,10 @@ class EditView extends LitElement {
         this.viewTabs = this.createTabs();
     }
 
+    registerTrack(track) {
+        this.editPatch.value.registerTrack(track);
+    }
+
     createTabs() {
         let tabs = [];
 
@@ -71,7 +78,6 @@ class EditView extends LitElement {
 
         return tabs;
     }
-
 }
 
 customElements.define("ui-edit-view", EditView);

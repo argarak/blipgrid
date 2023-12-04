@@ -18,15 +18,7 @@ class Patch {
         this.mixer = mixer;
         this.track = track;
 
-        this.patchControls = document.getElementById("patchControls");
-        this.patchNameElement = document.getElementById("patchName");
-        this.patchUploadButton = document.getElementById("patchUploadBtn");
-
         let self = this;
-
-        this.patchUploadButton.addEventListener("click", () => {
-            self.uploadPatch();
-        });
 
         if (!patchObject) return;
 
@@ -37,8 +29,6 @@ class Patch {
         // should this be cleared differently? what about garbage collection?
         this.modules = [];
         this.connects = [];
-
-        this.patchNameElement.textContent = patchObject.name;
 
         // -- load patch object --
         // load modules
@@ -131,88 +121,6 @@ class Patch {
     addConnect(input, output) {
         input.connect(output);
         this.connects.push([input, output]);
-    }
-
-    onControlInput(e, module, control) {
-        let target = e.target;
-        if (typeof module[control.property] === "object") {
-            module[control.property].value = target.value;
-            return;
-        }
-        module[control.property] = target.value;
-    }
-
-    getControlValue(module, control) {
-        if (typeof module[control.property] === "object") {
-            return module[control.property].value;
-        }
-        return module[control.property];
-    }
-
-    createControlElement(module, control) {
-        if (control.type == "knob") {
-            let knob = document.createElement("ui-knob");
-            knob.setAttribute("min", control.min);
-            knob.setAttribute("max", control.max);
-            knob.setAttribute("default", this.getControlValue(module, control));
-            knob.setAttribute("label", control.label);
-
-            knob.addEventListener("input", e =>
-                this.onControlInput(e, module, control));
-
-            return knob;
-        }
-
-        if (control.type == "select") {
-            let select = document.createElement("select");
-
-            for (let option of control.select) {
-                let optionElement = document.createElement("option");
-                optionElement.value = option;
-                optionElement.textContent = option;
-                select.appendChild(optionElement);
-            }
-
-            select.value = this.getControlValue(module, control);
-
-            select.addEventListener("input", e =>
-                this.onControlInput(e, module, control));
-
-            return select;
-        }
-    }
-
-    drawControls() {
-        this.patchControls.innerHTML = "";
-
-        let index = 0;
-        for (let module of this.modules) {
-            // for some reason, the module name can have a underscore at the start,
-            // if it does, then we slice it off
-            let moduleName = module.name;
-
-            let groupLabel = document.createElement("label");
-            groupLabel.setAttribute("for", `knobsGroup${index}`);
-            groupLabel.innerText = moduleName;
-
-            let knobsGroup = document.createElement("div");
-            knobsGroup.id = `knobsGroup${index}`;
-            knobsGroup.classList.add("knobSet");
-
-            knobsGroup.appendChild(groupLabel);
-
-            let controls = moduleName in moduleControls ?
-                moduleControls[moduleName] : [];
-
-            for (let control of controls) {
-                knobsGroup.appendChild(
-                    this.createControlElement(module, control)
-                );
-            }
-
-            this.patchControls.appendChild(knobsGroup);
-            index++;
-        }
     }
 }
 
