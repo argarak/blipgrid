@@ -62,12 +62,14 @@ class Sequencer extends LitElement {
     }
 
     render() {
-        const tabs = this.createTabs();
+        this.tabs = this.createTabs();
         const algorithmOptions = this.algorithmSelectOptions();
         const algorithmControls = this.algorithmControls();
         const length = this.sequence[this.selectedTrack].length;
         return html`
-            ${tabs}
+            <div id="trackTabs">
+                ${this.tabs}
+            </div>
             <h3 id="viewTitle" @click=${this._onViewTitleClick}>
                 <span class="material-icons">grid_view</span>
                 <span class="text">pattern</span>
@@ -135,6 +137,8 @@ class Sequencer extends LitElement {
         // at step zero when the first next() method is called
         this.step = defaultLength;
 
+        this.tabs = this.createTabs();
+
         this.switchTrack(0);
     }
 
@@ -193,7 +197,16 @@ class Sequencer extends LitElement {
             this.triggerGrid.value.setStep(this.step % length);
         }
 
-        return this.sequence[trackIndex % this.numTracks].sequence[this.step % length];
+        let trigger = this.sequence[trackIndex % this.numTracks]
+            .sequence[this.step % length];
+
+        if (trigger) {
+            this.tabs[trackIndex].classList.add("trig");
+        } else {
+            this.tabs[trackIndex].classList.remove("trig");
+        }
+
+        return trigger;
     }
 
     registerAlgorithm(name, fn) {
@@ -204,8 +217,7 @@ class Sequencer extends LitElement {
     }
 
     createTabs() {
-        let tabContainer = document.createElement("div");
-        tabContainer.id = "trackTabs";
+        let tabs = [];
 
         for (let trackIndex = 0; trackIndex < this.numTracks; trackIndex++) {
             let tab = document.createElement("div");
@@ -219,10 +231,10 @@ class Sequencer extends LitElement {
             tab.addEventListener("click", () =>
                 this.switchTrack(trackIndex));
 
-            tabContainer.appendChild(tab);
+            tabs.push(tab);
         }
 
-        return tabContainer;
+        return tabs;
     }
 
     algorithmControls() {

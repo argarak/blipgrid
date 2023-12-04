@@ -9,6 +9,9 @@ class EditView extends LitElement {
         return html`
         <div id="viewTabs">
             ${this.viewTabs}
+        </div>
+        <div id="editViewContainer">
+            <ui-edit-patch></ui-edit-patch>
         </div>`;
     }
 

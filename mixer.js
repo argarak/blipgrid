@@ -6,7 +6,7 @@ class Mixer {
         this.soloChannel = null;
         this.sequencer = sequencer;
 
-        this.delay = new Tone.PingPongDelay("16n", 0.1).toDestination();
+        this.delay = new Tone.FeedbackDelay("8n", 0.5).toDestination();
 
         for (let track = 0; track < sequencer.numTracks; track++) {
             let gainNode = new Tone.Gain(1).toDestination();
