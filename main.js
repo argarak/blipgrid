@@ -42,7 +42,9 @@ document.addEventListener("DOMContentLoaded", () => {
             mixer, trackIndex
         );
         sequencer.assignPatch(trackIndex, patch);
-        //if (trackIndex === sequencer.selectedTrack) patch.drawControls();
+        if (trackIndex === sequencer.selectedTrack) {
+            editView.registerTrack(sequencer.sequence[trackIndex]);
+        }
     }
 
     function setFrequency(modules, frequency, time) {
@@ -62,7 +64,10 @@ document.addEventListener("DOMContentLoaded", () => {
     // FIXME currently the keys "roll", as is default OS behaviour
     // not sure whether we should deal with it somehow
     keyHandler.registerKey("a", [], () => {
-        trigger(sequencer.getCurrentTrack().patch.modules, Tone.now());
+        let modules = sequencer.getCurrentTrack().patch.modules;
+        let time = Tone.now();
+        setFrequency(modules, Tone.Frequency(60, "midi"), time);
+        trigger(modules, time);
     });
 
     for (let trackIndex = 1; trackIndex <= sequencer.numTracks; trackIndex++) {

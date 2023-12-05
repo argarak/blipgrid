@@ -18,6 +18,8 @@ class Patch {
         this.mixer = mixer;
         this.track = track;
 
+        this.name = patchObject.name ? patchObject.name : "unnamed patch";
+
         let self = this;
 
         if (!patchObject) return;

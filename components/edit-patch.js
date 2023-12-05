@@ -5,7 +5,9 @@ import * as editPatchStyle from "/styles/components/edit-patch.styl?inline";
 import { LitElement, html, css, unsafeCSS } from "lit";
 
 class EditPatch extends LitElement {
-    static properties = {};
+    static properties = {
+        name: { type: String, state: true }
+    };
 
     render() {
         return html`
@@ -15,7 +17,7 @@ class EditPatch extends LitElement {
               <span class="material-icons">upload</span>load patch
             </button>
           </div>
-          <div id="patchName"></div>
+          <div id="patchName">${this.name}</div>
         </div>
         <div id="patchControls">
            ${this.controls}
@@ -31,11 +33,14 @@ class EditPatch extends LitElement {
         super();
         this.patch = null;
         this.controls = this.drawControls();
+
+        this.name = "";
     }
 
     registerTrack(track) {
         if (!track.patch) return;
         this.patch = track.patch;
+        this.name = track.patch.name;
         this.controls = this.drawControls();
         this.requestUpdate();
     }
