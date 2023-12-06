@@ -6,14 +6,43 @@ class Mixer {
         this.soloChannel = null;
         this.sequencer = sequencer;
 
+        this.chorus = new Tone.Chorus({
+            wet: 1,
+        }).toDestination().start();
+        this.chorusChannel = new Tone.Channel({ volume: -6 }).connect(this.chorus);
+
+        this.cheby = new Tone.Chebyshev(50).toDestination();
+        this.chebyChannel = new Tone.Channel({ volume: -6 }).connect(this.cheby);
+
+        this.reverb = new Tone.Reverb(3).toDestination();
+        this.reverbChannel = new Tone.Channel({ volume: -6 }).connect(this.reverb);
+
         this.delay = new Tone.FeedbackDelay("8n", 0.5).toDestination();
+        this.delayChannel = new Tone.Channel({ volume: -6 }).connect(this.delay);
+
+        this.effectChannels = [
+            { name: "chorus", channel: this.chorusChannel },
+            { name: "chebyshev", channel: this.chebyChannel },
+            { name: "reverb", channel: this.reverbChannel },
+            { name: "delay", channel: this.delayChannel }
+        ];
+
+        this.effectSends = [];
+
+        this.chorusChannel.receive(this.effectChannels[0].name);
+        this.chebyChannel.receive(this.effectChannels[1].name);
+        this.reverbChannel.receive(this.effectChannels[2].name);
+        this.delayChannel.receive(this.effectChannels[3].name);
 
         for (let track = 0; track < sequencer.numTracks; track++) {
             let channel = new Tone.Channel().toDestination();
+            let channelSends = {};
 
-            if (track === 0) {
-                channel.connect(this.delay);
+            for (let effectChannel of this.effectChannels) {
+                let send = channel.send(effectChannel.name, -Infinity);
+                channelSends[effectChannel.name] = send;
             }
+            this.effectSends.push(channelSends);
 
             this.channels.push(channel);
         }

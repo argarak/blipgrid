@@ -21,6 +21,12 @@ class EditPatch extends LitElement {
         </div>
         <div id="patchControls">
            ${this.controls}
+        </div>
+        <div id="effectControlContainer">
+           <h3 id="effectTitle">
+             <span class="material-icons">send</span> fx send
+           </h3>
+           <div id="effectControls">${this.effectControls}</div>
         </div>`;
     }
 
@@ -31,18 +37,27 @@ class EditPatch extends LitElement {
 
     constructor() {
         super();
+        this.track = null;
         this.patch = null;
+        this.mixer = null;
         this.controls = this.drawControls();
+        this.effectControls = this.drawEffectControls();
 
         this.name = "";
     }
 
     registerTrack(track) {
         if (!track.patch) return;
+        this.track = track;
         this.patch = track.patch;
         this.name = track.patch.name;
         this.controls = this.drawControls();
+        this.effectControls = this.drawEffectControls();
         this.requestUpdate();
+    }
+
+    registerMixer(mixer) {
+        this.mixer = mixer;
     }
 
     _onControlInput(e, module, control) {
@@ -52,6 +67,15 @@ class EditPatch extends LitElement {
             return;
         }
         module[control.property] = target.value;
+    }
+
+    _onSendInput(e, effect) {
+        if (!this.track) return;
+        if (!this.mixer) return;
+        let value = e.target.value;
+        this.mixer.effectSends[this.track.index][effect.name].set(
+            { gain: value }
+        );
     }
 
     getControlValue(module, control) {
@@ -92,6 +116,37 @@ class EditPatch extends LitElement {
 
             return select;
         }
+    }
+
+    drawEffectControls() {
+        if (!this.patch) return;
+        let knobs = [];
+
+        const effectChannels = this.patch.mixer.effectChannels;
+
+        for (let effectIndex = 0; effectIndex < effectChannels.length;
+            effectIndex++) {
+            let knob = document.createElement("ui-knob");
+            //let currentMod = this.sequence[this.selectedTrack].mod[modIndex];
+
+            let min = -80;
+            let max = 0;
+            knob.setAttribute("min", min);
+            knob.setAttribute("max", max);
+
+            knob.setAttribute("default",
+                this.mixer.effectSends[
+                    this.track.index][effectChannels[effectIndex].name].gain.value);
+            knob.setAttribute("label", effectChannels[effectIndex].name);
+            knob.setAttribute("integer-mode", true);
+
+            knob.addEventListener("input", e =>
+                this._onSendInput(e, effectChannels[effectIndex]));
+
+            knobs.push(knob);
+        }
+
+        return knobs;
     }
 
     drawControls() {

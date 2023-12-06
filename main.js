@@ -29,6 +29,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const editView = document.querySelector("ui-edit-view");
 
     const mixer = new Mixer(sequencer);
+    editView.registerMixer(mixer);
 
     document.addEventListener("trackSwitch", e => {
         let track = e.detail;

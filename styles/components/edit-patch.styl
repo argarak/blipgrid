@@ -1,6 +1,12 @@
 @require "../defines.styl"
 @require "../input-common.styl"
 
+:host
+  display flex
+  height 100%
+
+  flex-direction column
+
 #loadControls
   display flex
   flex-direction row
@@ -23,6 +29,46 @@
 
   label
     color var(--primary-text)
+
+#effectControlContainer
+  display flex
+  flex-direction column
+  justify-content space-around
+
+  margin-top auto
+  position sticky
+  bottom 0
+
+  #effectTitle
+    user-select none
+
+    display flex
+    align-items center
+
+    width 100px
+    margin 0
+
+    color var(--note-color)
+    background-color var(--surface-background)
+    border-bottom none
+
+    padding 10px
+
+    span
+      color var(--on-surface-focus)
+      margin-right 10px
+
+  #effectControls
+    display flex
+    flex-direction row
+    justify-content space-evenly
+
+    padding 10px 0px
+    border 2px solid var(--surface-background)
+    background-color var(--surface-background-alt)
+    border-bottom none
+    border-left none
+    border-right none
 
 .knobSet
   display flex
