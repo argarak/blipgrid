@@ -1,0 +1,39 @@
+@require "../defines.styl"
+@require "../input-common.styl"
+
+:host
+  z-index 999
+  background #000a
+
+  position fixed
+  top 0
+  left 0
+
+  width 100vw
+  height 100vh
+
+  display flex
+  justify-content center
+  align-items center
+
+#dialog
+  background var(--surface-background)
+  border-radius 20px
+
+#header
+  display flex
+  justify-content start
+  align-items center
+
+  border-radius 20px 20px 0px 0px
+  padding 5px 10px
+  background var(--surface-background-alt)
+
+  font-size 15px
+  font-weight 600
+
+  button
+    margin-right 10px
+
+#body
+  padding 20px
