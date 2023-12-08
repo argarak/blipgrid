@@ -3,6 +3,8 @@ import { LitElement, html, css, unsafeCSS } from "lit";
 import { ref, createRef } from "lit/directives/ref.js";
 import * as dialogStyle from "/styles/components/welcome-dialog.styl?inline";
 
+import * as themes from "/objects/themes.json";
+
 class WelcomeDialog extends LitElement {
     dialog = createRef();
 
@@ -65,7 +67,7 @@ class WelcomeDialog extends LitElement {
         const mainpanel = html`
             <div id="themeSelectContainer">
                 select theme:::
-                <select id="themeSelect" name="theme">
+                <select id="themeSelect" name="theme" @input=${this._onThemeSelect}>
                     ${this.themeOptions}
                 </select>
             </div>
@@ -117,6 +119,13 @@ class WelcomeDialog extends LitElement {
         css`${unsafeCSS(dialogStyle.default)}`
     ];
 
+    _onThemeSelect(e) {
+        let theme = e.target.value;
+        for (let key of Object.keys(themes.default[theme])) {
+            document.documentElement.style.setProperty(key, themes.default[theme][key]);
+        }
+    }
+
     close() {
         this.dialog.value.close();
     }
@@ -140,6 +149,16 @@ class WelcomeDialog extends LitElement {
         this.iconCounter = (this.iconCounter + 1) % this.iconText.length;
     }
 
+    themeSelectOptions() {
+        let options = [];
+        for (let theme of Object.keys(themes.default)) {
+            let option = document.createElement("option");
+            option.textContent = theme;
+            options.push(option);
+        }
+        return options;
+    }
+
     constructor() {
         super();
         this.title = "welcome to blipgrid!";
@@ -148,6 +167,8 @@ class WelcomeDialog extends LitElement {
         this.iconText = "blipgrid";
         this.iconCounter = 0;
         this.iconInterval = window.setInterval(() => this.updateIcon(), 1000);
+
+        this.themeOptions = this.themeSelectOptions();
     }
 
     populateGrid() {
