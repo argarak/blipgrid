@@ -1,0 +1,74 @@
+@require "../defines.styl"
+@require "../input-common.styl"
+
+#dialogContent
+  width 80vw
+  height 60vh
+
+  margin 20px
+
+  display flex
+  flex-direction row
+
+#leftpanel
+  flex 1
+  width 200px
+  display flex
+  flex-direction column
+
+  h1
+    font-size 64px
+    font-weight 600
+    margin-top 20px
+    margin-bottom 0
+
+  #version
+    font-size 32px
+    font-weight 300
+
+    margin-bottom 20px
+
+  #description
+    font-size 16px
+
+#mainpanel
+  flex 3
+
+  display flex
+  align-items center
+  justify-content center
+
+#blipicon
+  display grid
+  grid-template-columns repeat(3, 48px)
+  justify-content start
+  max-height 100%
+
+  gap 16px
+
+#leftbuttons
+  margin-top auto
+
+  button
+    margin-top 10px
+    padding 5px 10px
+
+    span
+      margin-right 10px
+
+
+.blipBox
+  width 48px
+  height 48px
+  background-color var(--surface-active)
+  border-radius 2px
+  border 1px solid var(--surface-active)
+  transition all .1s linear
+
+  &.active
+    background-color var(--note-color)
+    border-color var(--note-color)
+    //box-shadow 0px 0px 10px rgba(67, 160, 71, 0.5)
+
+  &.marker
+    border-color var(--primary-text)
