@@ -3,16 +3,19 @@
 
 #dialogContent
   width 80vw
-  height 60vh
+  height 80vh
 
   margin 20px
 
   display flex
   flex-direction row
 
+  max-width 1200px
+  max-height 800px
+
 #leftpanel
   flex 1
-  width 200px
+  max-width 200px
   display flex
   flex-direction column
 
@@ -35,8 +38,25 @@
   flex 3
 
   display flex
-  align-items center
-  justify-content center
+  flex-direction column
+
+  #filePickerContainer
+    margin-top 10px
+    height 100%
+
+  #themeSelectContainer,
+  #projectActions,
+  #lowerActions
+    width 100%
+    display flex
+    justify-content end
+    align-items center
+
+    button
+      margin-left 10px
+
+    select
+      margin-left 10px
 
 #blipicon
   display grid
@@ -46,16 +66,15 @@
 
   gap 16px
 
+button
+  margin-top 10px
+  padding 5px 10px
+
+  span
+    margin-right 10px
+
 #leftbuttons
   margin-top auto
-
-  button
-    margin-top 10px
-    padding 5px 10px
-
-    span
-      margin-right 10px
-
 
 .blipBox
   width 48px
@@ -72,3 +91,40 @@
 
   &.marker
     border-color var(--primary-text)
+
+.file
+  display flex
+  flex-direction row
+  justify-content start
+  align-items center
+
+  padding 10px
+  background-color var(--surface-active)
+  border-radius 20px
+
+  font-size 14px
+
+  div
+    margin-right 20px
+
+  .fileActions
+    display flex
+    flex-direction row
+    align-items center
+
+    button
+      margin-top 0
+
+      span
+        margin 0
+
+  .fileName
+    font-weight 800
+
+  .fileAuthor
+    font-weight 600
+
+  .fileDateTime
+    flex 1
+    text-align right
+    font-weight 800

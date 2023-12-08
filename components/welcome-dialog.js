@@ -24,7 +24,7 @@ class WelcomeDialog extends LitElement {
 
                         <div id="leftbuttons">
                             <button>
-                                <span class="material-icons">help</span> user guide
+                                <span class="material-icons">info</span> user guide
                             </button>
                             <button>
                                 <span class="material-icons">open_in_new</span> code repository
@@ -35,7 +35,56 @@ class WelcomeDialog extends LitElement {
                         </div>
                     </div>
                     <div id="mainpanel">
-                        content go here
+                        <div id="themeSelectContainer">
+                            select theme:::
+                            <select id="themeSelect" name="theme">
+                                ${this.themeOptions}
+                            </select>
+                        </div>
+                        <div id="projectActions">
+                            <button>
+                                <span class="material-icons">add</span> create new project
+                            </button>
+                            <button>
+                                <span class="material-icons">upload</span> upload project file
+                            </button>
+                        </div>
+                        <div id="filePickerContainer">
+                            <div id="viewTabs">
+                                <div class="tab active">
+                                    saved projects
+                                </div>
+                                <div class="tab">
+                                    open example
+                                </div>
+                            </div>
+
+                            <div id="fileContainer">
+                                <div class="file">
+                                    <div class="fileActions">
+                                        <button class="btn"><span class="material-icons">delete</span></button>
+                                        <button class="btn"><span class="material-icons">download</span></button>
+                                    </div>
+                                    <div class="fileName">
+                                        FM Test
+                                    </div>
+                                    <div class="fileAuthor">
+                                        by argarak
+                                    </div>
+                                    <div class="fileDateTime">
+                                        2023/12/08 17:15
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="lowerActions">
+                            <button>
+                                <span class="material-icons">help</span> view tutorial
+                            </button>
+                            <button>
+                                <span class="material-icons">close</span> close
+                            </button>
+                        </div>
                     </div>
                 </div>
             </ui-dialog>`;

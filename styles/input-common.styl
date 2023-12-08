@@ -181,3 +181,39 @@ select
     margin-right 0px
   & > .text
     opacity 0
+
+
+#viewTabs
+  display flex
+  flex-direction row
+  width 100%
+  margin-bottom 10px
+  justify-content space-around
+
+  top 0
+  position sticky
+
+  height 40px
+  z-index 99
+
+  .tab
+    background var(--surface-background)
+
+    flex 1
+    display flex
+    align-items center
+    justify-content center
+    border-bottom 1px var(--surface-active) solid
+
+    transition all .1s ease-in-out
+    cursor pointer
+    user-select none
+
+    span
+      margin-right 5px
+      color var(--on-surface-focus)
+
+  .active
+    background var(--surface-active)
+    color var(--primary-text)
+    border-color var(--primary-color)
