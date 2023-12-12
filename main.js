@@ -15,12 +15,14 @@ import "/components/sequencer.js";
 
 import * as Tone from "tone";
 
-import Patch from "./patch.js";
-import Mixer from "./mixer.js";
-import keyHandler from "./keys.js";
+import State from "/state.js";
 
-import * as basicPatch from "./objects/patches/basic.json";
-import * as basicSynthPatch from "./objects/patches/basic-synth.json";
+import Patch from "/patch.js";
+import Mixer from "/mixer.js";
+import keyHandler from "/keys.js";
+
+import * as basicPatch from "/objects/patches/basic.json";
+import * as basicSynthPatch from "/objects/patches/basic-synth.json";
 
 document.addEventListener("DOMContentLoaded", () => {
     let btnPlay = document.getElementById("btnPlay");
@@ -35,12 +37,10 @@ document.addEventListener("DOMContentLoaded", () => {
         Tone.Transport.bpm.value = e.target.value;
     });
 
-    const sequencer = document.querySelector("ui-sequencer");
-    const arpeggiator = document.querySelector("ui-arpeggiator");
-    const editView = document.querySelector("ui-edit-view");
-
-    const mixer = new Mixer(sequencer);
-    editView.registerMixer(mixer);
+    const sequencer = State.sequencer();
+    const arpeggiator = State.arpeggiator();
+    const editView = State.editView();
+    const mixer = State.mixer();
 
     document.addEventListener("trackSwitch", e => {
         let track = e.detail;

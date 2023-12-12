@@ -4,6 +4,8 @@ import * as mdiStyle from "@material-design-icons/font/index.css?inline";
 import * as editPatchStyle from "/styles/components/edit-patch.styl?inline";
 import { LitElement, html, css, unsafeCSS } from "lit";
 
+import State from "/state";
+
 class EditPatch extends LitElement {
     static properties = {
         name: { type: String, state: true }
@@ -39,7 +41,7 @@ class EditPatch extends LitElement {
         super();
         this.track = null;
         this.patch = null;
-        this.mixer = null;
+        this.mixer = State.mixer();
         this.controls = this.drawControls();
         this.effectControls = this.drawEffectControls();
 
@@ -54,10 +56,6 @@ class EditPatch extends LitElement {
         this.controls = this.drawControls();
         this.effectControls = this.drawEffectControls();
         this.requestUpdate();
-    }
-
-    registerMixer(mixer) {
-        this.mixer = mixer;
     }
 
     _onControlInput(e, module, control) {

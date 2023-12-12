@@ -50,10 +50,6 @@ class EditView extends LitElement {
         this.viewTabs = this.createTabs();
     }
 
-    registerMixer(mixer) {
-        this.editPatch.value.registerMixer(mixer);
-    }
-
     registerTrack(track) {
         this.editPatch.value.registerTrack(track);
     }

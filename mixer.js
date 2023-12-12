@@ -1,10 +1,11 @@
+import State from "/state.js";
 import * as Tone from "tone";
 
 class Mixer {
-    constructor(sequencer) {
+    constructor() {
         this.channels = [];
         this.soloChannel = null;
-        this.sequencer = sequencer;
+        this.sequencer = State.sequencer();
 
         this.chorus = new Tone.Chorus({
             wet: 1,
@@ -34,7 +35,7 @@ class Mixer {
         this.reverbChannel.receive(this.effectChannels[2].name);
         this.delayChannel.receive(this.effectChannels[3].name);
 
-        for (let track = 0; track < sequencer.numTracks; track++) {
+        for (let track = 0; track < this.sequencer.numTracks; track++) {
             let channel = new Tone.Channel().toDestination();
             let channelSends = {};
 
