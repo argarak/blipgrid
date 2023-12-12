@@ -1,26 +1,25 @@
 import * as Tone from "tone";
+import State from "/state";
 import * as moduleControls from "./objects/module-controls.json";
 
 const modulesTable = {
-    "Envelope": Tone.Envelope,
-    "FrequencyEnvelope": Tone.FrequencyEnvelope,
-    "Oscillator": Tone.Oscillator,
-    "AmplitudeEnvelope": Tone.AmplitudeEnvelope,
-    "Noise": Tone.Noise,
-    "Filter": Tone.Filter
+    Envelope: Tone.Envelope,
+    FrequencyEnvelope: Tone.FrequencyEnvelope,
+    Oscillator: Tone.Oscillator,
+    AmplitudeEnvelope: Tone.AmplitudeEnvelope,
+    Noise: Tone.Noise,
+    Filter: Tone.Filter,
 };
 
 class Patch {
-    constructor(patchObject, mixer, track) {
+    constructor(patchObject, track) {
         this.modules = [];
         this.connects = [];
 
-        this.mixer = mixer;
+        this.mixer = State.mixer();
         this.track = track;
 
         this.name = patchObject.name ? patchObject.name : "unnamed patch";
-
-        let self = this;
 
         if (!patchObject) return;
 
@@ -32,6 +31,8 @@ class Patch {
         this.modules = [];
         this.connects = [];
 
+        let module = null;
+
         // -- load patch object --
         // load modules
         for (let moduleObject of patchObject.modules) {
@@ -41,9 +42,10 @@ class Patch {
                 return;
             }
 
-            let module = new modulesTable[moduleObject.type]();
+            module = new modulesTable[moduleObject.type]();
 
-            if (moduleObject.toDestination) this.mixer.attach(this.track, module);
+            if (moduleObject.toDestination)
+                this.mixer.attach(this.track, module);
             if (moduleObject.start) module.start();
 
             this.addModule(module);
@@ -56,16 +58,20 @@ class Patch {
         for (let connectObject of patchObject.connects) {
             let input;
             if (connectObject.input.property) {
-                input = this.modules[connectObject.input.id][
-                    connectObject.input.property];
+                input =
+                    this.modules[connectObject.input.id][
+                        connectObject.input.property
+                    ];
             } else {
                 input = this.modules[connectObject.input.id];
             }
 
             let output;
             if (connectObject.output.property) {
-                output = this.modules[connectObject.output.id][
-                    connectObject.output.property];
+                output =
+                    this.modules[connectObject.output.id][
+                        connectObject.output.property
+                    ];
             } else {
                 output = this.modules[connectObject.output.id];
             }
@@ -88,9 +94,8 @@ class Patch {
 
         // TODO errors should show up in a some dialog box
         // maybe we need a new component?
-        fileInput.addEventListener("change", e => {
-            if (e.target.files.length === 0 ||
-                e.target.files.length > 1) {
+        fileInput.addEventListener("change", (e) => {
+            if (e.target.files.length === 0 || e.target.files.length > 1) {
                 // error: select one file
             }
 

@@ -2,25 +2,27 @@ import * as mdiStyle from "@material-design-icons/font/index.css?inline";
 import { LitElement, html, css, unsafeCSS } from "lit";
 import { ref, createRef } from "lit/directives/ref.js";
 import * as dialogStyle from "/styles/components/welcome-dialog.styl?inline";
-
 import * as themes from "/objects/themes.json";
+
+import State from "/state";
+import localforage from "localforage";
 
 class WelcomeDialog extends LitElement {
     dialog = createRef();
 
     static properties = {
-        title: { type: String }
+        title: { type: String },
+        selectedTheme: { type: String },
     };
 
     render() {
         const leftpanel = html`
             <div id="blipicon">${this.blipboxes}</div>
-            <h1>blip—\ngrid</h1>
-            <div id="version">
-                v0.3.5
-            </div>
+            <h1>blip— grid</h1>
+            <div id="version">v0.3.5</div>
             <div id="description">
-                blipgrid is a unique web-app music sequencer and composition tool
+                blipgrid is a unique web-app music sequencer and composition
+                tool
             </div>
 
             <div id="leftbuttons">
@@ -28,14 +30,16 @@ class WelcomeDialog extends LitElement {
                     <span class="material-icons">info</span> user guide
                 </button>
                 <a href="https://github.com/argarak/blipgrid" target="_blank">
-                <button>
-                    <span class="material-icons">open_in_new</span> code repository
-                </button>
+                    <button>
+                        <span class="material-icons">open_in_new</span> code
+                        repository
+                    </button>
                 </a>
                 <a href="https://argarak.me" target="_blank">
-                <button>
-                    <span class="material-icons">open_in_new</span> visit argarak.me
-                </button>
+                    <button>
+                        <span class="material-icons">open_in_new</span> visit
+                        argarak.me
+                    </button>
                 </a>
             </div>
         `;
@@ -51,15 +55,9 @@ class WelcomeDialog extends LitElement {
                             <span class="material-icons">download</span>
                         </button>
                     </div>
-                    <div class="fileName">
-                        FM Test
-                    </div>
-                    <div class="fileAuthor">
-                        by argarak
-                    </div>
-                    <div class="fileDateTime">
-                        2023/12/08 17:15
-                    </div>
+                    <div class="fileName">FM Test</div>
+                    <div class="fileAuthor">by argarak</div>
+                    <div class="fileDateTime">2023/12/08 17:15</div>
                 </div>
             </div>
         `;
@@ -67,7 +65,12 @@ class WelcomeDialog extends LitElement {
         const mainpanel = html`
             <div id="themeSelectContainer">
                 select theme:::
-                <select id="themeSelect" name="theme" @input=${this._onThemeSelect}>
+                <select
+                    id="themeSelect"
+                    name="theme"
+                    @input=${this._onThemeSelect}
+                    .value="${this.selectedTheme}"
+                >
                     ${this.themeOptions}
                 </select>
             </div>
@@ -76,17 +79,14 @@ class WelcomeDialog extends LitElement {
                     <span class="material-icons">add</span> create new project
                 </button>
                 <button>
-                    <span class="material-icons">upload</span> upload project file
+                    <span class="material-icons">upload</span> upload project
+                    file
                 </button>
             </div>
             <div id="filePickerContainer">
                 <div id="viewTabs">
-                    <div class="tab active">
-                        saved projects
-                    </div>
-                    <div class="tab">
-                        open example
-                    </div>
+                    <div class="tab active">saved projects</div>
+                    <div class="tab">open example</div>
                 </div>
 
                 ${fileContainer}
@@ -101,29 +101,26 @@ class WelcomeDialog extends LitElement {
             </div>
         `;
 
-        return html`
-            <ui-dialog ${ref(this.dialog)} title="${this.title}">
-                <div id="dialogContent">
-                    <div id="leftpanel">
-                        ${leftpanel}
-                    </div>
-                    <div id="mainpanel">
-                        ${mainpanel}
-                    </div>
-                </div>
-            </ui-dialog>`;
+        return html` <ui-dialog ${ref(this.dialog)} title="${this.title}">
+            <div id="dialogContent">
+                <div id="leftpanel">${leftpanel}</div>
+                <div id="mainpanel">${mainpanel}</div>
+            </div>
+        </ui-dialog>`;
     }
 
     static styles = [
-        css`${unsafeCSS(mdiStyle.default)}`,
-        css`${unsafeCSS(dialogStyle.default)}`
+        css`
+            ${unsafeCSS(mdiStyle.default)}
+        `,
+        css`
+            ${unsafeCSS(dialogStyle.default)}
+        `,
     ];
 
     _onThemeSelect(e) {
         let theme = e.target.value;
-        for (let key of Object.keys(themes.default[theme])) {
-            document.documentElement.style.setProperty(key, themes.default[theme][key]);
-        }
+        State.setTheme(theme);
     }
 
     close() {
@@ -131,7 +128,9 @@ class WelcomeDialog extends LitElement {
     }
 
     updateIcon() {
-        let binaryString = this.iconText.charCodeAt(this.iconCounter).toString(2);
+        let binaryString = this.iconText
+            .charCodeAt(this.iconCounter)
+            .toString(2);
         for (let a = 0; a < this.blipboxes.length; a++) {
             let offset = this.blipboxes.length - binaryString.length;
             if (a < offset) {
@@ -153,6 +152,7 @@ class WelcomeDialog extends LitElement {
         let options = [];
         for (let theme of Object.keys(themes.default)) {
             let option = document.createElement("option");
+            option.value = theme;
             option.textContent = theme;
             options.push(option);
         }
@@ -163,10 +163,17 @@ class WelcomeDialog extends LitElement {
         super();
         this.title = "welcome to blipgrid!";
         this.blipboxes = this.populateGrid();
+        this.selectedTheme = "";
+
+        localforage.getItem("theme").then((value) => {
+            this.selectedTheme = value;
+        });
 
         this.iconText = "blipgrid";
         this.iconCounter = 0;
         this.iconInterval = window.setInterval(() => this.updateIcon(), 1000);
+
+        this.saveManager = State.saveManager();
 
         this.themeOptions = this.themeSelectOptions();
     }

@@ -17,6 +17,7 @@
     "@material-design-icons/font": "^0.14.12",
     "eslint": "^8.49.0",
     "lit": "^3.0.2",
+    "localforage": "^1.10.0",
     "tone": "^14.7.77"
   },
   "main": "main.js",

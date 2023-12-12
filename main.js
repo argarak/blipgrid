@@ -18,11 +18,11 @@ import * as Tone from "tone";
 import State from "/state.js";
 
 import Patch from "/patch.js";
-import Mixer from "/mixer.js";
 import keyHandler from "/keys.js";
 
 import * as basicPatch from "/objects/patches/basic.json";
 import * as basicSynthPatch from "/objects/patches/basic-synth.json";
+import localforage from "localforage";
 
 document.addEventListener("DOMContentLoaded", () => {
     let btnPlay = document.getElementById("btnPlay");
@@ -33,7 +33,7 @@ document.addEventListener("DOMContentLoaded", () => {
         else btnPlay.classList.remove("active");
     });
 
-    document.getElementById("bpmSlider").addEventListener("input", e => {
+    document.getElementById("bpmSlider").addEventListener("input", (e) => {
         Tone.Transport.bpm.value = e.target.value;
     });
 
@@ -42,7 +42,11 @@ document.addEventListener("DOMContentLoaded", () => {
     const editView = State.editView();
     const mixer = State.mixer();
 
-    document.addEventListener("trackSwitch", e => {
+    localforage.getItem("theme").then((value) => {
+        State.setTheme(value);
+    });
+
+    document.addEventListener("trackSwitch", (e) => {
         let track = e.detail;
         editView.registerTrack(track);
         arpeggiator.switchTrack(e.detail.index);
@@ -51,7 +55,7 @@ document.addEventListener("DOMContentLoaded", () => {
     for (let trackIndex = 0; trackIndex < sequencer.numTracks; trackIndex++) {
         let patch = new Patch(
             trackIndex % 2 == 0 ? basicSynthPatch : basicPatch,
-            mixer, trackIndex
+            trackIndex,
         );
         sequencer.assignPatch(trackIndex, patch);
         if (trackIndex === sequencer.selectedTrack) {
@@ -61,7 +65,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
     function setFrequency(modules, frequency, time) {
         for (let module of modules) {
-            if (module.name === "Oscillator") module.frequency.setValueAtTime(frequency, time);
+            if (module.name === "Oscillator")
+                module.frequency.setValueAtTime(frequency, time);
         }
     }
 
@@ -102,11 +107,22 @@ document.addEventListener("DOMContentLoaded", () => {
     Tone.Transport.scheduleRepeat((time) => {
         let t = sequencer.nextStep();
 
-        for (let trackIndex = 0; trackIndex < sequencer.numTracks; trackIndex++) {
+        for (
+            let trackIndex = 0;
+            trackIndex < sequencer.numTracks;
+            trackIndex++
+        ) {
             let trig = sequencer.next(trackIndex);
             if (trig) {
-                let frequency = arpeggiator.next(trackIndex, t % sequencer.sequence[trackIndex].length);
-                setFrequency(sequencer.sequence[trackIndex].patch.modules, frequency, time);
+                let frequency = arpeggiator.next(
+                    trackIndex,
+                    t % sequencer.sequence[trackIndex].length,
+                );
+                setFrequency(
+                    sequencer.sequence[trackIndex].patch.modules,
+                    frequency,
+                    time,
+                );
                 trigger(sequencer.sequence[trackIndex].patch.modules, time);
             }
         }
