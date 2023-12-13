@@ -1,0 +1,244 @@
+import { LitElement, html, css, unsafeCSS } from "lit";
+import { ref, createRef } from "lit/directives/ref.js";
+
+import * as mdiStyle from "@material-design-icons/font/index.css?inline";
+import * as appStyle from "/styles/components/app.styl?inline";
+
+import * as Tone from "tone";
+
+import State from "/state.js";
+
+import Patch from "/patch.js";
+import keyHandler from "/keys.js";
+
+import * as basicPatch from "/objects/patches/basic.json";
+import * as basicSynthPatch from "/objects/patches/basic-synth.json";
+import localforage from "localforage";
+
+class App extends LitElement {
+    sequencer = createRef();
+    arpeggiator = createRef();
+    editView = createRef();
+
+    static properties = {
+        name: { type: String, state: true },
+    };
+
+    _onPlayClick(e) {
+        let btnPlay = e.target;
+
+        Tone.start();
+        Tone.Transport.toggle();
+        if (Tone.Transport.state === "started") btnPlay.classList.add("active");
+        else btnPlay.classList.remove("active");
+    }
+
+    _onBpmInput(e) {
+        Tone.Transport.bpm.value = e.target.value;
+    }
+
+    render() {
+        return html`
+            <div id="mainContainer">
+                <div id="headContainer">
+                    <div class="dropdown" aria-haspopup="true">
+                        <div class="droplabel" tabindex="0">
+                            File
+                            <span class="material-icons">arrow_drop_down</span>
+                        </div>
+                        <div class="dropmenu" aria-label="submenu">
+                            <button>
+                                <span class="material-icons">add</span> New
+                            </button>
+                            <button>
+                                <span class="material-icons">save</span> Save to
+                                Browser
+                            </button>
+                            <button>
+                                <span class="material-icons">file_open</span>
+                                Load from Browser
+                            </button>
+                            <button>
+                                <span class="material-icons">download</span>
+                                Download
+                            </button>
+                            <button>
+                                <span class="material-icons">upload</span>
+                                Upload
+                            </button>
+                        </div>
+                    </div>
+
+                    <input
+                        id="bpmSlider"
+                        name="bpm"
+                        type="number"
+                        min="0"
+                        max="300"
+                        value="120"
+                        size="3"
+                        @input=${this._onBpmInput}
+                    />
+                    <label for="bpm">bpm</label>
+
+                    <div class="hfill"></div>
+
+                    <button
+                        class="btn"
+                        id="btnPlay"
+                        @click=${this._onPlayClick}
+                    >
+                        <span class="material-icons">play_arrow</span>
+                    </button>
+                    <button class="btn" id="btnLoop">
+                        <span class="material-icons">repeat</span>
+                    </button>
+                    <button class="btn" id="btnStop">
+                        <span class="material-icons">stop</span>
+                    </button>
+                </div>
+
+                <div id="editContainer">
+                    <div id="sequencerContainer">
+                        <ui-sequencer ${ref(this.sequencer)}></ui-sequencer>
+                        <ui-arpeggiator
+                            ${ref(this.arpeggiator)}
+                        ></ui-arpeggiator>
+                    </div>
+                    <div id="paramContainer">
+                        <ui-edit-view ${ref(this.editView)}></ui-edit-view>
+                    </div>
+                </div>
+
+                <ui-welcome-dialog></ui-welcome-dialog>
+            </div>
+        `;
+    }
+
+    static styles = [
+        css`
+            ${unsafeCSS(mdiStyle.default)}
+        `,
+        css`
+            ${unsafeCSS(appStyle.default)}
+        `,
+    ];
+
+    firstUpdated() {
+        State.set("sequencer", this.sequencer.value);
+        State.set("arpeggiator", this.arpeggiator.value);
+        State.set("editView", this.editView.value);
+
+        const mixer = State.mixer();
+
+        localforage.getItem("theme").then((value) => {
+            State.setTheme(value);
+        });
+
+        document.addEventListener("trackSwitch", (e) => {
+            let track = e.detail;
+            this.editView.value.registerTrack(track);
+            this.arpeggiator.value.switchTrack(e.detail.index);
+        });
+
+        for (
+            let trackIndex = 0;
+            trackIndex < this.sequencer.value.numTracks;
+            trackIndex++
+        ) {
+            let patch = new Patch(
+                trackIndex % 2 == 0 ? basicSynthPatch : basicPatch,
+                trackIndex,
+            );
+            this.sequencer.value.assignPatch(trackIndex, patch);
+            if (trackIndex === this.sequencer.value.selectedTrack) {
+                this.editView.value.registerTrack(
+                    this.sequencer.value.sequence[trackIndex],
+                );
+            }
+        }
+
+        function setFrequency(modules, frequency, time) {
+            for (let module of modules) {
+                if (module.name === "Oscillator")
+                    module.frequency.setValueAtTime(frequency, time);
+            }
+        }
+
+        function trigger(modules, time) {
+            for (let module of modules) {
+                if (module.name === "AmplitudeEnvelope")
+                    module.triggerAttack(time);
+                if (module.name === "FrequencyEnvelope")
+                    module.triggerAttack(time);
+                if (module.name === "Envelope") module.triggerAttack(time);
+            }
+        }
+
+        // FIXME currently the keys "roll", as is default OS behaviour
+        // not sure whether we should deal with it somehow
+        keyHandler.registerKey("a", [], () => {
+            let modules = this.sequencer.value.getCurrentTrack().patch.modules;
+            let time = Tone.now();
+            setFrequency(modules, Tone.Frequency(60, "midi"), time);
+            trigger(modules, time);
+        });
+
+        for (
+            let trackIndex = 1;
+            trackIndex <= this.sequencer.value.numTracks;
+            trackIndex++
+        ) {
+            keyHandler.registerKey(`Digit${trackIndex}`, ["shift"], () => {
+                console.debug(`muting channel ${trackIndex - 1}`);
+                mixer.toggleMute(trackIndex - 1);
+            });
+
+            keyHandler.registerKey(`Digit${trackIndex}`, ["ctrl"], () => {
+                console.debug(`soloing channel ${trackIndex - 1}`);
+                mixer.toggleSolo(trackIndex - 1);
+            });
+
+            keyHandler.registerKey(`Digit${trackIndex}`, [], () => {
+                console.debug(`switching to track ${trackIndex - 1}`);
+                this.sequencer.value.switchTrack(trackIndex - 1);
+            });
+        }
+
+        Tone.Transport.scheduleRepeat((time) => {
+            let t = this.sequencer.value.nextStep();
+
+            for (
+                let trackIndex = 0;
+                trackIndex < this.sequencer.value.numTracks;
+                trackIndex++
+            ) {
+                let trig = this.sequencer.value.next(trackIndex);
+                if (trig) {
+                    let frequency = this.arpeggiator.value.next(
+                        trackIndex,
+                        t % this.sequencer.value.sequence[trackIndex].length,
+                    );
+                    setFrequency(
+                        this.sequencer.value.sequence[trackIndex].patch.modules,
+                        frequency,
+                        time,
+                    );
+                    trigger(
+                        this.sequencer.value.sequence[trackIndex].patch.modules,
+                        time,
+                    );
+                }
+            }
+        }, "16n");
+
+        Tone.Transport.start();
+    }
+
+    constructor() {
+        super();
+    }
+}
+
+customElements.define("ui-app", App);
+export default App;

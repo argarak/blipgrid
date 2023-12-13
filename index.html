@@ -19,44 +19,7 @@
             </p>
         <![endif]-->
 
-        <div id="mainContainer">
-            <div id="headContainer">
-                <div class="dropdown" aria-haspopup="true">
-                    <div class="droplabel" tabindex="0">
-                        File <span class="material-icons">arrow_drop_down</span>
-                    </div>
-                    <div class="dropmenu" aria-label="submenu">
-                        <button><span class="material-icons">add</span> New</button>
-                        <button><span class="material-icons">save</span> Save to Browser</button>
-                        <button><span class="material-icons">file_open</span> Load from Browser</button>
-                        <button><span class="material-icons">download</span> Download</button>
-                        <button><span class="material-icons">upload</span> Upload</button>
-                    </div>
-                </div>
-
-                <input id="bpmSlider" name="bpm" type="number" min="0" max="300" value="120" size="3"/>
-                <label for="bpm">bpm</label>
-
-                <div class="hfill"></div>
-
-                <button class="btn" id="btnPlay"><span class="material-icons">play_arrow</span></button>
-                <button class="btn" id="btnLoop"><span class="material-icons">repeat</span></button>
-                <button class="btn" id="btnStop"><span class="material-icons">stop</span></button>
-            </div>
-
-            <div id="editContainer">
-                <div id="sequencerContainer">
-                    <ui-sequencer></ui-sequencer>
-                    <ui-arpeggiator></ui-arpeggiator>
-                </div>
-                <div id="paramContainer">
-                    <ui-edit-view></ui-edit-view>
-                </div>
-            </div>
-
-            <ui-welcome-dialog></ui-welcome-dialog>
-        </div>
-
+        <ui-app></ui-app>
         <script type="module" src="main.js"></script>
     </body>
 </html>

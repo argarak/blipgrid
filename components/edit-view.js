@@ -9,49 +9,60 @@ class EditView extends LitElement {
     static properties = {};
 
     render() {
-        return html`
-        <div id="viewTabs">
-            ${this.viewTabs}
-        </div>
-        <div id="editViewContainer">
-            <ui-edit-patch ${ref(this.editPatch)}></ui-edit-patch>
-        </div>`;
+        return html` <div id="viewTabs">${this.viewTabs}</div>
+            <div id="editViewContainer">
+                <ui-edit-patch ${ref(this.editPatch)}></ui-edit-patch>
+            </div>`;
     }
 
     static styles = [
-        css`${unsafeCSS(mdiStyle.default)}`,
-        css`${unsafeCSS(editViewStyle.default)}`
+        css`
+            ${unsafeCSS(mdiStyle.default)}
+        `,
+        css`
+            ${unsafeCSS(editViewStyle.default)}
+        `,
     ];
 
     constructor() {
         super();
+        this.ready = false;
+        this.track = null;
         this.views = [
             {
                 name: "sound",
                 icon: "cable",
-                active: true
+                active: true,
             },
             {
                 name: "edit/mix",
                 icon: "tune",
-                active: false
+                active: false,
             },
             {
                 name: "effect",
                 icon: "blur_on",
-                active: false
+                active: false,
             },
             {
                 name: "modulation",
                 icon: "graphic_eq",
-                active: false
-            }
+                active: false,
+            },
         ];
         this.viewTabs = this.createTabs();
     }
 
+    firstUpdated() {
+        this.ready = true;
+        if (this.track) this.editPatch.value.registerTrack(this.track);
+    }
+
     registerTrack(track) {
-        this.editPatch.value.registerTrack(track);
+        this.track = track;
+        if (this.ready) {
+            this.editPatch.value.registerTrack(track);
+        }
     }
 
     createTabs() {
@@ -71,7 +82,7 @@ class EditView extends LitElement {
             let content = document.createTextNode(` ${view.name}`);
             tab.appendChild(content);
 
-            tab.addEventListener("click", e => console.log(e));
+            tab.addEventListener("click", (e) => console.log(e));
 
             tabs.push(tab);
         }

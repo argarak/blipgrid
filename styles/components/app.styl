@@ -1,0 +1,89 @@
+@require "../defines.styl"
+@require "../input-common.styl"
+
+#mainContainer
+  display flex
+  flex-direction column
+  height 100%
+
+  align-items center
+
+.hfill
+  width 100%
+
+#sequencerContainer
+  display flex
+  flex-direction column
+  height 100%
+
+#headContainer
+  box-sizing border-box
+  padding 5px
+  background var(--surface-background)
+  border-bottom m-border-size solid var(--surface-active)
+
+  width 100%
+  height 40px
+  display flex
+  flex-direction row
+
+  & > button
+    display flex
+    align-items center
+    justify-content center
+
+    padding 3px
+    margin 0px 5px
+
+    color var(--primary-text)
+
+  input
+    margin-left 5px
+
+  label, input
+    display flex
+    align-items center
+    border-radius 0px
+
+#editContainer
+  display flex
+  align-items start
+  justify-content center
+  flex-direction row
+  height calc(100% - 40px)
+
+  width 100vw
+  max-width 150ch
+
+#sideContainer
+  background #0000
+  border-right 0px solid var(--surface-active)
+  height 100%
+
+  flex 1
+
+  display flex
+  flex-direction column
+  align-items start
+
+  overflow-x auto
+
+#paramContainer
+  background var(--surface-background-alt)
+  border-left 0px solid var(--surface-active)
+
+  flex 1
+
+  height 100%
+
+  overflow-y scroll
+  overflow-x clip
+
+ui-sequencer,
+ui-arpeggiator
+  display flex
+  flex-direction column
+  align-items center
+  max-height 60%
+  background var(--surface-background)
+  flex 1
