@@ -21,15 +21,17 @@ class Sequencer extends LitElement {
 
     static properties = {
         selectedAlgorithm: { type: Number, state: true },
-        selectedTrack: { type: Number, state: true }
+        selectedTrack: { type: Number, state: true },
     };
 
     _onAlgorithmSelectInput(e) {
         e.preventDefault();
         let algorithm = null;
         for (algorithm of this.algorithms) {
-            if (parseInt(e.target.value) ===
-                util.hashCode(algorithm.fn.toString())) {
+            if (
+                parseInt(e.target.value) ===
+                util.hashCode(algorithm.fn.toString())
+            ) {
                 break;
             }
             // TODO: error if not found
@@ -41,20 +43,28 @@ class Sequencer extends LitElement {
 
     _onStepsInput(e) {
         let value = parseInt(e.target.value);
-        if (isNaN(value)) { value = 1; e.target.value = 1; }
+        if (isNaN(value)) {
+            value = 1;
+            e.target.value = 1;
+        }
         if (value < 1) value = 1;
         if (value > 64) value = 64;
 
         this.sequence[this.selectedTrack].length = value;
         this.sequence[this.selectedTrack].sequence = this.generateSequence();
-        this.triggerGrid.value.apply(this.sequence[this.selectedTrack].sequence, value);
+        this.triggerGrid.value.apply(
+            this.sequence[this.selectedTrack].sequence,
+            value,
+        );
     }
 
     _onControlInput(e, modIndex) {
         this.sequence[this.selectedTrack].mod[modIndex] = e.target.value;
         this.sequence[this.selectedTrack].sequence = this.generateSequence();
-        this.triggerGrid.value.apply(this.sequence[this.selectedTrack].sequence,
-            this.sequence[this.selectedTrack].length);
+        this.triggerGrid.value.apply(
+            this.sequence[this.selectedTrack].sequence,
+            this.sequence[this.selectedTrack].length,
+        );
     }
 
     _onViewTitleClick(e) {
@@ -67,25 +77,31 @@ class Sequencer extends LitElement {
         const algorithmControls = this.algorithmControls();
         const length = this.sequence[this.selectedTrack].length;
         return html`
-            <div id="trackTabs">
-                ${this.tabs}
-            </div>
+            <div id="trackTabs">${this.tabs}</div>
             <h3 id="viewTitle" @click=${this._onViewTitleClick}>
                 <span class="material-icons">grid_view</span>
-                <span class="text">pattern</span>
+                <span class="text">rhythmic pattern</span>
             </h3>
             <select id="algorithmSelect" @input=${this._onAlgorithmSelectInput}>
                 ${algorithmOptions}
             </select>
             <div id="sequenceGridContainer">
-                <ui-trigger-grid ${ref(this.triggerGrid)}
-                 sequence="${this.sequence[this.selectedTrack].sequence}">
+                <ui-trigger-grid
+                    ${ref(this.triggerGrid)}
+                    sequence="${this.sequence[this.selectedTrack].sequence}"
+                >
                 </ui-trigger-grid>
             </div>
             <div id="stepsContainer">
-                <input id="seqSteps" type="number"
-                       min="1" max="64" .value="${length}" size="2"
-                       @input="${this._onStepsInput}"/>
+                <input
+                    id="seqSteps"
+                    type="number"
+                    min="1"
+                    max="64"
+                    .value="${length}"
+                    size="2"
+                    @input="${this._onStepsInput}"
+                />
                 <label for="seqSteps">steps</label>
             </div>
             <div id="knobContainer">${algorithmControls}</div>
@@ -94,8 +110,12 @@ class Sequencer extends LitElement {
     }
 
     static styles = [
-        css`${unsafeCSS(mdiStyle.default)}`,
-        css`${unsafeCSS(sequencerStyle.default)}`
+        css`
+            ${unsafeCSS(mdiStyle.default)}
+        `,
+        css`
+            ${unsafeCSS(sequencerStyle.default)}
+        `,
     ];
 
     constructor() {
@@ -125,12 +145,13 @@ class Sequencer extends LitElement {
                 index: trackIndex,
 
                 mute: false,
-                solo: false
+                solo: false,
             };
         }
 
-        this.selectedAlgorithm =
-            util.hashCode(this.sequence[this.selectedTrack].algorithm.fn.toString());
+        this.selectedAlgorithm = util.hashCode(
+            this.sequence[this.selectedTrack].algorithm.fn.toString(),
+        );
 
         // keeps track of the current step position
         // initially at the end of the sequence so that the sequence can start
@@ -162,16 +183,19 @@ class Sequencer extends LitElement {
         this.selectedTrack = trackIndex;
 
         const switchTrackEvent = new CustomEvent("trackSwitch", {
-            detail: this.sequence[this.selectedTrack]
+            detail: this.sequence[this.selectedTrack],
         });
 
         if ("value" in this.triggerGrid) {
-            this.triggerGrid.value.apply(this.sequence[this.selectedTrack].sequence,
-                this.sequence[this.selectedTrack].length);
+            this.triggerGrid.value.apply(
+                this.sequence[this.selectedTrack].sequence,
+                this.sequence[this.selectedTrack].length,
+            );
         }
 
-        this.selectedAlgorithm =
-            util.hashCode(this.sequence[this.selectedTrack].algorithm.fn.toString());
+        this.selectedAlgorithm = util.hashCode(
+            this.sequence[this.selectedTrack].algorithm.fn.toString(),
+        );
         document.dispatchEvent(switchTrackEvent);
         this.requestUpdate();
     }
@@ -197,8 +221,10 @@ class Sequencer extends LitElement {
             this.triggerGrid.value.setStep(this.step % length);
         }
 
-        let trigger = this.sequence[trackIndex % this.numTracks]
-            .sequence[this.step % length];
+        let trigger =
+            this.sequence[trackIndex % this.numTracks].sequence[
+                this.step % length
+            ];
 
         if (trigger) {
             this.tabs[trackIndex].classList.add("trig");
@@ -211,8 +237,8 @@ class Sequencer extends LitElement {
 
     registerAlgorithm(name, fn) {
         this.algorithms.push({
-            "name": name,
-            "fn": fn
+            name: name,
+            fn: fn,
         });
     }
 
@@ -228,8 +254,7 @@ class Sequencer extends LitElement {
             if (this.sequence[trackIndex].mute) tab.classList.add("mute");
             if (this.sequence[trackIndex].solo) tab.classList.add("solo");
 
-            tab.addEventListener("click", () =>
-                this.switchTrack(trackIndex));
+            tab.addEventListener("click", () => this.switchTrack(trackIndex));
 
             tabs.push(tab);
         }
@@ -252,17 +277,13 @@ class Sequencer extends LitElement {
             knob.setAttribute("max", max);
 
             knob.setAttribute("default", currentMod ? currentMod : min);
-            knob.setAttribute(
-                "label", algoMods[modIndex].name
-            );
+            knob.setAttribute("label", algoMods[modIndex].name);
 
-            knob.setAttribute(
-                "integer-mode",
-                algoMods[modIndex].integerMode
-            );
+            knob.setAttribute("integer-mode", algoMods[modIndex].integerMode);
 
-            knob.addEventListener("input", e =>
-                this._onControlInput(e, modIndex));
+            knob.addEventListener("input", (e) =>
+                this._onControlInput(e, modIndex),
+            );
 
             knobs.push(knob);
         }
@@ -288,8 +309,11 @@ class Sequencer extends LitElement {
         let thisSequence = this.sequence[this.selectedTrack];
         for (let index = 0; index < thisSequence.length; index++) {
             sequence.push(
-                thisSequence
-                    .algorithm.fn(index, thisSequence.length, thisSequence.mod)
+                thisSequence.algorithm.fn(
+                    index,
+                    thisSequence.length,
+                    thisSequence.mod,
+                ),
             );
         }
         return sequence;

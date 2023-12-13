@@ -52,6 +52,10 @@ class Arpeggiator extends LitElement {
         const noteControls = this.noteControls();
 
         return html`
+            <h3 id="viewTitle" @click=${this._onViewTitleClick}>
+                <span class="material-icons">music_note</span>
+                <span class="text">pitch pattern</span>
+            </h3>
             <select
                 id="algorithmSelect"
                 @input=${this._onAlgorithmSelectInput}
@@ -59,10 +63,6 @@ class Arpeggiator extends LitElement {
             >
                 ${algorithmOptions}
             </select>
-            <h3 id="viewTitle" @click=${this._onViewTitleClick}>
-                <span class="material-icons">music_note</span>
-                <span class="text">pitch</span>
-            </h3>
             <div id="noteIndicatorContainer">${this.noteIndicators}</div>
             <div id="controlsContainer">${noteControls}</div>
             <hr />

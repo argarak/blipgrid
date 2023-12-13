@@ -29,5 +29,21 @@
         "--mute-color": "#E57373",
         "--shadow-color": "#00000000",
         "--shadow-color-alt": "#00000000"
+    },
+
+    "dracula": {
+        "--main-background": "#1A1B26",
+        "--surface-background": "#282a36",
+        "--surface-background-alt": "#373844",
+        "--surface-active": "#565761",
+        "--on-surface-active": "#b6b6b6",
+        "--on-surface-focus": "#ccccc7",
+        "--note-color": "#e4e4e4",
+        "--primary-text": "#f8f8f2",
+        "--primary-color": "#bd93f9",
+        "--solo-color": "#50fa7b",
+        "--mute-color": "#f55",
+        "--shadow-color": "#00000000",
+        "--shadow-color-alt": "#00000000"
     }
 }
