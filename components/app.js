@@ -37,7 +37,41 @@ class App extends LitElement {
         Tone.Transport.bpm.value = e.target.value;
     }
 
+    displayWelcome() {
+        const welcomeDialog = document.createElement("ui-welcome-dialog");
+        this.shadowRoot.appendChild(welcomeDialog);
+    }
+
     render() {
+        const dropmenu = html`
+            <div class="dropmenu" aria-label="submenu">
+                <button>
+                    <span class="material-icons">add</span> New
+                </button>
+                <button>
+                    <span class="material-icons">save</span> Save to
+                    Browser
+                </button>
+                <button>
+                    <span class="material-icons">file_open</span>
+                    Load from Browser
+                </button>
+                <button>
+                    <span class="material-icons">download</span>
+                    Download
+                </button>
+                <button>
+                    <span class="material-icons">upload</span>
+                    Upload
+                </button>
+                </hr>
+                <button @click=${this.displayWelcome}>
+                    <span class="material-icons">web_asset</span>
+                    Show Welcome Screen
+                </button>
+            </div>
+       `;
+
         return html`
             <div id="mainContainer">
                 <div id="headContainer">
@@ -46,27 +80,7 @@ class App extends LitElement {
                             File
                             <span class="material-icons">arrow_drop_down</span>
                         </div>
-                        <div class="dropmenu" aria-label="submenu">
-                            <button>
-                                <span class="material-icons">add</span> New
-                            </button>
-                            <button>
-                                <span class="material-icons">save</span> Save to
-                                Browser
-                            </button>
-                            <button>
-                                <span class="material-icons">file_open</span>
-                                Load from Browser
-                            </button>
-                            <button>
-                                <span class="material-icons">download</span>
-                                Download
-                            </button>
-                            <button>
-                                <span class="material-icons">upload</span>
-                                Upload
-                            </button>
-                        </div>
+                        ${dropmenu}
                     </div>
 
                     <input
@@ -109,8 +123,6 @@ class App extends LitElement {
                         <ui-edit-view ${ref(this.editView)}></ui-edit-view>
                     </div>
                 </div>
-
-                <ui-welcome-dialog></ui-welcome-dialog>
             </div>
         `;
     }
@@ -130,6 +142,8 @@ class App extends LitElement {
         State.set("editView", this.editView.value);
 
         const mixer = State.mixer();
+
+        //this.displayWelcome();
 
         localforage.getItem("theme").then((value) => {
             State.setTheme(value);

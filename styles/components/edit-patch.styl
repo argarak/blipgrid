@@ -44,12 +44,13 @@
 
     display flex
     align-items center
+    justify-content center
 
-    width 100px
+    width 100%
     margin 0
 
     color var(--note-color)
-    background-color var(--surface-background)
+    background linear-gradient(var(--surface-background), var(--surface-background-alt))
     border-bottom none
 
     padding 10px
@@ -64,12 +65,8 @@
     justify-content space-evenly
 
     padding 10px 0px
-    border 2px solid var(--surface-background)
-    background-color var(--surface-background-alt)
-    border-bottom none
-    border-left none
-    border-right none
 
+    background-color var(--surface-background-alt)
 .knobSet
   display flex
   margin 10px
