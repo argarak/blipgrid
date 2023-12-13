@@ -24,6 +24,8 @@ import * as basicPatch from "/objects/patches/basic.json";
 import * as basicSynthPatch from "/objects/patches/basic-synth.json";
 import localforage from "localforage";
 
+import SaveManager from "./save-manager";
+
 document.addEventListener("DOMContentLoaded", () => {
     let btnPlay = document.getElementById("btnPlay");
     btnPlay.addEventListener("click", () => {
