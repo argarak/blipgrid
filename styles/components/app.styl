@@ -21,8 +21,42 @@
   height 40px
   display flex
   flex-direction row
+  justify-content space-between
 
-  & > button
+  .headLeft,
+  .headCenter,
+  .headRight
+    display flex
+    flex-direction row
+    flex 1
+    height 100%
+
+  .headCenter
+    justify-content center
+
+  .headRight
+    justify-content end
+
+  .headCenter > .editProject
+    display flex
+    flex-direction row
+    align-items center
+    user-select none
+
+    padding 0px 10px
+
+    background var(--surface-active)
+    transition color .1s ease-in-out
+
+    &:hover
+      cursor pointer
+      color var(--primary-color)
+
+    span
+      margin-left 10px
+      font-size 16px
+
+  .headRight > button
     display flex
     align-items center
     justify-content center

@@ -81,41 +81,54 @@ class App extends LitElement {
         return html`
             <div id="mainContainer">
                 <div id="headContainer">
-                    <div class="dropdown" aria-haspopup="true">
-                        <div class="droplabel" tabindex="0">
-                            File
-                            <span class="material-icons">arrow_drop_down</span>
+                    <div class="headLeft">
+                        <div class="dropdown" aria-haspopup="true">
+                            <div class="droplabel" tabindex="0">
+                                File
+                                <span class="material-icons"
+                                    >arrow_drop_down</span
+                                >
+                            </div>
+                            ${dropmenu}
                         </div>
-                        ${dropmenu}
+
+                        <input
+                            id="bpmSlider"
+                            name="bpm"
+                            type="number"
+                            min="0"
+                            max="300"
+                            value="120"
+                            size="3"
+                            @input=${this._onBpmInput}
+                        />
+                        <label for="bpm">bpm</label>
                     </div>
 
-                    <input
-                        id="bpmSlider"
-                        name="bpm"
-                        type="number"
-                        min="0"
-                        max="300"
-                        value="120"
-                        size="3"
-                        @input=${this._onBpmInput}
-                    />
-                    <label for="bpm">bpm</label>
+                    <div class="headCenter">
+                        <div class="editProject">
+                            <div class="projectName">
+                                ${SaveManager.projectName}
+                            </div>
+                            <span class="material-icons">edit</span>
+                        </div>
+                    </div>
 
-                    <div class="hfill"></div>
-
-                    <button
-                        class="btn"
-                        id="btnPlay"
-                        @click=${this._onPlayClick}
-                    >
-                        <span class="material-icons">play_arrow</span>
-                    </button>
-                    <button class="btn" id="btnLoop">
-                        <span class="material-icons">repeat</span>
-                    </button>
-                    <button class="btn" id="btnStop">
-                        <span class="material-icons">stop</span>
-                    </button>
+                    <div class="headRight">
+                        <button
+                            class="btn"
+                            id="btnPlay"
+                            @click=${this._onPlayClick}
+                        >
+                            <span class="material-icons">play_arrow</span>
+                        </button>
+                        <button class="btn" id="btnLoop">
+                            <span class="material-icons">repeat</span>
+                        </button>
+                        <button class="btn" id="btnStop">
+                            <span class="material-icons">stop</span>
+                        </button>
+                    </div>
                 </div>
 
                 <div id="editContainer">
