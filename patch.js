@@ -117,36 +117,6 @@ class Patch {
         return state;
     }
 
-    uploadPatch() {
-        let self = this;
-        let fileInput = document.createElement("input");
-        fileInput.type = "file";
-        fileInput.accept = "text/json";
-
-        // TODO errors should show up in a some dialog box
-        // maybe we need a new component?
-        fileInput.addEventListener("change", (e) => {
-            if (e.target.files.length === 0 || e.target.files.length > 1) {
-                // error: select one file
-            }
-
-            if (e.target.files[0].size > 10e6) {
-                // error: file too large
-            }
-
-            let reader = new FileReader();
-
-            reader.onload = function () {
-                let patchObject = JSON.parse(reader.result);
-                self.loadPatch(patchObject);
-            };
-
-            reader.readAsText(e.target.files[0]);
-        });
-
-        fileInput.click();
-    }
-
     addModule(module) {
         this.modules.push(module);
     }

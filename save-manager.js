@@ -8,6 +8,8 @@ class SaveManager {
     static author = "";
     static saveVersion = 0;
 
+    static projectFileType = ".blip";
+
     static saveProject() {
         const project = {};
 
@@ -26,7 +28,26 @@ class SaveManager {
         project["patch"] = sequencer.savePatchState();
         project["controls"] = sequencer.saveControlState();
 
-        this.downloadObject(project, `${this.projectName}.blip`);
+        return project;
+    }
+
+    static downloadProject() {
+        this.downloadObject(this.saveProject(), `${this.projectName}.blip`);
+    }
+
+    static loadProject(project) {
+        console.log(project);
+    }
+
+    static uploadProject() {
+        this.upload(this.projectFileType, (result) => {
+            let project = JSON.parse(result);
+            if (!project) {
+                // error here
+                return;
+            }
+            this.loadProject(project);
+        });
     }
 
     static downloadObject(obj, filename) {
@@ -34,6 +55,33 @@ class SaveManager {
             type: "application/json",
         });
         this.download(blob, filename);
+    }
+
+    static upload(mimetype, callback) {
+        const fileInput = document.createElement("input");
+        fileInput.type = "file";
+        fileInput.accept = mimetype;
+
+        // TODO errors should show up in some dialog box
+        fileInput.addEventListener("change", (e) => {
+            if (e.target.files.length === 0 || e.target.files.length > 1) {
+                // error: select one file
+            }
+
+            if (e.target.files[0].size > 10e6) {
+                // error: file too large
+            }
+
+            let reader = new FileReader();
+
+            reader.onload = () => {
+                callback(reader.result);
+            };
+
+            reader.readAsText(e.target.files[0]);
+        });
+
+        fileInput.click();
     }
 
     static download(blob, filename) {

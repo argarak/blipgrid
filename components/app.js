@@ -45,7 +45,11 @@ class App extends LitElement {
     }
 
     _onDownloadClick() {
-        SaveManager.saveProject();
+        SaveManager.downloadProject();
+    }
+
+    _onUploadClick() {
+        SaveManager.uploadProject();
     }
 
     render() {
@@ -66,7 +70,7 @@ class App extends LitElement {
                     <span class="material-icons">download</span>
                     Download
                 </button>
-                <button>
+                <button @click=${this._onUploadClick}>
                     <span class="material-icons">upload</span>
                     Upload
                 </button>
