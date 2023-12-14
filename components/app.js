@@ -14,6 +14,7 @@ import keyHandler from "/keys.js";
 import * as basicPatch from "/objects/patches/basic.json";
 import * as basicSynthPatch from "/objects/patches/basic-synth.json";
 import localforage from "localforage";
+import SaveManager from "../save-manager";
 
 class App extends LitElement {
     sequencer = createRef();
@@ -37,9 +38,14 @@ class App extends LitElement {
         Tone.Transport.bpm.value = e.target.value;
     }
 
-    displayWelcome() {
+    displayWelcome(e) {
+        e.target.blur();
         const welcomeDialog = document.createElement("ui-welcome-dialog");
         this.shadowRoot.appendChild(welcomeDialog);
+    }
+
+    _onDownloadClick() {
+        SaveManager.saveProject();
     }
 
     render() {
@@ -56,7 +62,7 @@ class App extends LitElement {
                     <span class="material-icons">file_open</span>
                     Load from Browser
                 </button>
-                <button>
+                <button @click=${this._onDownloadClick}>
                     <span class="material-icons">download</span>
                     Download
                 </button>

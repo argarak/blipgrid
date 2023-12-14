@@ -163,6 +163,43 @@ class Sequencer extends LitElement {
         this.switchTrack(0);
     }
 
+    savePatchState() {
+        const state = {};
+        for (let trackIndex = 0; trackIndex < this.numTracks; trackIndex++) {
+            state[trackIndex] = this.sequence[trackIndex].patch.patchObject;
+        }
+        return state;
+    }
+
+    saveControlState() {
+        const state = {};
+        for (let trackIndex = 0; trackIndex < this.numTracks; trackIndex++) {
+            state[trackIndex] =
+                this.sequence[trackIndex].patch.saveControlState();
+        }
+        return state;
+    }
+
+    saveState() {
+        const state = {};
+
+        for (let trackIndex = 0; trackIndex < this.numTracks; trackIndex++) {
+            let trackState = {};
+            let track = this.sequence[trackIndex];
+
+            trackState["mod"] = track["mod"];
+            trackState["length"] = track["length"];
+            // store algorithm reference
+            trackState["algorithm"] = util.hashCode(
+                track.algorithm.fn.toString(),
+            );
+
+            state[trackIndex] = trackState;
+        }
+
+        return state;
+    }
+
     assignPatch(trackIndex, patch) {
         this.sequence[trackIndex].patch = patch;
     }

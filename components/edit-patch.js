@@ -8,33 +8,34 @@ import State from "/state";
 
 class EditPatch extends LitElement {
     static properties = {
-        name: { type: String, state: true }
+        name: { type: String, state: true },
     };
 
     render() {
-        return html`
-        <div id="loadControls">
-          <div id="patchUpload">
-            <button id="patchUploadBtn" class="btn">
-              <span class="material-icons">upload</span>load patch
-            </button>
-          </div>
-          <div id="patchName">${this.name}</div>
-        </div>
-        <div id="patchControls">
-           ${this.controls}
-        </div>
-        <div id="effectControlContainer">
-           <h3 id="effectTitle">
-             <span class="material-icons">send</span> fx send
-           </h3>
-           <div id="effectControls">${this.effectControls}</div>
-        </div>`;
+        return html` <div id="loadControls">
+                <div id="patchUpload">
+                    <button id="patchUploadBtn" class="btn">
+                        <span class="material-icons">upload</span>load patch
+                    </button>
+                </div>
+                <div id="patchName">${this.name}</div>
+            </div>
+            <div id="patchControls">${this.controls}</div>
+            <div id="effectControlContainer">
+                <h3 id="effectTitle">
+                    <span class="material-icons">send</span> fx send
+                </h3>
+                <div id="effectControls">${this.effectControls}</div>
+            </div>`;
     }
 
     static styles = [
-        css`${unsafeCSS(mdiStyle.default)}`,
-        css`${unsafeCSS(editPatchStyle.default)}`
+        css`
+            ${unsafeCSS(mdiStyle.default)}
+        `,
+        css`
+            ${unsafeCSS(editPatchStyle.default)}
+        `,
     ];
 
     constructor() {
@@ -71,9 +72,9 @@ class EditPatch extends LitElement {
         if (!this.track) return;
         if (!this.mixer) return;
         let value = e.target.value;
-        this.mixer.effectSends[this.track.index][effect.name].set(
-            { gain: value }
-        );
+        this.mixer.effectSends[this.track.index][effect.name].set({
+            gain: value,
+        });
     }
 
     getControlValue(module, control) {
@@ -91,8 +92,9 @@ class EditPatch extends LitElement {
             knob.setAttribute("default", this.getControlValue(module, control));
             knob.setAttribute("label", control.label);
 
-            knob.addEventListener("input", e =>
-                this._onControlInput(e, module, control));
+            knob.addEventListener("input", (e) =>
+                this._onControlInput(e, module, control),
+            );
 
             return knob;
         }
@@ -109,8 +111,9 @@ class EditPatch extends LitElement {
 
             select.value = this.getControlValue(module, control);
 
-            select.addEventListener("input", e =>
-                this._onControlInput(e, module, control));
+            select.addEventListener("input", (e) =>
+                this._onControlInput(e, module, control),
+            );
 
             return select;
         }
@@ -122,8 +125,11 @@ class EditPatch extends LitElement {
 
         const effectChannels = this.patch.mixer.effectChannels;
 
-        for (let effectIndex = 0; effectIndex < effectChannels.length;
-            effectIndex++) {
+        for (
+            let effectIndex = 0;
+            effectIndex < effectChannels.length;
+            effectIndex++
+        ) {
             let knob = document.createElement("ui-knob");
             //let currentMod = this.sequence[this.selectedTrack].mod[modIndex];
 
@@ -132,14 +138,18 @@ class EditPatch extends LitElement {
             knob.setAttribute("min", min);
             knob.setAttribute("max", max);
 
-            knob.setAttribute("default",
-                this.mixer.effectSends[
-                    this.track.index][effectChannels[effectIndex].name].gain.value);
+            knob.setAttribute(
+                "default",
+                this.mixer.effectSends[this.track.index][
+                    effectChannels[effectIndex].name
+                ].gain.value,
+            );
             knob.setAttribute("label", effectChannels[effectIndex].name);
             knob.setAttribute("integer-mode", true);
 
-            knob.addEventListener("input", e =>
-                this._onSendInput(e, effectChannels[effectIndex]));
+            knob.addEventListener("input", (e) =>
+                this._onSendInput(e, effectChannels[effectIndex]),
+            );
 
             knobs.push(knob);
         }
@@ -165,12 +175,12 @@ class EditPatch extends LitElement {
 
             knobsGroup.appendChild(groupLabel);
 
-            let controls = moduleName in moduleControls ?
-                moduleControls[moduleName] : [];
+            let controls =
+                moduleName in moduleControls ? moduleControls[moduleName] : [];
 
             for (let control of controls) {
                 knobsGroup.appendChild(
-                    this.createControlElement(module, control)
+                    this.createControlElement(module, control),
                 );
             }
 

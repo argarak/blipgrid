@@ -165,12 +165,9 @@ class Arpeggiator extends LitElement {
 
         this.noteIndicators = this.generateIndicators(this.noteRange.length);
 
-        let defaultLength = 64;
-
         for (let trackIndex = 0; trackIndex < this.numTracks; trackIndex++) {
             this.sequence[trackIndex] = {
                 mod: [],
-                length: defaultLength,
                 sequence: [],
                 algorithm: this.algorithms[0],
 
@@ -183,14 +180,29 @@ class Arpeggiator extends LitElement {
             this.sequence[this.selectedTrack].algorithm.fn.toString(),
         );
 
-        this.sequenceLength = defaultLength;
-
-        // keeps track of the current step position
-        // initially at the end of the sequence so that the sequence can start
-        // at step zero when the first next() method is called
-        this.step = this.sequenceLength;
-
         this.switchTrack(0);
+    }
+
+    saveState() {
+        const state = {};
+
+        for (let trackIndex = 0; trackIndex < this.numTracks; trackIndex++) {
+            let trackState = {};
+            let track = this.sequence[trackIndex];
+
+            trackState["mod"] = track["mod"];
+            // store algorithm reference
+            trackState["algorithm"] = util.hashCode(
+                track.algorithm.fn.toString(),
+            );
+
+            trackState["rangeStart"] = track["rangeStart"];
+            trackState["rangeEnd"] = track["rangeEnd"];
+
+            state[trackIndex] = trackState;
+        }
+
+        return state;
     }
 
     switchTrack(trackIndex) {

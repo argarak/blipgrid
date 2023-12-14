@@ -1,6 +1,7 @@
 import * as Tone from "tone";
 import State from "/state";
-import * as moduleControls from "./objects/module-controls.json";
+
+import * as moduleControls from "/objects/module-controls.json";
 
 const modulesTable = {
     Envelope: Tone.Envelope,
@@ -15,6 +16,7 @@ class Patch {
     constructor(patchObject, track) {
         this.modules = [];
         this.connects = [];
+        this.patchObject = null;
 
         this.mixer = State.mixer();
         this.track = track;
@@ -30,6 +32,7 @@ class Patch {
         // should this be cleared differently? what about garbage collection?
         this.modules = [];
         this.connects = [];
+        this.patchObject = patchObject.default;
 
         let module = null;
 
@@ -84,6 +87,34 @@ class Patch {
             this.modules[defaultObject.id][defaultObject.property] =
                 defaultObject.value;
         }
+    }
+
+    getControlValue(module, control) {
+        if (typeof module[control.property] === "object") {
+            return module[control.property].value;
+        }
+        return module[control.property];
+    }
+
+    saveControlState() {
+        const state = {};
+
+        for (let module of this.modules) {
+            let moduleName = module.name;
+            state[moduleName] = {};
+
+            let controls =
+                moduleName in moduleControls ? moduleControls[moduleName] : [];
+
+            for (let control of controls) {
+                state[moduleName][control.property] = this.getControlValue(
+                    module,
+                    control,
+                );
+            }
+        }
+
+        return state;
     }
 
     uploadPatch() {

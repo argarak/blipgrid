@@ -1,7 +1,33 @@
+import State from "/state";
 import localforage from "localforage";
 
 class SaveManager {
     constructor() {}
+
+    static projectName = "new project";
+    static author = "";
+    static saveVersion = 0;
+
+    static saveProject() {
+        const project = {};
+
+        const sequencer = State.get("sequencer");
+        const arpeggiator = State.get("arpeggiator");
+
+        project["name"] = this.projectName;
+        project["author"] = this.author;
+        project["date"] = Date.now();
+        project["version"] = this.saveVersion;
+
+        project["root"] = arpeggiator.root;
+        project["scale"] = arpeggiator.scale;
+        project["sequencer"] = sequencer.saveState();
+        project["arpeggiator"] = arpeggiator.saveState();
+        project["patch"] = sequencer.savePatchState();
+        project["controls"] = sequencer.saveControlState();
+
+        this.downloadObject(project, `${this.projectName}.blip`);
+    }
 
     static downloadObject(obj, filename) {
         let blob = new Blob([JSON.stringify(obj, null, 2)], {
