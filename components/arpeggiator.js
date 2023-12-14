@@ -205,6 +205,51 @@ class Arpeggiator extends LitElement {
         return state;
     }
 
+    loadState(root, scale, sequence) {
+        this.selectedTrack = 0;
+
+        this.allRoots = new Set();
+        this.root = root;
+        this.scale = scale;
+        this.noteRange = this.generateNoteRange(this.root, this.scale);
+
+        // holds currently programmed sequencer
+        this.sequence = {};
+
+        this.noteIndicators = this.generateIndicators(this.noteRange.length);
+
+        for (let trackIndex = 0; trackIndex < this.numTracks; trackIndex++) {
+            let trackAlgorithm = null;
+            for (let algorithm of this.algorithms) {
+                let hash = util.hashCode(algorithm.fn.toString());
+                if (hash === sequence[trackIndex].algorithm) {
+                    trackAlgorithm = algorithm;
+                    break;
+                }
+            }
+
+            if (!trackAlgorithm) {
+                // TODO error here
+            }
+
+            this.sequence[trackIndex] = {
+                mod: sequence[trackIndex].mod,
+                sequence: [],
+                algorithm: trackAlgorithm,
+
+                rangeStart: sequence[trackIndex].rangeStart,
+                rangeEnd: sequence[trackIndex].rangeEnd,
+            };
+        }
+
+        this.selectedAlgorithm = util.hashCode(
+            this.sequence[this.selectedTrack].algorithm.fn.toString(),
+        );
+
+        this.switchTrack(0);
+        this.requestUpdate();
+    }
+
     switchTrack(trackIndex) {
         this.selectedTrack = trackIndex;
         this.selectedAlgorithm = util.hashCode(

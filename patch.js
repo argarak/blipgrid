@@ -117,6 +117,22 @@ class Patch {
         return state;
     }
 
+    loadControlState(state) {
+        for (let module of this.modules) {
+            let moduleName = module.name;
+            let controlValues = state[moduleName];
+
+            let controls =
+                moduleName in moduleControls ? moduleControls[moduleName] : [];
+
+            for (let control of controls) {
+                const properties = {};
+                properties[control.property] = controlValues[control.property];
+                module.set(properties);
+            }
+        }
+    }
+
     addModule(module) {
         this.modules.push(module);
     }

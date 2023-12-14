@@ -6,6 +6,8 @@ import * as sequencerStyle from "/styles/components/sequencer.styl?inline";
 import defaultAlgorithms from "../sequence-algorithms.js";
 import util from "../util.js";
 
+import Patch from "../patch.js";
+
 /**
  * sequencer web component
  * creates a sequencer which consists of
@@ -51,7 +53,9 @@ class Sequencer extends LitElement {
         if (value > 64) value = 64;
 
         this.sequence[this.selectedTrack].length = value;
-        this.sequence[this.selectedTrack].sequence = this.generateSequence();
+        this.sequence[this.selectedTrack].sequence = this.generateSequence(
+            this.selectedTrack,
+        );
         this.triggerGrid.value.apply(
             this.sequence[this.selectedTrack].sequence,
             value,
@@ -60,7 +64,9 @@ class Sequencer extends LitElement {
 
     _onControlInput(e, modIndex) {
         this.sequence[this.selectedTrack].mod[modIndex] = e.target.value;
-        this.sequence[this.selectedTrack].sequence = this.generateSequence();
+        this.sequence[this.selectedTrack].sequence = this.generateSequence(
+            this.selectedTrack,
+        );
         this.triggerGrid.value.apply(
             this.sequence[this.selectedTrack].sequence,
             this.sequence[this.selectedTrack].length,
@@ -178,6 +184,61 @@ class Sequencer extends LitElement {
                 this.sequence[trackIndex].patch.saveControlState();
         }
         return state;
+    }
+
+    loadState(patches, controls, state) {
+        this.selectedTrack = 0;
+
+        // holds currently programmed sequencer
+        this.sequence = {};
+
+        let defaultLength = 64;
+
+        for (let trackIndex = 0; trackIndex < this.numTracks; trackIndex++) {
+            let trackAlgorithm = null;
+            for (let algorithm of this.algorithms) {
+                let hash = util.hashCode(algorithm.fn.toString());
+                if (hash === state[trackIndex].algorithm) {
+                    trackAlgorithm = algorithm;
+                    break;
+                }
+            }
+
+            if (!trackAlgorithm) {
+                // TODO error here
+            }
+
+            const trackPatch = new Patch(patches[trackIndex], trackIndex);
+            trackPatch.loadControlState(controls[trackIndex]);
+
+            this.sequence[trackIndex] = {
+                mod: state[trackIndex].mod,
+                patch: trackPatch,
+                length: state[trackIndex].length,
+                sequence: [],
+                algorithm: trackAlgorithm,
+                index: trackIndex,
+
+                mute: false,
+                solo: false,
+            };
+
+            this.sequence[trackIndex].sequence =
+                this.generateSequence(trackIndex);
+        }
+
+        this.selectedAlgorithm = util.hashCode(
+            this.sequence[this.selectedTrack].algorithm.fn.toString(),
+        );
+
+        this.step = defaultLength;
+        this.switchTrack(0);
+        this.requestUpdate();
+
+        this.triggerGrid.value.apply(
+            this.sequence[this.selectedTrack].sequence,
+            this.sequence[this.selectedTrack].length,
+        );
     }
 
     saveState() {
@@ -341,9 +402,9 @@ class Sequencer extends LitElement {
         return options;
     }
 
-    generateSequence() {
+    generateSequence(track) {
         let sequence = [];
-        let thisSequence = this.sequence[this.selectedTrack];
+        let thisSequence = this.sequence[track];
         for (let index = 0; index < thisSequence.length; index++) {
             sequence.push(
                 thisSequence.algorithm.fn(

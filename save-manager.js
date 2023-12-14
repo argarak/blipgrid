@@ -36,7 +36,28 @@ class SaveManager {
     }
 
     static loadProject(project) {
-        console.log(project);
+        if (project.version > this.saveVersion) {
+            // error (version is too new to load!)
+            return;
+        }
+
+        const sequencer = State.get("sequencer");
+        const arpeggiator = State.get("arpeggiator");
+
+        this.projectName = project.name;
+        this.author = project.author;
+
+        arpeggiator.loadState(
+            project["root"],
+            project["scale"],
+            project["arpeggiator"],
+        );
+
+        sequencer.loadState(
+            project["patch"],
+            project["controls"],
+            project["sequencer"],
+        );
     }
 
     static uploadProject() {
