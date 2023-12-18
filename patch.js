@@ -47,6 +47,8 @@ class Patch {
 
             module = new modulesTable[moduleObject.type]();
 
+            if (moduleObject.independent) module.independent = true;
+
             if (moduleObject.toDestination)
                 this.mixer.attach(this.track, module);
             if (moduleObject.start) module.start();

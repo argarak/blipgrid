@@ -11,13 +11,15 @@
             "id": 1,
             "type": "Oscillator",
             "start": true,
-            "toDestination": false
+            "toDestination": false,
+            "independent": true
         },
         {
             "id": 2,
             "type": "Oscillator",
             "start": true,
-            "toDestination": false
+            "toDestination": false,
+            "independent": true
         },
         {
             "id": 3,
@@ -46,27 +48,27 @@
     ],
     "connects": [
         {
-            "input":  { "id": 0, "property": null },
+            "input": { "id": 0, "property": null },
             "output": { "id": 1, "property": "frequency" }
         },
 
         {
-            "input":  { "id": 1, "property": null },
+            "input": { "id": 1, "property": null },
             "output": { "id": 3, "property": null }
         },
 
         {
-            "input":  { "id": 2, "property": null },
+            "input": { "id": 2, "property": null },
             "output": { "id": 3, "property": null }
         },
 
         {
-            "input":  { "id": 5, "property": null },
+            "input": { "id": 5, "property": null },
             "output": { "id": 4, "property": null }
         },
 
         {
-            "input":  { "id": 4, "property": null },
+            "input": { "id": 4, "property": null },
             "output": { "id": 6, "property": null }
         }
     ],

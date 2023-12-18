@@ -22,7 +22,7 @@ class App extends LitElement {
     editView = createRef();
 
     static properties = {
-        name: { type: String, state: true },
+        projectName: { type: String, state: true },
     };
 
     _onPlayClick(e) {
@@ -38,18 +38,32 @@ class App extends LitElement {
         Tone.Transport.bpm.value = e.target.value;
     }
 
-    displayWelcome(e) {
-        e.target.blur();
+    displayWelcome() {
         const welcomeDialog = document.createElement("ui-welcome-dialog");
         this.shadowRoot.appendChild(welcomeDialog);
     }
 
-    _onDownloadClick() {
+    _onWelcomeClick(e) {
+        e.target.blur();
+        this.displayWelcome();
+    }
+
+    _onDownloadClick(e) {
+        e.target.blur();
         SaveManager.downloadProject();
     }
 
-    _onUploadClick() {
+    _onUploadClick(e) {
+        e.target.blur();
         SaveManager.uploadProject();
+    }
+
+    _onProjectClick(e) {
+        e.target.blur();
+        const projectSettingsDialog = document.createElement(
+            "ui-project-settings-dialog",
+        );
+        this.shadowRoot.appendChild(projectSettingsDialog);
     }
 
     render() {
@@ -75,7 +89,7 @@ class App extends LitElement {
                     Upload
                 </button>
                 </hr>
-                <button @click=${this.displayWelcome}>
+                <button @click=${this._onWelcomeClick}>
                     <span class="material-icons">web_asset</span>
                     Show Welcome Screen
                 </button>
@@ -110,12 +124,13 @@ class App extends LitElement {
                     </div>
 
                     <div class="headCenter">
-                        <div class="editProject">
-                            <div class="projectName">
-                                ${SaveManager.projectName}
-                            </div>
+                        <button
+                            class="editProject"
+                            @click=${this._onProjectClick}
+                        >
+                            <div class="projectName">${this.projectName}</div>
                             <span class="material-icons">edit</span>
-                        </div>
+                        </button>
                     </div>
 
                     <div class="headRight">
@@ -166,7 +181,7 @@ class App extends LitElement {
 
         const mixer = State.mixer();
 
-        //this.displayWelcome();
+        this.displayWelcome();
 
         localforage.getItem("theme").then((value) => {
             State.setTheme(value);
@@ -197,7 +212,7 @@ class App extends LitElement {
 
         function setFrequency(modules, frequency, time) {
             for (let module of modules) {
-                if (module.name === "Oscillator")
+                if (module.name === "Oscillator" && !module.independent)
                     module.frequency.setValueAtTime(frequency, time);
             }
         }
@@ -268,12 +283,11 @@ class App extends LitElement {
                 }
             }
         }, "16n");
-
-        Tone.Transport.start();
     }
 
     constructor() {
         super();
+        this.projectName = SaveManager.projectName;
     }
 }
 

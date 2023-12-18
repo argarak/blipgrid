@@ -49,10 +49,16 @@
     transition color .1s ease-in-out
 
     &:hover
-      cursor pointer
-      color var(--primary-color)
+      background var(--on-surface-active)
+
+    &:focus
+      background var(--on-surface-focus)
+
+    div
+      pointer-events none
 
     span
+      pointer-events none
       margin-left 10px
       font-size 16px
 
