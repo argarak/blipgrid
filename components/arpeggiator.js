@@ -6,6 +6,8 @@ import * as arpeggiatorStyle from "/styles/components/arpeggiator.styl?inline";
 import defaultAlgorithms from "../arpeggiator-algorithms.js";
 import util from "../util.js";
 
+import * as scales from "/objects/scales.json";
+
 /**
  * sequencer web component
  * creates a sequencer which consists of
@@ -99,16 +101,16 @@ class Arpeggiator extends LitElement {
     generateNoteRange(root, scale) {
         let range = [];
 
-        for (let note = this.lowestNote; note < root; note++) {
+        for (let note = this.lowestNote; note < root.note; note++) {
             let rootDivisor = Math.ceil(
-                Math.abs((note - root) / this.notesPerOctave),
+                Math.abs((note - root.note) / this.notesPerOctave),
             );
 
-            let octaveRoot = root - this.notesPerOctave * rootDivisor;
+            let octaveRoot = root.note - this.notesPerOctave * rootDivisor;
             this.allRoots.add(octaveRoot);
 
             let scaleNotes = Tone.Frequency(octaveRoot, "midi").harmonize(
-                scale,
+                scale.semitones,
             );
 
             for (let scaleNote of scaleNotes) {
@@ -117,15 +119,15 @@ class Arpeggiator extends LitElement {
             }
         }
 
-        for (let note = root; note <= this.highestNote; note++) {
+        for (let note = root.note; note <= this.highestNote; note++) {
             let octaveMultiplier = Math.floor(
-                (note - root) / this.notesPerOctave,
+                (note - root.note) / this.notesPerOctave,
             );
-            let octaveRoot = root + 12 * octaveMultiplier;
+            let octaveRoot = root.note + 12 * octaveMultiplier;
             this.allRoots.add(octaveRoot);
 
             let scaleNotes = Tone.Frequency(octaveRoot, "midi").harmonize(
-                scale,
+                scale.semitones,
             );
 
             for (let scaleNote of scaleNotes) {
@@ -155,15 +157,10 @@ class Arpeggiator extends LitElement {
         this.notesPerOctave = 12;
         this.octaves = 5;
 
-        this.allRoots = new Set();
-        this.root = 53;
-        this.scale = [0, 2, 3, 5, 7, 8, 10];
-        this.noteRange = this.generateNoteRange(this.root, this.scale);
+        this.applyScale(scales.roots[0], scales.scales[0]);
 
         // holds currently programmed sequencer
         this.sequence = {};
-
-        this.noteIndicators = this.generateIndicators(this.noteRange.length);
 
         for (let trackIndex = 0; trackIndex < this.numTracks; trackIndex++) {
             this.sequence[trackIndex] = {
@@ -181,6 +178,15 @@ class Arpeggiator extends LitElement {
         );
 
         this.switchTrack(0);
+    }
+
+    applyScale(root, scale) {
+        this.allRoots = new Set();
+        this.root = root;
+        this.scale = scale;
+        this.noteRange = this.generateNoteRange(this.root, this.scale);
+        this.noteIndicators = this.generateIndicators(this.noteRange.length);
+        this.requestUpdate();
     }
 
     saveState() {

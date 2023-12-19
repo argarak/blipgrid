@@ -16,6 +16,8 @@ class ProjectSettingsDialog extends LitElement {
         title: { type: String },
         projectName: { type: String, state: true },
         author: { type: String, state: true },
+        root: { type: Number, state: true },
+        scale: { type: Number, state: true },
     };
 
     _onNameInput(e) {
@@ -46,6 +48,24 @@ class ProjectSettingsDialog extends LitElement {
             detail: { property: "description", value: this.description },
         });
         this.dispatchEvent(inputEvent);
+    }
+
+    _onRootSelectInput(e) {
+        if (!this.arpeggiator) return;
+        this.root = parseInt(e.target.value);
+        this.arpeggiator.applyScale(
+            scales.roots[this.root],
+            scales.scales[this.scale],
+        );
+    }
+
+    _onScaleSelectInput(e) {
+        if (!this.arpeggiator) return;
+        this.scale = parseInt(e.target.value);
+        this.arpeggiator.applyScale(
+            scales.roots[this.root],
+            scales.scales[this.scale],
+        );
     }
 
     render() {
@@ -87,10 +107,18 @@ class ProjectSettingsDialog extends LitElement {
                     <label for="scale">scale</label>
 
                     <div id="scaleContainer">
-                        <select name="root">
+                        <select
+                            name="root"
+                            @input=${this._onRootSelectInput}
+                            .value=${this.root}
+                        >
                             ${this.rootOptions}
                         </select>
-                        <select name="scale">
+                        <select
+                            name="scale"
+                            @input=${this._onScaleSelectInput}
+                            .value=${this.scale}
+                        >
                             ${this.scaleOptions}
                         </select>
                     </div>
@@ -125,16 +153,26 @@ class ProjectSettingsDialog extends LitElement {
         this.author = SaveManager.author;
         this.description = SaveManager.description;
 
+        this.arpeggiator = State.get("arpeggiator");
+
+        this.root = scales.roots.indexOf(this.arpeggiator.root);
+        this.scale = scales.scales.indexOf(this.arpeggiator.scale);
+
         this.scaleOptions = this.scaleSelectOptions();
         this.rootOptions = this.rootSelectOptions();
     }
 
     scaleSelectOptions() {
         let options = [];
-        for (let scale of Object.keys(scales.default)) {
+        for (
+            let scaleIndex = 0;
+            scaleIndex < scales.scales.length;
+            scaleIndex++
+        ) {
             let option = document.createElement("option");
-            option.value = scale;
-            option.textContent = scale;
+            option.value = scaleIndex;
+            option.textContent = scales.scales[scaleIndex].name;
+            if (scaleIndex === this.scale) option.selected = true;
             options.push(option);
         }
         return options;
@@ -142,23 +180,11 @@ class ProjectSettingsDialog extends LitElement {
 
     rootSelectOptions() {
         let options = [];
-        for (let note of [
-            "C",
-            "C#",
-            "D",
-            "D#",
-            "E",
-            "F",
-            "F#",
-            "G",
-            "G#",
-            "A",
-            "A#",
-            "B",
-        ]) {
+        for (let rootIndex = 0; rootIndex < scales.roots.length; rootIndex++) {
             let option = document.createElement("option");
-            option.value = note;
-            option.textContent = note;
+            option.value = rootIndex;
+            option.textContent = scales.roots[rootIndex].name;
+            if (rootIndex === this.root) option.selected = true;
             options.push(option);
         }
         return options;
