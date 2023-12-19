@@ -6,6 +6,7 @@ class SaveManager {
 
     static projectName = "new project";
     static author = "";
+    static description = "";
     static saveVersion = 0;
 
     static projectFileType = ".blip";

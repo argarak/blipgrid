@@ -113,7 +113,9 @@ input[type="range"]
     height 100%
     width 5px
 
-input[type="number"], input[type="text"]
+input[type="number"],
+input[type="text"],
+textarea
   -moz-appearance textfield
   appearance textfield
 
@@ -121,13 +123,13 @@ input[type="number"], input[type="text"]
   background var(--surface-active)
   color var(--primary-text)
   padding 6px 10px
-  border-radius m-border-radius
 
-  text-align center
+  text-align left
   font-family m-font
   font-size m-font-size
 
   margin-right 5px
+  resize none
 
 select
   font-family m-font

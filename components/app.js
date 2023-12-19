@@ -63,6 +63,14 @@ class App extends LitElement {
         const projectSettingsDialog = document.createElement(
             "ui-project-settings-dialog",
         );
+
+        projectSettingsDialog.addEventListener("input", (e) => {
+            if (!e.detail) return;
+            if (e.detail.property === "projectName") {
+                this.projectName = e.detail.value;
+            }
+        });
+
         this.shadowRoot.appendChild(projectSettingsDialog);
     }
 
