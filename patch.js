@@ -46,6 +46,7 @@ class Patch {
             }
 
             module = new modulesTable[moduleObject.type]();
+            module.id = moduleObject.type + "_" + moduleObject.id;
 
             if (moduleObject.independent) module.independent = true;
 
@@ -102,14 +103,15 @@ class Patch {
         const state = {};
 
         for (let module of this.modules) {
+            if (!module.id) continue;
             let moduleName = module.name;
-            state[moduleName] = {};
+            state[module.id] = {};
 
             let controls =
                 moduleName in moduleControls ? moduleControls[moduleName] : [];
 
             for (let control of controls) {
-                state[moduleName][control.property] = this.getControlValue(
+                state[module.id][control.property] = this.getControlValue(
                     module,
                     control,
                 );
@@ -122,7 +124,7 @@ class Patch {
     loadControlState(state) {
         for (let module of this.modules) {
             let moduleName = module.name;
-            let controlValues = state[moduleName];
+            let controlValues = state[module.id];
 
             let controls =
                 moduleName in moduleControls ? moduleControls[moduleName] : [];

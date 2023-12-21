@@ -7,6 +7,7 @@ import defaultAlgorithms from "../sequence-algorithms.js";
 import util from "../util.js";
 
 import Patch from "../patch.js";
+import { onInputBlur, onInputFocus } from "../keys";
 
 /**
  * sequencer web component
@@ -107,6 +108,8 @@ class Sequencer extends LitElement {
                     .value="${length}"
                     size="2"
                     @input="${this._onStepsInput}"
+                    @focus=${onInputFocus}
+                    @blur=${onInputBlur}
                 />
                 <label for="seqSteps">steps</label>
             </div>

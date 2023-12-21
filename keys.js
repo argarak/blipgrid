@@ -1,30 +1,35 @@
-class KeyHandler {
-    constructor() {
-        this.registeredKeys = [];
-        this.paused = false;
-        document.addEventListener("keydown", e => {
+export default class KeyHandler {
+    static registeredKeys = [];
+    static paused = false;
+
+    static start() {
+        document.addEventListener("keydown", (e) => {
             this.handleKeyDown(e);
         });
     }
 
-    pause() {
+    static pause() {
+        console.debug("pausing key handler");
         this.paused = true;
     }
 
-    resume() {
+    static resume() {
+        console.debug("resuming key handler");
         this.paused = false;
     }
 
-    handleKeyDown(e) {
-        console.debug(e);
-        if (this.target !== document.body && this.paused) return;
+    static handleKeyDown(e) {
+        console.debug(e.target, this.paused);
+        if (e.target !== document.body && this.paused) return;
         let keyCombinations = this.registeredKeys.filter(
-            kp => kp.key === e.code
+            (kp) => kp.key === e.code,
         );
         for (let combination of keyCombinations) {
             let mod = 0;
-            if (combination.mod.includes("shift")) mod = e.shiftKey ? mod + 1 : mod;
-            if (combination.mod.includes("ctrl")) mod = e.ctrlKey ? mod + 1 : mod;
+            if (combination.mod.includes("shift"))
+                mod = e.shiftKey ? mod + 1 : mod;
+            if (combination.mod.includes("ctrl"))
+                mod = e.ctrlKey ? mod + 1 : mod;
             if (combination.mod.includes("alt")) mod = e.altKey ? mod + 1 : mod;
             console.debug(combination, mod);
             e.preventDefault();
@@ -35,14 +40,19 @@ class KeyHandler {
         }
     }
 
-    registerKey(key, mod, fn) {
+    static registerKey(key, mod, fn) {
         this.registeredKeys.push({
-            "key": key,
-            "mod": mod,
-            "fn": fn
+            key: key,
+            mod: mod,
+            fn: fn,
         });
     }
 }
 
-let keyHandler = new KeyHandler();
-export default keyHandler;
+export const onInputFocus = () => {
+    KeyHandler.pause();
+};
+
+export const onInputBlur = () => {
+    KeyHandler.resume();
+};

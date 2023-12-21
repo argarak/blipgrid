@@ -9,12 +9,12 @@ import * as Tone from "tone";
 import State from "/state.js";
 
 import Patch from "/patch.js";
-import keyHandler from "/keys.js";
 
 import * as basicPatch from "/objects/patches/basic.json";
 import * as basicSynthPatch from "/objects/patches/basic-synth.json";
 import localforage from "localforage";
 import SaveManager from "../save-manager";
+import KeyHandler, { onInputBlur, onInputFocus } from "../keys";
 
 class App extends LitElement {
     sequencer = createRef();
@@ -68,6 +68,7 @@ class App extends LitElement {
             if (!e.detail) return;
             if (e.detail.property === "projectName") {
                 this.projectName = e.detail.value;
+                document.title = `${this.projectName} | blipgrid`;
             }
         });
 
@@ -97,9 +98,13 @@ class App extends LitElement {
                     Upload
                 </button>
                 </hr>
+                <button @click=${this._onProjectClick}>
+                    <span class="material-icons">settings_applications</span>
+                    Project Settings
+                </button>
                 <button @click=${this._onWelcomeClick}>
                     <span class="material-icons">web_asset</span>
-                    Show Welcome Screen
+                    Welcome Screen
                 </button>
             </div>
        `;
@@ -110,7 +115,7 @@ class App extends LitElement {
                     <div class="headLeft">
                         <div class="dropdown" aria-haspopup="true">
                             <div class="droplabel" tabindex="0">
-                                File
+                                Action
                                 <span class="material-icons"
                                     >arrow_drop_down</span
                                 >
@@ -127,6 +132,8 @@ class App extends LitElement {
                             value="120"
                             size="3"
                             @input=${this._onBpmInput}
+                            @focus=${onInputFocus}
+                            @blur=${onInputBlur}
                         />
                         <label for="bpm">bpm</label>
                     </div>
@@ -190,6 +197,7 @@ class App extends LitElement {
         const mixer = State.mixer();
 
         this.displayWelcome();
+        KeyHandler.start();
 
         localforage.getItem("theme").then((value) => {
             State.setTheme(value);
@@ -237,7 +245,7 @@ class App extends LitElement {
 
         // FIXME currently the keys "roll", as is default OS behaviour
         // not sure whether we should deal with it somehow
-        keyHandler.registerKey("a", [], () => {
+        KeyHandler.registerKey("a", [], () => {
             let modules = this.sequencer.value.getCurrentTrack().patch.modules;
             let time = Tone.now();
             setFrequency(modules, Tone.Frequency(60, "midi"), time);
@@ -249,17 +257,17 @@ class App extends LitElement {
             trackIndex <= this.sequencer.value.numTracks;
             trackIndex++
         ) {
-            keyHandler.registerKey(`Digit${trackIndex}`, ["shift"], () => {
+            KeyHandler.registerKey(`Digit${trackIndex}`, ["shift"], () => {
                 console.debug(`muting channel ${trackIndex - 1}`);
                 mixer.toggleMute(trackIndex - 1);
             });
 
-            keyHandler.registerKey(`Digit${trackIndex}`, ["ctrl"], () => {
+            KeyHandler.registerKey(`Digit${trackIndex}`, ["ctrl"], () => {
                 console.debug(`soloing channel ${trackIndex - 1}`);
                 mixer.toggleSolo(trackIndex - 1);
             });
 
-            keyHandler.registerKey(`Digit${trackIndex}`, [], () => {
+            KeyHandler.registerKey(`Digit${trackIndex}`, [], () => {
                 console.debug(`switching to track ${trackIndex - 1}`);
                 this.sequencer.value.switchTrack(trackIndex - 1);
             });
@@ -296,6 +304,7 @@ class App extends LitElement {
     constructor() {
         super();
         this.projectName = SaveManager.projectName;
+        document.title = `${this.projectName} | blipgrid`;
     }
 }
 

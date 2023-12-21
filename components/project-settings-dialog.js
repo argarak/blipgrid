@@ -9,6 +9,8 @@ import State from "/state";
 import SaveManager from "/save-manager";
 import localforage from "localforage";
 
+import { onInputBlur, onInputFocus } from "../keys";
+
 class ProjectSettingsDialog extends LitElement {
     dialog = createRef();
 
@@ -78,6 +80,8 @@ class ProjectSettingsDialog extends LitElement {
                         type="text"
                         .value="${this.projectName}"
                         @input=${this._onNameInput}
+                        @focus=${onInputFocus}
+                        @blur=${onInputBlur}
                     />
                 </div>
 
@@ -88,6 +92,8 @@ class ProjectSettingsDialog extends LitElement {
                         type="text"
                         .value="${this.author}"
                         @input=${this._onAuthorInput}
+                        @focus=${onInputFocus}
+                        @blur=${onInputBlur}
                     />
                 </div>
 
@@ -100,6 +106,8 @@ class ProjectSettingsDialog extends LitElement {
                         rows="10"
                         .value=${this.description}
                         @input=${this._onDescriptionInput}
+                        @focus=${onInputFocus}
+                        @blur=${onInputBlur}
                     ></textarea>
                 </div>
 
