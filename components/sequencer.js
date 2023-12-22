@@ -3,11 +3,11 @@ import { ref, createRef } from "lit/directives/ref.js";
 
 import * as mdiStyle from "@material-design-icons/font/index.css?inline";
 import * as sequencerStyle from "/styles/components/sequencer.styl?inline";
-import defaultAlgorithms from "../sequence-algorithms.js";
-import util from "../util.js";
 
-import Patch from "../patch.js";
-import { onInputBlur, onInputFocus } from "../keys";
+import defaultAlgorithms from "/scripts/sequence-algorithms.js";
+import util from "/scripts/util.js";
+import Patch from "/scripts/patch.js";
+import { onInputBlur, onInputFocus } from "/scripts/keys";
 
 /**
  * sequencer web component

@@ -1,4 +1,4 @@
-import State from "/state";
+import State from "/scripts/state";
 import localforage from "localforage";
 
 class SaveManager {

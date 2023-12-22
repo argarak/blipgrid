@@ -1,6 +1,6 @@
 import { LitElement, html, css, unsafeCSS } from "lit";
 import * as knobStyle from "/styles/components/knob.styl?inline";
-import util from "../util.js";
+import util from "/scripts/util.js";
 
 // TODO: disable ability (cannot be modified)
 // TODO: custom events : input, change
@@ -12,13 +12,13 @@ import util from "../util.js";
 // TODO: improved prompt
 // keyboard support?
 
-window.addEventListener("mousemove", e => {
+window.addEventListener("mousemove", (e) => {
     let currentKnob = window.inputKnob;
     if (!currentKnob) return;
 
     if (!currentKnob.mouseOrigin) currentKnob.mouseOrigin = e.pageY;
 
-    let d = -(e.pageY - currentKnob.mouseOrigin) / 4 * currentKnob.knobSpeed;
+    let d = (-(e.pageY - currentKnob.mouseOrigin) / 4) * currentKnob.knobSpeed;
 
     if (d > currentKnob.maxSpeed) d = currentKnob.maxSpeed;
     else if (d < -currentKnob.maxSpeed) d = -currentKnob.maxSpeed;
@@ -26,10 +26,9 @@ window.addEventListener("mousemove", e => {
     currentKnob.mouseOrigin = e.pageY;
     currentKnob.apply(d);
 
-    currentKnob.labelContent =
-        currentKnob.value.toFixed(
-            currentKnob.integerMode ? 0 : 2
-        );
+    currentKnob.labelContent = currentKnob.value.toFixed(
+        currentKnob.integerMode ? 0 : 2,
+    );
 });
 
 window.addEventListener("mouseup", () => {
@@ -44,46 +43,51 @@ class Knob extends LitElement {
 
     static properties = {
         max: {
-            type: Number
+            type: Number,
         },
         min: {
-            type: Number
+            type: Number,
         },
         default: {
-            type: Number
+            type: Number,
         },
         integerMode: {
             attribute: "integer-mode",
-            type: Boolean
+            type: Boolean,
         },
         value: {
-            type: Number
+            type: Number,
         },
         label: {
-            type: String
+            type: String,
         },
         labelContent: {
             type: String,
             state: true,
-            attribute: false
+            attribute: false,
         },
         marker: {
-            type: String
+            type: String,
         },
     };
 
-    static styles = css`${unsafeCSS(knobStyle.default)}`;
+    static styles = css`
+        ${unsafeCSS(knobStyle.default)}
+    `;
 
     render() {
-        return html`
-        <div id="knob">
+        return html` <div id="knob">
             <svg width="50px" height="50px">
                 <g>
                     <circle class="outline"></circle>
-                    <line class="marker" x1="50%" y1="50%"
+                    <line
+                        class="marker"
+                        x1="50%"
+                        y1="50%"
                         x2=${50 + Math.cos(this.deg) * 40 + "%"}
                         y2=${50 + Math.sin(this.deg) * 40 + "%"}
-                        stroke=${this.marker}/>
+                        stroke=${this.marker}
+                    />
                 </g>
             </svg>
             <div class="label">
@@ -109,17 +113,13 @@ class Knob extends LitElement {
     _handleWheel(e) {
         e.preventDefault();
         this.apply(e.deltaY > 0 ? -this.wheelSpeed : this.wheelSpeed);
-        this.labelContent = this.value.toFixed(
-            this.integerMode ? 0 : 2
-        );
+        this.labelContent = this.value.toFixed(this.integerMode ? 0 : 2);
     }
 
     _handleMouseDown() {
         console.log(this.integerMode);
         window.inputKnob = this;
-        this.labelContent = this.value.toFixed(
-            this.integerMode ? 0 : 2
-        );
+        this.labelContent = this.value.toFixed(this.integerMode ? 0 : 2);
     }
 
     _handleMouseLeave() {
@@ -161,8 +161,9 @@ class Knob extends LitElement {
         this.labelContent = this.label;
 
         this.integerMode = false;
-        this.value = this.integerMode ? Math.round(this.#default) :
-            this.default;
+        this.value = this.integerMode
+            ? Math.round(this.#default)
+            : this.default;
 
         // pos is a value that must be between 0 and 100 because this dictates
         // only the position of the knob, and not it's value. this is important
@@ -188,7 +189,7 @@ class Knob extends LitElement {
         else this.pos += d;
 
         if (d !== 0) this.dispatchEvent(this.eventInput);
-        this.deg = (this.pos / 100) * (1.5 * Math.PI) + (0.75 * Math.PI);
+        this.deg = (this.pos / 100) * (1.5 * Math.PI) + 0.75 * Math.PI;
 
         let newValue = util.map(this.pos, 0, 100, this.min, this.max);
         if (this.integerMode) this.value = Math.round(newValue);

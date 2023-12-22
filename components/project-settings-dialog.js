@@ -5,11 +5,11 @@ import * as dialogStyle from "/styles/components/project-settings-dialog.styl?in
 
 import * as scales from "/objects/scales.json";
 
-import State from "/state";
-import SaveManager from "/save-manager";
+import State from "/scripts/state";
+import SaveManager from "/scripts/save-manager";
 import localforage from "localforage";
 
-import { onInputBlur, onInputFocus } from "../keys";
+import { onInputBlur, onInputFocus } from "/scripts/keys";
 
 class ProjectSettingsDialog extends LitElement {
     dialog = createRef();

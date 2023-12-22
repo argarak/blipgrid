@@ -6,15 +6,14 @@ import * as appStyle from "/styles/components/app.styl?inline";
 
 import * as Tone from "tone";
 
-import State from "/state.js";
-
-import Patch from "/patch.js";
+import State from "/scripts/state";
+import Patch from "/scripts/patch";
+import SaveManager from "/scripts/save-manager";
+import KeyHandler, { onInputBlur, onInputFocus } from "/scripts/keys";
 
 import * as basicPatch from "/objects/patches/basic.json";
 import * as basicSynthPatch from "/objects/patches/basic-synth.json";
 import localforage from "localforage";
-import SaveManager from "../save-manager";
-import KeyHandler, { onInputBlur, onInputFocus } from "../keys";
 
 class App extends LitElement {
     sequencer = createRef();

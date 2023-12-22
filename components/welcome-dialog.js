@@ -4,7 +4,7 @@ import { ref, createRef } from "lit/directives/ref.js";
 import * as dialogStyle from "/styles/components/welcome-dialog.styl?inline";
 import * as themes from "/objects/themes.json";
 
-import State from "/state";
+import State from "/scripts/state";
 import localforage from "localforage";
 
 class WelcomeDialog extends LitElement {

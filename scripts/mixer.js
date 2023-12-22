@@ -1,4 +1,4 @@
-import State from "/state.js";
+import State from "/scripts/state.js";
 import * as Tone from "tone";
 
 class Mixer {
@@ -9,23 +9,33 @@ class Mixer {
 
         this.chorus = new Tone.Chorus({
             wet: 1,
-        }).toDestination().start();
-        this.chorusChannel = new Tone.Channel({ volume: -6 }).connect(this.chorus);
+        })
+            .toDestination()
+            .start();
+        this.chorusChannel = new Tone.Channel({ volume: -6 }).connect(
+            this.chorus,
+        );
 
         this.cheby = new Tone.Chebyshev(50).toDestination();
-        this.chebyChannel = new Tone.Channel({ volume: -6 }).connect(this.cheby);
+        this.chebyChannel = new Tone.Channel({ volume: -6 }).connect(
+            this.cheby,
+        );
 
         this.reverb = new Tone.Reverb(3).toDestination();
-        this.reverbChannel = new Tone.Channel({ volume: -6 }).connect(this.reverb);
+        this.reverbChannel = new Tone.Channel({ volume: -6 }).connect(
+            this.reverb,
+        );
 
         this.delay = new Tone.FeedbackDelay("8n", 0.5).toDestination();
-        this.delayChannel = new Tone.Channel({ volume: -6 }).connect(this.delay);
+        this.delayChannel = new Tone.Channel({ volume: -6 }).connect(
+            this.delay,
+        );
 
         this.effectChannels = [
             { name: "chorus", channel: this.chorusChannel },
             { name: "chebyshev", channel: this.chebyChannel },
             { name: "reverb", channel: this.reverbChannel },
-            { name: "delay", channel: this.delayChannel }
+            { name: "delay", channel: this.delayChannel },
         ];
 
         this.effectSends = [];
@@ -71,9 +81,11 @@ class Mixer {
         }
         this.soloChannel = channel;
 
-        for (let channelIndex = 0;
+        for (
+            let channelIndex = 0;
             channelIndex < this.channels.length;
-            channelIndex++) {
+            channelIndex++
+        ) {
             if (channelIndex === channel) {
                 this.channels[channel].mute = false;
                 this.sequencer.setSolo(channel, true);
@@ -86,9 +98,11 @@ class Mixer {
     }
 
     unmuteAll() {
-        for (let channelIndex = 0;
+        for (
+            let channelIndex = 0;
             channelIndex < this.channels.length;
-            channelIndex++) {
+            channelIndex++
+        ) {
             this.channels[channelIndex].mute = false;
             this.sequencer.setMute(channelIndex, false);
             this.sequencer.setSolo(channelIndex, false);

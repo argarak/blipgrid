@@ -3,8 +3,8 @@ import { LitElement, html, css, unsafeCSS } from "lit";
 
 import * as mdiStyle from "@material-design-icons/font/index.css?inline";
 import * as arpeggiatorStyle from "/styles/components/arpeggiator.styl?inline";
-import defaultAlgorithms from "../arpeggiator-algorithms.js";
-import util from "../util.js";
+import defaultAlgorithms from "/scripts/arpeggiator-algorithms.js";
+import util from "/scripts/util.js";
 
 import * as scales from "/objects/scales.json";
 

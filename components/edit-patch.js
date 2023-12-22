@@ -4,7 +4,7 @@ import * as mdiStyle from "@material-design-icons/font/index.css?inline";
 import * as editPatchStyle from "/styles/components/edit-patch.styl?inline";
 import { LitElement, html, css, unsafeCSS } from "lit";
 
-import State from "/state";
+import State from "/scripts/state";
 
 class EditPatch extends LitElement {
     static properties = {

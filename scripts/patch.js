@@ -1,5 +1,5 @@
 import * as Tone from "tone";
-import State from "/state";
+import State from "/scripts/state";
 
 import * as moduleControls from "/objects/module-controls.json";
 

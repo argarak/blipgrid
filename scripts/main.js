@@ -2,7 +2,6 @@ import "/styles/main.styl";
 import "@ibm/plex/css/ibm-plex.min.css";
 import "@material-design-icons/font";
 
-import "/util.js";
 import "/components/knob.js";
 
 import "/components/dialog.js";
