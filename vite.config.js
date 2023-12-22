@@ -1,5 +1,5 @@
 export default {
-    "base": "/blipgrid/",
+    "base": "/",
 
     "build": {
         assetsInlineLimit: 0
