@@ -4,8 +4,12 @@ import { ref, createRef } from "lit/directives/ref.js";
 import * as dialogStyle from "/styles/components/welcome-dialog.styl?inline";
 import * as themes from "/objects/themes.json";
 
+import * as packageMeta from "/package.json";
+
 import State from "/scripts/state";
 import localforage from "localforage";
+
+import SaveManager from "/scripts/save-manager";
 
 class WelcomeDialog extends LitElement {
     dialog = createRef();
@@ -15,11 +19,16 @@ class WelcomeDialog extends LitElement {
         selectedTheme: { type: String },
     };
 
+    _onUploadClick(e) {
+        e.target.blur();
+        SaveManager.uploadProject();
+    }
+
     render() {
         const leftpanel = html`
             <div id="blipicon">${this.blipboxes}</div>
             <h1>blip— grid</h1>
-            <div id="version">v0.3.5</div>
+            <div id="version">${packageMeta.version}</div>
             <div id="description">
                 blipgrid is a unique web-app music sequencer and composition
                 tool
@@ -29,7 +38,7 @@ class WelcomeDialog extends LitElement {
                 <button>
                     <span class="material-icons">info</span> user guide
                 </button>
-                <a href="https://github.com/argarak/blipgrid" target="_blank">
+                <a href="${packageMeta.repository}" target="_blank">
                     <button>
                         <span class="material-icons">open_in_new</span> code
                         repository
@@ -78,7 +87,7 @@ class WelcomeDialog extends LitElement {
                 <button>
                     <span class="material-icons">add</span> create new project
                 </button>
-                <button>
+                <button @click=${this._onUploadClick}>
                     <span class="material-icons">upload</span> upload project
                     file
                 </button>
