@@ -26,30 +26,30 @@ class ProjectSettingsDialog extends LitElement {
         this.projectName = e.target.value;
         SaveManager.projectName = e.target.value;
 
-        const inputEvent = new CustomEvent("input", {
+        const inputEvent = new CustomEvent("projectChange", {
             detail: { property: "projectName", value: this.projectName },
         });
-        this.dispatchEvent(inputEvent);
+        document.dispatchEvent(inputEvent);
     }
 
     _onAuthorInput(e) {
         this.author = e.target.value;
         SaveManager.author = e.target.value;
 
-        const inputEvent = new CustomEvent("input", {
+        const inputEvent = new CustomEvent("projectChange", {
             detail: { property: "author", value: this.author },
         });
-        this.dispatchEvent(inputEvent);
+        document.dispatchEvent(inputEvent);
     }
 
     _onDescriptionInput(e) {
         this.description = e.target.value;
         SaveManager.description = e.target.value;
 
-        const inputEvent = new CustomEvent("input", {
+        const inputEvent = new CustomEvent("projectChange", {
             detail: { property: "description", value: this.description },
         });
-        this.dispatchEvent(inputEvent);
+        document.dispatchEvent(inputEvent);
     }
 
     _onRootSelectInput(e) {

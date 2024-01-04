@@ -48,6 +48,16 @@ class SaveManager {
         this.projectName = project.name;
         this.author = project.author;
 
+        let inputEvent = new CustomEvent("projectChange", {
+            detail: { property: "projectName", value: this.projectName },
+        });
+        document.dispatchEvent(inputEvent);
+
+        inputEvent = new CustomEvent("projectChange", {
+            detail: { property: "author", value: this.author },
+        });
+        document.dispatchEvent(inputEvent);
+
         arpeggiator.loadState(
             project["root"],
             project["scale"],

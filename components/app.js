@@ -67,16 +67,12 @@ class App extends LitElement {
         const projectSettingsDialog = document.createElement(
             "ui-project-settings-dialog",
         );
-
-        projectSettingsDialog.addEventListener("input", (e) => {
-            if (!e.detail) return;
-            if (e.detail.property === "projectName") {
-                this.projectName = e.detail.value;
-                document.title = `${this.projectName} | blipgrid`;
-            }
-        });
-
         this.shadowRoot.appendChild(projectSettingsDialog);
+    }
+
+    updateProjectName(projectName) {
+        this.projectName = projectName;
+        document.title = `${projectName} | blipgrid`;
     }
 
     render() {
@@ -223,6 +219,13 @@ class App extends LitElement {
             }
         });
 
+        document.addEventListener("projectChange", (e) => {
+            if (!e.detail) return;
+            if (e.detail.property === "projectName") {
+                this.updateProjectName(e.detail.value);
+            }
+        });
+
         document.addEventListener("trackSwitch", (e) => {
             let track = e.detail;
             this.editView.value.registerTrack(track);
@@ -323,9 +326,8 @@ class App extends LitElement {
 
     constructor() {
         super();
-        this.projectName = SaveManager.projectName;
+        this.updateProjectName(SaveManager.projectName);
         this.welcomeDialog = null;
-        document.title = `${this.projectName} | blipgrid`;
     }
 }
 
