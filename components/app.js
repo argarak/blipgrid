@@ -11,9 +11,14 @@ import Patch from "/scripts/patch";
 import SaveManager from "/scripts/save-manager";
 import KeyHandler, { onInputBlur, onInputFocus } from "/scripts/keys";
 
+import * as themes from "/objects/themes.json";
+
 import * as basicPatch from "/objects/patches/basic.json";
 import * as basicSynthPatch from "/objects/patches/basic-synth.json";
 import localforage from "localforage";
+
+const defaultLightTheme = "default-light";
+const defaultDarkTheme = "default-dark";
 
 class App extends LitElement {
     sequencer = createRef();
@@ -38,8 +43,8 @@ class App extends LitElement {
     }
 
     displayWelcome() {
-        const welcomeDialog = document.createElement("ui-welcome-dialog");
-        this.shadowRoot.appendChild(welcomeDialog);
+        this.welcomeDialog = document.createElement("ui-welcome-dialog");
+        this.shadowRoot.appendChild(this.welcomeDialog);
     }
 
     _onWelcomeClick(e) {
@@ -199,7 +204,23 @@ class App extends LitElement {
         KeyHandler.start();
 
         localforage.getItem("theme").then((value) => {
-            State.setTheme(value);
+            if (value) {
+                State.setTheme(value);
+                return;
+            }
+
+            if (
+                window.matchMedia &&
+                window.matchMedia("(prefers-color-scheme: dark)").matches
+            ) {
+                localforage.setItem("theme", defaultDarkTheme);
+                State.setTheme(defaultDarkTheme);
+                this.welcomeDialog.selectedTheme = defaultDarkTheme;
+            } else {
+                localforage.setItem("theme", defaultLightTheme);
+                State.setTheme(defaultLightTheme);
+                this.welcomeDialog.selectedTheme = defaultLightTheme;
+            }
         });
 
         document.addEventListener("trackSwitch", (e) => {
@@ -303,6 +324,7 @@ class App extends LitElement {
     constructor() {
         super();
         this.projectName = SaveManager.projectName;
+        this.welcomeDialog = null;
         document.title = `${this.projectName} | blipgrid`;
     }
 }
