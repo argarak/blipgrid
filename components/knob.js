@@ -3,12 +3,7 @@ import * as knobStyle from "/styles/components/knob.styl?inline";
 import util from "/scripts/util.js";
 
 // TODO: disable ability (cannot be modified)
-// TODO: custom events : input, change
-// TODO: fancy circular progress element
-
-// TODO: indicator LED at the top left corner (it gets brighter the higher the value)
 // TODO: touch support
-
 // TODO: improved prompt
 // keyboard support?
 
@@ -69,6 +64,10 @@ class Knob extends LitElement {
         marker: {
             type: String,
         },
+        deg: {
+            type: Number,
+            state: true,
+        },
     };
 
     static styles = css`
@@ -79,13 +78,32 @@ class Knob extends LitElement {
         return html` <div id="knob">
             <svg width="50px" height="50px">
                 <g>
-                    <circle class="outline"></circle>
+                    <path
+                        class="outline-active"
+                        d="${this.describeArc(
+                            25,
+                            25,
+                            24,
+                            0.75 * Math.PI,
+                            this.deg,
+                        )}"
+                    />
+                    <path
+                        class="outline"
+                        d="${this.describeArc(
+                            25,
+                            25,
+                            24,
+                            this.deg + 0.0001,
+                            0.75 * Math.PI,
+                        )}"
+                    />
                     <line
                         class="marker"
                         x1="50%"
                         y1="50%"
-                        x2=${50 + Math.cos(this.deg) * 40 + "%"}
-                        y2=${50 + Math.sin(this.deg) * 40 + "%"}
+                        x2=${50 + Math.cos(this.deg) * 48 + "%"}
+                        y2=${50 + Math.sin(this.deg) * 48 + "%"}
                         stroke=${this.marker}
                     />
                 </g>
@@ -143,6 +161,38 @@ class Knob extends LitElement {
         return false;
     }
     /* -- */
+
+    polarToCartesian(centerX, centerY, radius, angleInRadians) {
+        return {
+            x: centerX + radius * Math.cos(angleInRadians),
+            y: centerY + radius * Math.sin(angleInRadians),
+        };
+    }
+
+    describeArc(x, y, radius, startAngle, endAngle) {
+        var start = this.polarToCartesian(x, y, radius, endAngle);
+        var end = this.polarToCartesian(x, y, radius, startAngle);
+
+        let largeArcFlag = endAngle - startAngle <= Math.PI ? "0" : "1";
+        if (endAngle - startAngle < 0) {
+            largeArcFlag =
+                Math.abs(endAngle - startAngle) >= Math.PI ? "0" : "1";
+        }
+
+        return [
+            "M",
+            start.x,
+            start.y,
+            "A",
+            radius,
+            radius,
+            0,
+            largeArcFlag,
+            0,
+            end.x,
+            end.y,
+        ].join(" ");
+    }
 
     constructor() {
         super();

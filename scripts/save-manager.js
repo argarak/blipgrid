@@ -16,6 +16,7 @@ class SaveManager {
 
         const sequencer = State.get("sequencer");
         const arpeggiator = State.get("arpeggiator");
+        const mixer = State.get("mixer");
 
         project["name"] = this.projectName;
         project["author"] = this.author;
@@ -28,6 +29,7 @@ class SaveManager {
         project["arpeggiator"] = arpeggiator.saveState();
         project["patch"] = sequencer.savePatchState();
         project["controls"] = sequencer.saveControlState();
+        project["mixer"] = mixer.saveState();
 
         return project;
     }

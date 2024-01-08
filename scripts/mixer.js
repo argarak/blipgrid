@@ -59,6 +59,19 @@ class Mixer {
         }
     }
 
+    saveState() {
+        let state = {};
+        let trackIndex = 0;
+        for (let channelSend of this.effectSends) {
+            state[trackIndex] = {};
+            for (const [key, value] of Object.entries(channelSend)) {
+                state[trackIndex][key] = value.gain.value;
+            }
+            trackIndex++;
+        }
+        return state;
+    }
+
     attach(channel, module) {
         module.connect(this.channels[channel]);
     }

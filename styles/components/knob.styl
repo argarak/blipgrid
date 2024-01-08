@@ -1,5 +1,11 @@
+.outline-active
+  cx 50%
+  cy 50%
+  fill #0000
+  stroke-width 2px
+  stroke var(--note-color)
+
 .outline
-  r calc(50% - 2px)
   cx 50%
   cy 50%
   fill #0000
@@ -11,7 +17,7 @@
   transform-origin center center
   stroke-linecap round
 
-  stroke var(--on-surface-focus)
+  stroke var(--note-color)
   /* controls the percieved length of the marker without
    * screwing with more trigonometry */
   stroke-dashoffset -12
