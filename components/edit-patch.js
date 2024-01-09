@@ -145,7 +145,7 @@ class EditPatch extends LitElement {
                 ].gain.value,
             );
             knob.setAttribute("label", effectChannels[effectIndex].name);
-            knob.setAttribute("integer-mode", true);
+            knob.setAttribute("nonlinear", true);
 
             knob.addEventListener("input", (e) =>
                 this._onSendInput(e, effectChannels[effectIndex]),

@@ -50,6 +50,9 @@ class Knob extends LitElement {
             attribute: "integer-mode",
             type: Boolean,
         },
+        nonlinear: {
+            type: Boolean,
+        },
         value: {
             type: Number,
         },
@@ -211,6 +214,7 @@ class Knob extends LitElement {
         this.labelContent = this.label;
 
         this.integerMode = false;
+        this.nonlinear = false;
         this.value = this.integerMode
             ? Math.round(this.#default)
             : this.default;
@@ -233,6 +237,10 @@ class Knob extends LitElement {
         this.apply(0);
     }
 
+    toNonLinear(x) {
+        return x < 0 ? -Math.pow(-x, 1 / 4) : Math.pow(x, 1 / 4);
+    }
+
     apply(d) {
         if (this.pos + d > 100) this.pos = 100;
         else if (this.pos + d < 0) this.pos = 0;
@@ -241,7 +249,19 @@ class Knob extends LitElement {
         if (d !== 0) this.dispatchEvent(this.eventInput);
         this.deg = (this.pos / 100) * (1.5 * Math.PI) + 0.75 * Math.PI;
 
-        let newValue = util.map(this.pos, 0, 100, this.min, this.max);
+        let newValue;
+        if (this.nonlinear) {
+            newValue = util.map(
+                this.toNonLinear(this.pos + 0.0001),
+                this.toNonLinear(0.0001),
+                this.toNonLinear(100),
+                this.min,
+                this.max,
+            );
+        } else {
+            newValue = util.map(this.pos, 0, 100, this.min, this.max);
+        }
+
         if (this.integerMode) this.value = Math.round(newValue);
         else this.value = newValue;
     }

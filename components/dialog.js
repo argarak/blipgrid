@@ -12,6 +12,7 @@ class Dialog extends LitElement {
     }
 
     close() {
+        // FIXME this leaves behind empty html tags, is there a better way to do this?
         this.remove();
     }
 
