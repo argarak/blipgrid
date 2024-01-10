@@ -32,7 +32,7 @@ class Patch {
         // should this be cleared differently? what about garbage collection?
         this.modules = [];
         this.connects = [];
-        this.patchObject = patchObject.default;
+        this.patchObject = patchObject;
 
         let module = null;
 

@@ -238,7 +238,9 @@ class App extends LitElement {
             trackIndex++
         ) {
             let patch = new Patch(
-                trackIndex % 2 == 0 ? basicSynthPatch : basicPatch,
+                trackIndex % 2 == 0
+                    ? basicSynthPatch.default
+                    : basicPatch.default,
                 trackIndex,
             );
             this.sequencer.value.assignPatch(trackIndex, patch);
