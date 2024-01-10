@@ -72,6 +72,17 @@ class Mixer {
         return state;
     }
 
+    loadState(state) {
+        for (let [trackIndex, effectGains] of Object.entries(state)) {
+            const entries = Object.entries(effectGains);
+
+            for (let [effectName, effectGain] of entries) {
+                this.effectSends[trackIndex][effectName].gain.value =
+                    effectGain;
+            }
+        }
+    }
+
     attach(channel, module) {
         module.connect(this.channels[channel]);
     }

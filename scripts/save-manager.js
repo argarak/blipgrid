@@ -50,6 +50,7 @@ class SaveManager {
 
         const sequencer = State.get("sequencer");
         const arpeggiator = State.get("arpeggiator");
+        const mixer = State.get("mixer");
 
         this.projectName = project.name;
         this.author = project.author;
@@ -88,6 +89,9 @@ class SaveManager {
             project["controls"],
             project["sequencer"],
         );
+
+        mixer.loadState(project["mixer"]);
+        sequencer.switchTrack(0);
     }
 
     static uploadProject() {
