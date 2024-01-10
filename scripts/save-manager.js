@@ -1,3 +1,5 @@
+import * as Tone from "tone";
+
 import State from "/scripts/state";
 import localforage from "localforage";
 
@@ -22,6 +24,8 @@ class SaveManager {
         project["author"] = this.author;
         project["date"] = Date.now();
         project["version"] = this.saveVersion;
+        project["bpm"] = Tone.Transport.bpm.value;
+        project["swing"] = Tone.Transport.swing;
 
         project["root"] = arpeggiator.root;
         project["scale"] = arpeggiator.scale;
@@ -59,6 +63,19 @@ class SaveManager {
             detail: { property: "author", value: this.author },
         });
         document.dispatchEvent(inputEvent);
+
+        Tone.Transport.stop();
+
+        Tone.Transport.bpm.value = 120;
+        Tone.Transport.swing = 0;
+
+        if (project["bpm"]) {
+            Tone.Transport.bpm.value = project["bpm"];
+        }
+
+        if (project["swing"]) {
+            Tone.Transport.swing = project["swing"];
+        }
 
         arpeggiator.loadState(
             project["root"],

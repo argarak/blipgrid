@@ -9,6 +9,8 @@ import State from "/scripts/state";
 import SaveManager from "/scripts/save-manager";
 import localforage from "localforage";
 
+import * as Tone from "tone";
+
 import { onInputBlur, onInputFocus } from "/scripts/keys";
 
 class ProjectSettingsDialog extends LitElement {
@@ -70,6 +72,14 @@ class ProjectSettingsDialog extends LitElement {
         );
     }
 
+    _onBpmInput(e) {
+        Tone.Transport.bpm.value = e.target.value;
+    }
+
+    _onSwingInput(e) {
+        Tone.Transport.swing = e.target.value / 100;
+    }
+
     render() {
         return html` <ui-dialog ${ref(this.dialog)} title="${this.title}">
             <div id="dialogContent">
@@ -109,6 +119,43 @@ class ProjectSettingsDialog extends LitElement {
                         @focus=${onInputFocus}
                         @blur=${onInputBlur}
                     ></textarea>
+                </div>
+
+                <div class="inputContainer">
+                    <label for="bpm">bpm</label>
+
+                    <input
+                        id="bpmSlider"
+                        name="bpm"
+                        type="number"
+                        min="0"
+                        max="300"
+                        value="120"
+                        size="3"
+                        .value=${Math.round(Tone.Transport.bpm.value)}
+                        @input=${this._onBpmInput}
+                        @focus=${onInputFocus}
+                        @blur=${onInputBlur}
+                    />
+                </div>
+
+                <div class="inputContainer">
+                    <label for="swing">swing</label>
+
+                    <input
+                        id="swingSlider"
+                        name="swing"
+                        type="number"
+                        min="0"
+                        max="100"
+                        value="0"
+                        step="1"
+                        size="3"
+                        .value=${Tone.Transport.swing * 100}
+                        @input=${this._onSwingInput}
+                        @focus=${onInputFocus}
+                        @blur=${onInputBlur}
+                    />
                 </div>
 
                 <div class="inputContainer">

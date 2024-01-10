@@ -38,10 +38,6 @@ class App extends LitElement {
         else btnPlay.classList.remove("active");
     }
 
-    _onBpmInput(e) {
-        Tone.Transport.bpm.value = e.target.value;
-    }
-
     displayWelcome() {
         this.welcomeDialog = document.createElement("ui-welcome-dialog");
         this.shadowRoot.appendChild(this.welcomeDialog);
@@ -122,20 +118,6 @@ class App extends LitElement {
                             </div>
                             ${dropmenu}
                         </div>
-
-                        <input
-                            id="bpmSlider"
-                            name="bpm"
-                            type="number"
-                            min="0"
-                            max="300"
-                            value="120"
-                            size="3"
-                            @input=${this._onBpmInput}
-                            @focus=${onInputFocus}
-                            @blur=${onInputBlur}
-                        />
-                        <label for="bpm">bpm</label>
                     </div>
 
                     <div class="headCenter">

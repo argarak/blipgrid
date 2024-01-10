@@ -246,7 +246,6 @@ class Knob extends LitElement {
         else if (this.pos + d < 0) this.pos = 0;
         else this.pos += d;
 
-        if (d !== 0) this.dispatchEvent(this.eventInput);
         this.deg = (this.pos / 100) * (1.5 * Math.PI) + 0.75 * Math.PI;
 
         let newValue;
@@ -264,6 +263,8 @@ class Knob extends LitElement {
 
         if (this.integerMode) this.value = Math.round(newValue);
         else this.value = newValue;
+
+        this.dispatchEvent(this.eventInput);
     }
 }
 
