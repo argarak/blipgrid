@@ -5,6 +5,7 @@ import * as editViewStyle from "/styles/components/edit-view.styl?inline";
 
 class EditView extends LitElement {
     editPatch = createRef();
+    editEffect = createRef();
 
     static properties = {};
 
@@ -12,6 +13,7 @@ class EditView extends LitElement {
         return html` <div id="viewTabs">${this.viewTabs}</div>
             <div id="editViewContainer">
                 <ui-edit-patch ${ref(this.editPatch)}></ui-edit-patch>
+                <ui-edit-effect ${ref(this.editEffect)}></ui-edit-effect>
             </div>`;
     }
 
@@ -33,6 +35,7 @@ class EditView extends LitElement {
                 name: "sound",
                 icon: "cable",
                 active: true,
+                viewElement: this.editPatch,
             },
             {
                 name: "edit/mix",
@@ -43,6 +46,7 @@ class EditView extends LitElement {
                 name: "effect",
                 icon: "blur_on",
                 active: false,
+                viewElement: this.editEffect,
             },
             {
                 name: "modulation",
@@ -56,12 +60,32 @@ class EditView extends LitElement {
     firstUpdated() {
         this.ready = true;
         if (this.track) this.editPatch.value.registerTrack(this.track);
+        this.switchView(this.views[0]);
     }
 
     registerTrack(track) {
         this.track = track;
         if (this.ready) {
             this.editPatch.value.registerTrack(track);
+        }
+    }
+
+    switchView(newView) {
+        let viewIndex = -1;
+        for (let view of this.views) {
+            viewIndex++;
+            if (!view.viewElement || !view.viewElement.value) {
+                continue;
+            }
+
+            if (view === newView) {
+                view.viewElement.value.style.display = "flex";
+                this.viewTabs[viewIndex].classList.add("active");
+                continue;
+            }
+
+            view.viewElement.value.style.display = "none";
+            this.viewTabs[viewIndex].classList.remove("active");
         }
     }
 
@@ -82,7 +106,7 @@ class EditView extends LitElement {
             let content = document.createTextNode(` ${view.name}`);
             tab.appendChild(content);
 
-            tab.addEventListener("click", (e) => console.log(e));
+            tab.addEventListener("click", () => this.switchView(view));
 
             tabs.push(tab);
         }
