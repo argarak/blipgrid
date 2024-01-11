@@ -31,6 +31,8 @@ class Mixer {
             this.delay,
         );
 
+        this.modules = [this.chorus, this.cheby, this.reverb, this.delay];
+
         this.effectChannels = [
             { name: "chorus", channel: this.chorusChannel },
             { name: "chebyshev", channel: this.chebyChannel },

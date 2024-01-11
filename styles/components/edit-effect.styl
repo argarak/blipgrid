@@ -6,3 +6,38 @@
   height 100%
 
   flex-direction column
+
+#effectControls
+  display flex
+
+  width 100%
+
+  flex-direction column
+  justify-content center
+  align-items center
+
+  label
+    color var(--primary-text)
+
+.knobSet
+  display flex
+  margin 10px
+  align-items center
+  width 80%
+
+  flex-direction column
+  border m-border-size solid var(--surface-active)
+  border-radius 5px
+  padding 5px
+  background-color var(--surface-background)
+
+  box-shadow 0px 0px 10px var(--shadow-color)
+
+.knobContainer
+  display flex
+  flex-direction row
+  width 100%
+  justify-content space-evenly
+
+  select, ui-knob
+    width 100%
