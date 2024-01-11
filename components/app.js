@@ -259,6 +259,22 @@ class App extends LitElement {
             trigger(modules, time);
         });
 
+        KeyHandler.registerKey("KeyQ", [], () => {
+            this.editView.value.switchView(this.editView.value.views[0]);
+        });
+
+        KeyHandler.registerKey("KeyW", [], () => {
+            this.editView.value.switchView(this.editView.value.views[1]);
+        });
+
+        KeyHandler.registerKey("KeyE", [], () => {
+            this.editView.value.switchView(this.editView.value.views[2]);
+        });
+
+        KeyHandler.registerKey("KeyR", [], () => {
+            this.editView.value.switchView(this.editView.value.views[3]);
+        });
+
         for (
             let trackIndex = 1;
             trackIndex <= this.sequencer.value.numTracks;
