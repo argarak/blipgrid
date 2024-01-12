@@ -1,5 +1,7 @@
 import * as moduleControls from "/objects/module-controls.json";
 
+import util from "../scripts/util";
+
 import * as mdiStyle from "@material-design-icons/font/index.css?inline";
 import * as editEffectStyle from "/styles/components/edit-effect.styl?inline";
 import { LitElement, html, css, unsafeCSS } from "lit";
@@ -26,11 +28,15 @@ class EditEffect extends LitElement {
 
     _onControlInput(e, module, control) {
         let target = e.target;
-        if (typeof module[control.property] === "object") {
-            module[control.property].value = target.value;
-            return;
-        }
-        module[control.property] = target.value;
+
+        clearTimeout(target.timer);
+        target.timer = setTimeout(() => {
+            if (typeof module[control.property] === "object") {
+                module[control.property].value = target.value;
+                return;
+            }
+            module[control.property] = target.value;
+        }, 250);
     }
 
     constructor() {

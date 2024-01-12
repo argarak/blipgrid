@@ -79,8 +79,13 @@ class Mixer {
             const entries = Object.entries(effectGains);
 
             for (let [effectName, effectGain] of entries) {
-                this.effectSends[trackIndex][effectName].gain.value =
-                    effectGain;
+                if (!effectGain) {
+                    this.effectSends[trackIndex][effectName].gain.value =
+                        -Infinity;
+                } else {
+                    this.effectSends[trackIndex][effectName].gain.value =
+                        effectGain;
+                }
             }
         }
     }
