@@ -8,6 +8,7 @@ import "/components/dialog.js";
 import "/components/welcome-dialog.js";
 import "/components/project-settings-dialog.js";
 
+import "/components/visualizer.js";
 import "/components/edit-effect.js";
 import "/components/edit-patch.js";
 import "/components/edit-view.js";

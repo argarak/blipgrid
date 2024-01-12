@@ -8,8 +8,21 @@
 
   align-items center
 
-.hfill
+#mainContainer::before
+  content ""
+  position fixed
+  top 0
+  left 0
+  z-index -1
+
+  display block
+  background-image url("/assets/back-pattern.png")
+  background-size 50px
   width 100%
+  height 100%
+
+  opacity 0.1
+
 
 #headContainer
   box-sizing border-box
@@ -31,7 +44,7 @@
     flex 1
     height 100%
 
-  .headCenter
+  x.headCenter
     justify-content center
 
   .headRight
@@ -92,7 +105,7 @@
   height calc(100% - 40px)
 
   width 100vw
-  max-width 150ch
+  max-width 1200px
 
 #sideContainer
   background #0000
@@ -141,3 +154,11 @@ ui-sequencer
 
 ui-arpeggiator
   flex-basis max-content
+
+ui-visualizer
+  position fixed
+  top 0px
+  left 0px
+  height 100%
+  width 100%
+  z-index -999
