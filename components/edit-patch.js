@@ -78,48 +78,6 @@ class EditPatch extends LitElement {
         });
     }
 
-    // getControlValue(module, control) {
-    //     if (typeof module[control.property] === "object") {
-    //         return module[control.property].value;
-    //     }
-    //     return module[control.property];
-    // }
-
-    // createControlElement(module, control) {
-    //     if (control.type == "knob") {
-    //         let knob = document.createElement("ui-knob");
-    //         knob.setAttribute("min", control.min);
-    //         knob.setAttribute("max", control.max);
-    //         knob.setAttribute("default", this.getControlValue(module, control));
-    //         knob.setAttribute("label", control.label);
-
-    //         knob.addEventListener("input", (e) =>
-    //             this._onControlInput(e, module, control),
-    //         );
-
-    //         return knob;
-    //     }
-
-    //     if (control.type == "select") {
-    //         let select = document.createElement("select");
-
-    //         for (let option of control.select) {
-    //             let optionElement = document.createElement("option");
-    //             optionElement.value = option;
-    //             optionElement.textContent = option;
-    //             select.appendChild(optionElement);
-    //         }
-
-    //         select.value = this.getControlValue(module, control);
-
-    //         select.addEventListener("input", (e) =>
-    //             this._onControlInput(e, module, control),
-    //         );
-
-    //         return select;
-    //     }
-    // }
-
     drawEffectControls() {
         if (!this.patch) return;
         let knobs = [];
@@ -132,7 +90,6 @@ class EditPatch extends LitElement {
             effectIndex++
         ) {
             let knob = document.createElement("ui-knob");
-            //let currentMod = this.sequence[this.selectedTrack].mod[modIndex];
 
             let min = -80;
             let max = 0;

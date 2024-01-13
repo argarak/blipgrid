@@ -5,7 +5,9 @@ import * as editViewStyle from "/styles/components/edit-view.styl?inline";
 
 class EditView extends LitElement {
     editPatch = createRef();
+    editMix = createRef();
     editEffect = createRef();
+    editModulation = createRef();
 
     static properties = {};
 
@@ -13,7 +15,9 @@ class EditView extends LitElement {
         return html` <div id="viewTabs">${this.viewTabs}</div>
             <div id="editViewContainer">
                 <ui-edit-patch ${ref(this.editPatch)}></ui-edit-patch>
+                <ui-edit-mix ${ref(this.editMix)}></ui-edit-mix>
                 <ui-edit-effect ${ref(this.editEffect)}></ui-edit-effect>
+                <ui-edit-modulation ${ref(this.editModulation)}></ui-edit-modulation>
             </div>`;
     }
 
@@ -41,6 +45,7 @@ class EditView extends LitElement {
                 name: "edit/mix",
                 icon: "tune",
                 active: false,
+                viewElement: this.editMix,
             },
             {
                 name: "effect",
@@ -52,6 +57,7 @@ class EditView extends LitElement {
                 name: "modulation",
                 icon: "graphic_eq",
                 active: false,
+                viewElement: this.editModulation,
             },
         ];
         this.viewTabs = this.createTabs();
