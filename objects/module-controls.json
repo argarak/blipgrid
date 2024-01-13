@@ -247,5 +247,42 @@
             "max": 360,
             "default": 0
         }
+    ],
+
+    "FeedbackDelay": [
+        {
+            "type": "select",
+            "label": "delay time",
+            "property": "delayTime",
+            "select": [
+                "1n",
+                "1n.",
+                "2n",
+                "2n.",
+                "2t",
+                "4n",
+                "4n.",
+                "4t",
+                "8n",
+                "8n.",
+                "8t",
+                "16n",
+                "16n.",
+                "16t",
+                "32n",
+                "32n.",
+                "32t"
+            ],
+            "default": "16n."
+        },
+
+        {
+            "type": "knob",
+            "label": "feedback",
+            "property": "feedback",
+            "min": 0,
+            "max": 1,
+            "default": 0.5
+        }
     ]
 }

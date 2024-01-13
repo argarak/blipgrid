@@ -70,6 +70,13 @@ class EditEffect extends LitElement {
         }
 
         if (control.type == "select") {
+            let selectContainer = document.createElement("div");
+            selectContainer.classList.add("selectContainer");
+
+            let selectLabel = document.createElement("label");
+            selectLabel.textContent = control.label;
+            selectLabel.classList.add("selectLabel");
+
             let select = document.createElement("select");
 
             for (let option of control.select) {
@@ -85,7 +92,10 @@ class EditEffect extends LitElement {
                 this._onControlInput(e, module, control),
             );
 
-            return select;
+            selectContainer.appendChild(select);
+            selectContainer.appendChild(selectLabel);
+
+            return selectContainer;
         }
     }
 
