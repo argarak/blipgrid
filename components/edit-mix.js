@@ -4,14 +4,14 @@ import util from "../scripts/util";
 import ControlUtil from "../scripts/controls";
 
 import * as mdiStyle from "@material-design-icons/font/index.css?inline";
-import * as editEffectStyle from "/styles/components/edit-effect.styl?inline";
+import * as editMixStyle from "/styles/components/edit-mix.styl?inline";
 import { LitElement, html, css, unsafeCSS } from "lit";
 
 import State from "/scripts/state";
 
 class EditMix extends LitElement {
     render() {
-        return html`edit mix!`;
+        return html`<div id="mixerControls">${this.controls}</div>`;
     }
 
     static styles = [
@@ -19,13 +19,66 @@ class EditMix extends LitElement {
             ${unsafeCSS(mdiStyle.default)}
         `,
         css`
-            ${unsafeCSS(editEffectStyle.default)}
+            ${unsafeCSS(editMixStyle.default)}
         `,
     ];
+
+    _onControlInput(e, module, control) {
+        let target = e.target;
+        if (typeof module[control.property] === "object") {
+            module[control.property].value = target.value;
+            return;
+        }
+        module[control.property] = target.value;
+    }
 
     constructor() {
         super();
         this.mixer = State.mixer();
+        this.controls = this.drawControls();
+    }
+
+    drawControls() {
+        if (!this.mixer) return;
+        let controlElements = [];
+
+        let index = 0;
+        for (let module of this.mixer.channels) {
+            let moduleName = module.name;
+
+            let groupLabel = document.createElement("label");
+            groupLabel.setAttribute("for", `knobsGroup${index}`);
+            groupLabel.innerText = index + 1;
+
+            let knobsGroup = document.createElement("div");
+            knobsGroup.id = `knobsGroup${index}`;
+            knobsGroup.classList.add("knobSet");
+
+            knobsGroup.appendChild(groupLabel);
+
+            let knobContainer = document.createElement("div");
+            knobContainer.classList.add("knobContainer");
+
+            let controls =
+                moduleName in moduleControls ? moduleControls[moduleName] : [];
+
+            for (let control of controls) {
+                knobContainer.appendChild(
+                    ControlUtil.createControlElement(
+                        module,
+                        control,
+                        this._onControlInput,
+                    ),
+                );
+            }
+
+            knobsGroup.appendChild(knobContainer);
+
+            controlElements.push(knobsGroup);
+            index++;
+        }
+
+        return controlElements;
     }
 }
 

@@ -14,6 +14,7 @@ export default class ControlUtil {
             knob.setAttribute("default", this.getControlValue(module, control));
 
             if (control.integerMode) knob.setAttribute("integer-mode", true);
+            if (control.nonlinear) knob.setAttribute("nonlinear", true);
             knob.setAttribute("label", control.label);
 
             knob.addEventListener("input", (e) =>

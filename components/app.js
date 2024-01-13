@@ -178,7 +178,7 @@ class App extends LitElement {
 
         const mixer = State.mixer();
 
-        this.displayWelcome();
+        //this.displayWelcome();
         KeyHandler.start();
 
         localforage.getItem("theme").then((value) => {
