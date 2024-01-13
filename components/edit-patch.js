@@ -5,6 +5,7 @@ import * as editPatchStyle from "/styles/components/edit-patch.styl?inline";
 import { LitElement, html, css, unsafeCSS } from "lit";
 
 import State from "/scripts/state";
+import ControlUtil from "../scripts/controls";
 
 class EditPatch extends LitElement {
     static properties = {
@@ -77,47 +78,47 @@ class EditPatch extends LitElement {
         });
     }
 
-    getControlValue(module, control) {
-        if (typeof module[control.property] === "object") {
-            return module[control.property].value;
-        }
-        return module[control.property];
-    }
+    // getControlValue(module, control) {
+    //     if (typeof module[control.property] === "object") {
+    //         return module[control.property].value;
+    //     }
+    //     return module[control.property];
+    // }
 
-    createControlElement(module, control) {
-        if (control.type == "knob") {
-            let knob = document.createElement("ui-knob");
-            knob.setAttribute("min", control.min);
-            knob.setAttribute("max", control.max);
-            knob.setAttribute("default", this.getControlValue(module, control));
-            knob.setAttribute("label", control.label);
+    // createControlElement(module, control) {
+    //     if (control.type == "knob") {
+    //         let knob = document.createElement("ui-knob");
+    //         knob.setAttribute("min", control.min);
+    //         knob.setAttribute("max", control.max);
+    //         knob.setAttribute("default", this.getControlValue(module, control));
+    //         knob.setAttribute("label", control.label);
 
-            knob.addEventListener("input", (e) =>
-                this._onControlInput(e, module, control),
-            );
+    //         knob.addEventListener("input", (e) =>
+    //             this._onControlInput(e, module, control),
+    //         );
 
-            return knob;
-        }
+    //         return knob;
+    //     }
 
-        if (control.type == "select") {
-            let select = document.createElement("select");
+    //     if (control.type == "select") {
+    //         let select = document.createElement("select");
 
-            for (let option of control.select) {
-                let optionElement = document.createElement("option");
-                optionElement.value = option;
-                optionElement.textContent = option;
-                select.appendChild(optionElement);
-            }
+    //         for (let option of control.select) {
+    //             let optionElement = document.createElement("option");
+    //             optionElement.value = option;
+    //             optionElement.textContent = option;
+    //             select.appendChild(optionElement);
+    //         }
 
-            select.value = this.getControlValue(module, control);
+    //         select.value = this.getControlValue(module, control);
 
-            select.addEventListener("input", (e) =>
-                this._onControlInput(e, module, control),
-            );
+    //         select.addEventListener("input", (e) =>
+    //             this._onControlInput(e, module, control),
+    //         );
 
-            return select;
-        }
-    }
+    //         return select;
+    //     }
+    // }
 
     drawEffectControls() {
         if (!this.patch) return;
@@ -180,7 +181,11 @@ class EditPatch extends LitElement {
 
             for (let control of controls) {
                 knobsGroup.appendChild(
-                    this.createControlElement(module, control),
+                    ControlUtil.createControlElement(
+                        module,
+                        control,
+                        this._onControlInput,
+                    ),
                 );
             }
 
