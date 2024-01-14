@@ -10,28 +10,34 @@
 #effectControls
   display flex
 
-  width 100%
-
+  box-sizing border-box
   flex-direction column
   justify-content center
   align-items center
-
-  label
-    color var(--primary-text)
+  margin 10px
 
 .knobSet
   display flex
-  margin 10px
+  margin-bottom 10px
   align-items center
-  width 80%
+
+  width 100%
+  max-width 600px
+  box-sizing border-box
 
   flex-direction column
   border m-border-size solid var(--surface-active)
   border-radius 5px
-  padding 5px
+  padding 0px
   background-color var(--surface-background)
 
   box-shadow 0px 0px 10px var(--shadow-color)
+
+  & > label
+    width 100%
+    color var(--primary-text)
+    text-align center
+    padding 5px 0px
 
 .knobContainer
   display flex
