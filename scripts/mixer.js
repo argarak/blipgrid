@@ -98,6 +98,11 @@ class Mixer {
         this.channels[channel].mute = !this.channels[channel].muted;
         this.sequencer.setMute(channel, this.channels[channel].muted);
         this.sequencer.requestUpdate();
+
+        const muteEvent = new CustomEvent("mute", {
+            detail: { channel: channel, muted: this.channels[channel].muted },
+        });
+        document.dispatchEvent(muteEvent);
     }
 
     toggleSolo(channel) {
@@ -126,6 +131,11 @@ class Mixer {
             }
         }
         this.sequencer.requestUpdate();
+
+        const soloEvent = new CustomEvent("solo", {
+            detail: { channel: channel },
+        });
+        document.dispatchEvent(soloEvent);
     }
 
     unmuteAll() {

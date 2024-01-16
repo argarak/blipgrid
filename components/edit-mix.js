@@ -32,13 +32,36 @@ class EditMix extends LitElement {
         module[control.property] = target.value;
     }
 
+    _onMute(e) {
+        const muted = e.detail.muted;
+        const channel = e.detail.channel;
+        if (!this.muteButtons) return;
+
+        const button = this.muteButtons[channel];
+
+        if (muted) button.classList.add("mute");
+        else button.classList.remove("mute");
+    }
+
+    _onSolo(e) {
+        const channel = e.detail.channel;
+        if (!this.soloButtons) return;
+
+        let index = 0;
+        for (let button of this.soloButtons) {
+            if (index === channel) button.classList.add("solo");
+            else button.classList.remove("mute");
+            index++;
+        }
+    }
+
     constructor() {
         super();
         this.mixer = State.mixer();
         this.controls = this.drawControls();
 
-        this.muteButtons = [];
-        this.soloButtons = [];
+        document.addEventListener("mute", (e) => this._onMute(e));
+        document.addEventListener("solo", (e) => this._onSolo(e));
     }
 
     createMuteButton(trackIndex) {
@@ -100,8 +123,11 @@ class EditMix extends LitElement {
                 );
             }
 
-            knobContainer.appendChild(this.createMuteButton(index));
-            knobContainer.appendChild(this.createSoloButton(index));
+            let muteButton = this.createMuteButton(index);
+            knobContainer.appendChild(muteButton);
+
+            let soloButton = this.createSoloButton(index);
+            knobContainer.appendChild(soloButton);
 
             knobsGroup.appendChild(knobContainer);
 
