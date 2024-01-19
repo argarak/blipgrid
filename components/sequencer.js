@@ -31,17 +31,14 @@ class Sequencer extends LitElement {
         e.preventDefault();
         let algorithm = null;
         for (algorithm of this.algorithms) {
-            if (
-                parseInt(e.target.value) ===
-                util.hashCode(algorithm.fn.toString())
-            ) {
+            if (e.target.value === algorithm.name) {
                 break;
             }
             // TODO: error if not found
         }
 
         this.sequence[this.selectedTrack].algorithm = algorithm;
-        this.selectedAlgorithm = util.hashCode(algorithm.fn.toString());
+        this.selectedAlgorithm = algorithm.name;
     }
 
     _onStepsInput(e) {
@@ -158,9 +155,8 @@ class Sequencer extends LitElement {
             };
         }
 
-        this.selectedAlgorithm = util.hashCode(
-            this.sequence[this.selectedTrack].algorithm.fn.toString(),
-        );
+        this.selectedAlgorithm =
+            this.sequence[this.selectedTrack].algorithm.name;
 
         // keeps track of the current step position
         // initially at the end of the sequence so that the sequence can start
@@ -200,7 +196,7 @@ class Sequencer extends LitElement {
         for (let trackIndex = 0; trackIndex < this.numTracks; trackIndex++) {
             let trackAlgorithm = null;
             for (let algorithm of this.algorithms) {
-                let hash = util.hashCode(algorithm.fn.toString());
+                let hash = algorithm.name;
                 if (hash === state[trackIndex].algorithm) {
                     trackAlgorithm = algorithm;
                     break;
@@ -230,9 +226,8 @@ class Sequencer extends LitElement {
                 this.generateSequence(trackIndex);
         }
 
-        this.selectedAlgorithm = util.hashCode(
-            this.sequence[this.selectedTrack].algorithm.fn.toString(),
-        );
+        this.selectedAlgorithm =
+            this.sequence[this.selectedTrack].algorithm.name;
 
         this.step = defaultLength;
         this.switchTrack(0);
@@ -254,9 +249,7 @@ class Sequencer extends LitElement {
             trackState["mod"] = track["mod"];
             trackState["length"] = track["length"];
             // store algorithm reference
-            trackState["algorithm"] = util.hashCode(
-                track.algorithm.fn.toString(),
-            );
+            trackState["algorithm"] = track.algorithm.name;
 
             state[trackIndex] = trackState;
         }
@@ -294,9 +287,9 @@ class Sequencer extends LitElement {
             );
         }
 
-        this.selectedAlgorithm = util.hashCode(
-            this.sequence[this.selectedTrack].algorithm.fn.toString(),
-        );
+        this.selectedAlgorithm =
+            this.sequence[this.selectedTrack].algorithm.name;
+
         document.dispatchEvent(switchTrackEvent);
         this.requestUpdate();
     }
@@ -396,7 +389,7 @@ class Sequencer extends LitElement {
         let options = [];
         for (let alIndex = 0; alIndex < this.algorithms.length; alIndex++) {
             let optionElement = document.createElement("option");
-            let hash = util.hashCode(this.algorithms[alIndex].fn.toString());
+            let hash = this.algorithms[alIndex].name;
             optionElement.value = hash;
             if (hash == this.selectedAlgorithm) optionElement.selected = true;
             optionElement.textContent = this.algorithms[alIndex].name;
