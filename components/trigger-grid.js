@@ -5,7 +5,7 @@ class TriggerGrid extends LitElement {
     static properties = {
         sequence: { type: Array },
         length: { type: Number },
-        step: { type: Number }
+        step: { type: Number },
     };
 
     apply(sequence, length) {
@@ -16,7 +16,7 @@ class TriggerGrid extends LitElement {
         }
 
         if (sequence.length === 0) {
-            this.noteboxes.forEach(n => n.classList.remove("active"));
+            this.noteboxes.forEach((n) => n.classList.remove("active"));
             return;
         }
 
@@ -25,8 +25,7 @@ class TriggerGrid extends LitElement {
 
             if (sequence[noteIndex]) {
                 noteBox.classList.add("active");
-            }
-            else noteBox.classList.remove("active");
+            } else noteBox.classList.remove("active");
         }
 
         this.sequence = sequence;
@@ -36,7 +35,9 @@ class TriggerGrid extends LitElement {
         return html`${this.noteboxes}`;
     }
 
-    static styles = css`${unsafeCSS(triggerGridStyle.default)}`;
+    static styles = css`
+        ${unsafeCSS(triggerGridStyle.default)}
+    `;
 
     constructor() {
         super();
@@ -55,8 +56,7 @@ class TriggerGrid extends LitElement {
             if (noteIndex === s) {
                 noteBox.classList.add("marker");
                 noteBox.scrollIntoView();
-            }
-            else noteBox.classList.remove("marker");
+            } else noteBox.classList.remove("marker");
         }
         this.step = s;
     }

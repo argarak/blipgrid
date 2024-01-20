@@ -293,10 +293,10 @@ class Arpeggiator extends LitElement {
 
         if (this.selectedTrack === trackIndex) {
             this.updateNoteIndicators(
-                this.sequence[trackIndex].rangeStart + selected[0],
+                this.sequence[trackIndex].rangeStart + selected,
             );
         }
-        return Tone.Frequency(slicedRange[selected[0]], "midi");
+        return Tone.Frequency(slicedRange[selected], "midi");
     }
 
     registerAlgorithm(name, fn) {
