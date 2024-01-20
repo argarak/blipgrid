@@ -271,9 +271,9 @@ class App extends LitElement {
             this.editView.value.switchView(this.editView.value.views[2]);
         });
 
-        KeyHandler.registerKey("KeyR", [], () => {
-            this.editView.value.switchView(this.editView.value.views[3]);
-        });
+        // KeyHandler.registerKey("KeyR", [], () => {
+        //     this.editView.value.switchView(this.editView.value.views[3]);
+        // });
 
         for (
             let trackIndex = 1;

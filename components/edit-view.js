@@ -17,8 +17,9 @@ class EditView extends LitElement {
                 <ui-edit-patch ${ref(this.editPatch)}></ui-edit-patch>
                 <ui-edit-mix ${ref(this.editMix)}></ui-edit-mix>
                 <ui-edit-effect ${ref(this.editEffect)}></ui-edit-effect>
-                <ui-edit-modulation ${ref(this.editModulation)}></ui-edit-modulation>
             </div>`;
+
+        // <ui-edit-modulation ${ref(this.editModulation)}></ui-edit-modulation>
     }
 
     static styles = [
@@ -53,12 +54,12 @@ class EditView extends LitElement {
                 active: false,
                 viewElement: this.editEffect,
             },
-            {
-                name: "modulation",
-                icon: "graphic_eq",
-                active: false,
-                viewElement: this.editModulation,
-            },
+            // {
+            //     name: "modulation",
+            //     icon: "graphic_eq",
+            //     active: false,
+            //     viewElement: this.editModulation,
+            // },
         ];
         this.viewTabs = this.createTabs();
     }
