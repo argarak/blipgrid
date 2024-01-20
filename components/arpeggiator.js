@@ -25,19 +25,15 @@ class Arpeggiator extends LitElement {
     _onAlgorithmSelectInput(e) {
         let algorithm = null;
         for (algorithm of this.algorithms) {
-            if (
-                parseInt(e.target.value) ===
-                util.hashCode(algorithm.fn.toString())
-            ) {
+            if (parseInt(e.target.value) === algorithm.name) {
                 break;
             }
             // TODO: error if not found
         }
 
         this.sequence[this.selectedTrack].algorithm = algorithm;
-        this.selectedAlgorithm = util.hashCode(
-            this.sequence[this.selectedTrack].algorithm.fn.toString(),
-        );
+        this.selectedAlgorithm =
+            this.sequence[this.selectedTrack].algorithm.name;
     }
 
     _onControlInput(e, modIndex) {
@@ -173,9 +169,8 @@ class Arpeggiator extends LitElement {
             };
         }
 
-        this.selectedAlgorithm = util.hashCode(
-            this.sequence[this.selectedTrack].algorithm.fn.toString(),
-        );
+        this.selectedAlgorithm =
+            this.sequence[this.selectedTrack].algorithm.name;
 
         this.switchTrack(0);
     }
@@ -198,9 +193,7 @@ class Arpeggiator extends LitElement {
 
             trackState["mod"] = track["mod"];
             // store algorithm reference
-            trackState["algorithm"] = util.hashCode(
-                track.algorithm.fn.toString(),
-            );
+            trackState["algorithm"] = track.algorithm.name;
 
             trackState["rangeStart"] = track["rangeStart"];
             trackState["rangeEnd"] = track["rangeEnd"];
@@ -227,7 +220,7 @@ class Arpeggiator extends LitElement {
         for (let trackIndex = 0; trackIndex < this.numTracks; trackIndex++) {
             let trackAlgorithm = null;
             for (let algorithm of this.algorithms) {
-                let hash = util.hashCode(algorithm.fn.toString());
+                let hash = algorithm.name;
                 if (hash === sequence[trackIndex].algorithm) {
                     trackAlgorithm = algorithm;
                     break;
@@ -248,9 +241,8 @@ class Arpeggiator extends LitElement {
             };
         }
 
-        this.selectedAlgorithm = util.hashCode(
-            this.sequence[this.selectedTrack].algorithm.fn.toString(),
-        );
+        this.selectedAlgorithm =
+            this.sequence[this.selectedTrack].algorithm.name;
 
         this.switchTrack(0);
         this.requestUpdate();
@@ -258,9 +250,8 @@ class Arpeggiator extends LitElement {
 
     switchTrack(trackIndex) {
         this.selectedTrack = trackIndex;
-        this.selectedAlgorithm = util.hashCode(
-            this.sequence[this.selectedTrack].algorithm.fn.toString(),
-        );
+        this.selectedAlgorithm =
+            this.sequence[this.selectedTrack].algorithm.name;
     }
 
     updateNoteIndicators(noteIndex) {
@@ -381,7 +372,7 @@ class Arpeggiator extends LitElement {
         let options = [];
         for (let alIndex = 0; alIndex < this.algorithms.length; alIndex++) {
             let optionElement = document.createElement("option");
-            let hash = util.hashCode(this.algorithms[alIndex].fn.toString());
+            let hash = this.algorithms[alIndex].name;
             if (hash == this.selectedAlgorithm) optionElement.selected = true;
             optionElement.value = hash;
             optionElement.textContent = this.algorithms[alIndex].name;
