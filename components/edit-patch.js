@@ -12,10 +12,19 @@ class EditPatch extends LitElement {
         name: { type: String, state: true },
     };
 
+    _onPatchClick() {
+        this.presetDialog = document.createElement("ui-preset-dialog");
+        document.body.appendChild(this.presetDialog);
+    }
+
     render() {
         return html` <div id="loadControls">
                 <div id="patchUpload">
-                    <button id="patchUploadBtn" class="btn">
+                    <button
+                        id="patchUploadBtn"
+                        class="btn"
+                        @click=${this._onPatchClick}
+                    >
                         <span class="material-icons">
                             settings_input_component</span
                         >

@@ -1,0 +1,17 @@
+{
+    "basic melodic synth": [
+        {
+            "name": "square bass"
+        }
+    ],
+
+    "basic percussive synth": [
+        {
+            "name": "kick"
+        },
+
+        {
+            "name": "snare"
+        }
+    ]
+}

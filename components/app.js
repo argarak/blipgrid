@@ -40,7 +40,7 @@ class App extends LitElement {
 
     displayWelcome() {
         this.welcomeDialog = document.createElement("ui-welcome-dialog");
-        this.shadowRoot.appendChild(this.welcomeDialog);
+        document.body.appendChild(this.welcomeDialog);
     }
 
     _onWelcomeClick(e) {
@@ -63,7 +63,7 @@ class App extends LitElement {
         const projectSettingsDialog = document.createElement(
             "ui-project-settings-dialog",
         );
-        this.shadowRoot.appendChild(projectSettingsDialog);
+        document.body.appendChild(projectSettingsDialog);
     }
 
     updateProjectName(projectName) {

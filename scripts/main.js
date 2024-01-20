@@ -7,6 +7,7 @@ import "/components/knob.js";
 import "/components/dialog.js";
 import "/components/welcome-dialog.js";
 import "/components/project-settings-dialog.js";
+import "/components/preset-dialog.js";
 
 import "/components/visualizer.js";
 import "/components/edit-mix.js";
