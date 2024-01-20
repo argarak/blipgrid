@@ -16,7 +16,10 @@ class EditPatch extends LitElement {
         return html` <div id="loadControls">
                 <div id="patchUpload">
                     <button id="patchUploadBtn" class="btn">
-                        <span class="material-icons">upload</span>load patch
+                        <span class="material-icons">
+                            settings_input_component</span
+                        >
+                        select preset
                     </button>
                 </div>
                 <div id="patchName">${this.name}</div>

@@ -296,7 +296,7 @@
             "min": -80,
             "max": 0,
             "default": 0,
-                "nonlinear": true
+            "nonlinear": true
         },
 
         {

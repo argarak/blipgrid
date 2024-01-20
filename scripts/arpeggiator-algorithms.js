@@ -1,6 +1,6 @@
 export default [
     {
-        name: "ascending modulo",
+        name: "modulo motion",
         mods: [
             {
                 name: "loop",
@@ -25,9 +25,9 @@ export default [
             }
 
             let x;
-            if (mod[1] === 0) {
+            if (mod[2] === 0) {
                 x = t;
-            } else if (mod[2] === 0) {
+            } else if (mod[2] === 1) {
                 x = -t;
             } else {
                 x = t % mod[0] > mod[0] / 2 ? t : -t;

@@ -355,12 +355,14 @@ class Arpeggiator extends LitElement {
 
         for (let modIndex = 0; modIndex < algoMods.length; modIndex++) {
             let knob = document.createElement("ui-knob");
-            knob.setAttribute("min", 0);
-            knob.setAttribute("max", 64);
+            let min = algoMods[modIndex].min ? algoMods[modIndex].min : 0;
+            let max = algoMods[modIndex].max ? algoMods[modIndex].max : 64;
+            knob.setAttribute("min", min);
+            knob.setAttribute("max", max);
 
             let currentMod = this.sequence[this.selectedTrack].mod[modIndex];
 
-            knob.setAttribute("default", currentMod ? currentMod : 0);
+            knob.setAttribute("default", currentMod ? currentMod : min);
             knob.setAttribute("label", algoMods[modIndex].name);
 
             knob.setAttribute("integer-mode", algoMods[modIndex].integerMode);
