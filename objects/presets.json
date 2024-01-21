@@ -7,7 +7,43 @@
 
     "basic percussive synth": [
         {
-            "name": "kick"
+            "name": "kick",
+            "controls": {
+                "FrequencyEnvelope_0": {
+                    "attack": 0.01,
+                    "decay": 0.1,
+                    "sustain": 0.1,
+                    "baseFrequency": 20
+                },
+                "Oscillator_1": {
+                    "volume": 0,
+                    "frequency": 0,
+                    "type": "sine"
+                },
+                "Oscillator_2": {
+                    "volume": -79.99999999999999,
+                    "frequency": 440,
+                    "type": "sine"
+                },
+                "AmplitudeEnvelope_3": {
+                    "attack": 0.01,
+                    "decay": 0.22375000000000003
+                },
+                "AmplitudeEnvelope_4": {
+                    "attack": 0.01,
+                    "decay": 0.01
+                },
+                "Noise_5": {
+                    "volume": -79.99999999999999,
+                    "playbackRate": 1,
+                    "type": "white"
+                },
+                "Filter_6": {
+                    "frequency": 350,
+                    "Q": 1,
+                    "type": "lowpass"
+                }
+            }
         },
 
         {

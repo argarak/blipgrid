@@ -8,6 +8,8 @@ import State from "/scripts/state";
 import ControlUtil from "../scripts/controls";
 import SaveManager from "/scripts/save-manager";
 
+import defaultPatches from "/scripts/default-patches";
+
 class EditPatch extends LitElement {
     static properties = {
         name: { type: String, state: true },
@@ -15,6 +17,26 @@ class EditPatch extends LitElement {
 
     _onPatchClick() {
         this.presetDialog = document.createElement("ui-preset-dialog");
+
+        this.presetDialog.addEventListener("presetSelect", (e) => {
+            let found = false;
+            for (let patch of defaultPatches) {
+                if (e.detail.patch === patch.name) {
+                    this.patch.loadPatch(patch);
+                    found = true;
+                    break;
+                }
+            }
+            if (!found) {
+                // error dialog
+                console.error(`could not find patch ${e.detail.patch}!`);
+                return;
+            }
+            this.patch.loadControlState(e.detail.preset.controls);
+            this.controls = this.drawControls();
+            this.requestUpdate();
+        });
+
         document.body.appendChild(this.presetDialog);
     }
 

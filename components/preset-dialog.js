@@ -14,6 +14,14 @@ class PresetDialog extends LitElement {
         title: { type: String },
     };
 
+    _onPresetClick(e, patchName, preset) {
+        const presetSelectEvent = new CustomEvent("presetSelect", {
+            detail: { patch: patchName, preset: preset },
+        });
+        this.dispatchEvent(presetSelectEvent);
+        this.close();
+    }
+
     render() {
         return html` <ui-dialog ${ref(this.dialog)} title="${this.title}">
             <div id="dialogContent">
@@ -52,11 +60,16 @@ class PresetDialog extends LitElement {
             catLabel.innerText = cat;
             catElement.appendChild(catLabel);
 
-            for (let patch of presets.default[cat]) {
-                let patchButton = document.createElement("button");
-                patchButton.classList.add("presetBtn");
-                patchButton.innerText = patch.name;
-                catElement.appendChild(patchButton);
+            for (let preset of presets.default[cat]) {
+                let presetButton = document.createElement("button");
+                presetButton.classList.add("presetBtn");
+                presetButton.innerText = preset.name;
+
+                presetButton.addEventListener("click", (e) =>
+                    this._onPresetClick(e, cat, preset),
+                );
+
+                catElement.appendChild(presetButton);
             }
 
             patchCategories.push(catElement);
