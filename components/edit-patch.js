@@ -34,6 +34,7 @@ class EditPatch extends LitElement {
             }
             this.patch.loadControlState(e.detail.preset.controls);
             this.controls = this.drawControls();
+            this.name = e.detail.patch;
             this.requestUpdate();
         });
 
@@ -64,7 +65,7 @@ class EditPatch extends LitElement {
                         @click=${this._onDownloadClick}
                     >
                         <span class="material-icons"> download</span>
-                        download preset [debug]
+                        download preset
                     </button>
                 </div>
                 <div id="patchName">${this.name}</div>

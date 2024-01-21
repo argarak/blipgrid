@@ -1,7 +1,29 @@
 {
     "basic melodic synth": [
         {
-            "name": "square bass"
+            "name": "square bass",
+            "controls": {
+                "Oscillator_0": {
+                    "volume": 0,
+                    "frequency": 48.999429497718666,
+                    "type": "square"
+                },
+                "AmplitudeEnvelope_1": {
+                    "attack": 0.01,
+                    "decay": 0.27820000000000006
+                },
+                "Filter_2": {
+                    "frequency": 0,
+                    "Q": 1.9,
+                    "type": "lowpass"
+                },
+                "FrequencyEnvelope_3": {
+                    "attack": 0.01,
+                    "decay": 0.14455000000000004,
+                    "sustain": 0.115,
+                    "baseFrequency": 55
+                }
+            }
         }
     ],
 
@@ -47,7 +69,43 @@
         },
 
         {
-            "name": "snare"
+            "name": "snare 808",
+            "controls": {
+                "FrequencyEnvelope_0": {
+                    "attack": 0.01,
+                    "decay": 0.01,
+                    "sustain": 1,
+                    "baseFrequency": 22
+                },
+                "Oscillator_1": {
+                    "volume": -9.013387281530145,
+                    "frequency": 0,
+                    "type": "sine"
+                },
+                "Oscillator_2": {
+                    "volume": -8.154726319389695,
+                    "frequency": 180,
+                    "type": "sine"
+                },
+                "AmplitudeEnvelope_3": {
+                    "attack": 0.01,
+                    "decay": 0.14
+                },
+                "AmplitudeEnvelope_4": {
+                    "attack": 0.01,
+                    "decay": 0.10000000000000002
+                },
+                "Noise_5": {
+                    "volume": -5.999980895881677,
+                    "playbackRate": 0,
+                    "type": "white"
+                },
+                "Filter_6": {
+                    "frequency": 2800,
+                    "Q": 0.9,
+                    "type": "bandpass"
+                }
+            }
         }
     ]
 }
