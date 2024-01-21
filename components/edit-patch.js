@@ -6,6 +6,7 @@ import { LitElement, html, css, unsafeCSS } from "lit";
 
 import State from "/scripts/state";
 import ControlUtil from "../scripts/controls";
+import SaveManager from "/scripts/save-manager";
 
 class EditPatch extends LitElement {
     static properties = {
@@ -15,6 +16,10 @@ class EditPatch extends LitElement {
     _onPatchClick() {
         this.presetDialog = document.createElement("ui-preset-dialog");
         document.body.appendChild(this.presetDialog);
+    }
+
+    _onDownloadClick() {
+        SaveManager.downloadObject(this.patch.saveControlState(), "patch.json");
     }
 
     render() {
@@ -29,6 +34,15 @@ class EditPatch extends LitElement {
                             settings_input_component</span
                         >
                         select preset
+                    </button>
+
+                    <button
+                        id="patchUploadBtn"
+                        class="btn"
+                        @click=${this._onDownloadClick}
+                    >
+                        <span class="material-icons"> download</span>
+                        download preset [debug]
                     </button>
                 </div>
                 <div id="patchName">${this.name}</div>
