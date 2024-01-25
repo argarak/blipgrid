@@ -113,6 +113,12 @@ class Mixer {
             this.unmuteAll();
             this.sequencer.setSolo(this.soloChannel, false);
             this.soloChannel = null;
+
+            const soloEvent = new CustomEvent("solo", {
+                detail: { channel: channel, state: false },
+            });
+            document.dispatchEvent(soloEvent);
+
             return;
         }
         this.soloChannel = channel;
@@ -133,7 +139,7 @@ class Mixer {
         this.sequencer.requestUpdate();
 
         const soloEvent = new CustomEvent("solo", {
-            detail: { channel: channel },
+            detail: { channel: channel, state: true },
         });
         document.dispatchEvent(soloEvent);
     }
@@ -147,6 +153,14 @@ class Mixer {
             this.channels[channelIndex].mute = false;
             this.sequencer.setMute(channelIndex, false);
             this.sequencer.setSolo(channelIndex, false);
+
+            const muteEvent = new CustomEvent("mute", {
+                detail: {
+                    channel: channelIndex,
+                    muted: this.channels[channelIndex].muted,
+                },
+            });
+            document.dispatchEvent(muteEvent);
         }
         this.sequencer.requestUpdate();
     }

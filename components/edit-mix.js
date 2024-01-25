@@ -49,8 +49,10 @@ class EditMix extends LitElement {
 
         let index = 0;
         for (let button of this.soloButtons) {
-            if (index === channel) button.classList.add("solo");
-            else button.classList.remove("mute");
+            if (index === channel) {
+                if (e.detail.state) button.classList.add("solo");
+                else button.classList.remove("solo");
+            } else button.classList.remove("solo");
             index++;
         }
     }
@@ -68,6 +70,7 @@ class EditMix extends LitElement {
         let button = document.createElement("button");
         button.classList.add("muteBtn");
         button.textContent = "M";
+        button.title = "Mute Channel";
         button.addEventListener("click", (e) => {
             this.mixer.toggleMute(trackIndex);
         });
@@ -79,6 +82,7 @@ class EditMix extends LitElement {
         let button = document.createElement("button");
         button.classList.add("soloBtn");
         button.textContent = "S";
+        button.title = "Solo Channel";
         button.addEventListener("click", () =>
             this.mixer.toggleSolo(trackIndex),
         );

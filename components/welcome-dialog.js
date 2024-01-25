@@ -101,9 +101,6 @@ class WelcomeDialog extends LitElement {
                 ${fileContainer}
             </div>
             <div id="lowerActions">
-                <button>
-                    <span class="material-icons">help</span> view tutorial
-                </button>
                 <button @click=${this.close}>
                     <span class="material-icons">close</span> close
                 </button>
