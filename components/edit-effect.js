@@ -46,6 +46,11 @@ class EditEffect extends LitElement {
         this.controls = this.drawControls();
     }
 
+    redraw() {
+        this.controls = this.drawControls();
+        this.requestUpdate();
+    }
+
     drawControls() {
         if (!this.mixer) return;
         let controlElements = [];

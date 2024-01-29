@@ -34,6 +34,7 @@ class SaveManager {
         project["patch"] = sequencer.savePatchState();
         project["controls"] = sequencer.saveControlState();
         project["mixer"] = mixer.saveState();
+        project["effect"] = mixer.saveEffectState();
 
         return project;
     }
@@ -50,6 +51,7 @@ class SaveManager {
 
         const sequencer = State.get("sequencer");
         const arpeggiator = State.get("arpeggiator");
+        const editView = State.get("editView");
         const mixer = State.get("mixer");
 
         this.projectName = project.name;
@@ -91,7 +93,9 @@ class SaveManager {
         );
 
         mixer.loadState(project["mixer"]);
+        mixer.loadEffectState(project["effect"]);
         sequencer.switchTrack(0);
+        editView.redraw();
     }
 
     static uploadProject() {

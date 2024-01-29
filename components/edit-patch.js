@@ -99,6 +99,12 @@ class EditPatch extends LitElement {
         this.name = "";
     }
 
+    redraw() {
+        this.controls = this.drawControls();
+        this.effectControls = this.drawEffectControls();
+        this.requestUpdate();
+    }
+
     registerTrack(track) {
         if (!track.patch) return;
         this.track = track;

@@ -1,6 +1,9 @@
 import State from "/scripts/state.js";
 import * as Tone from "tone";
 
+import * as moduleControls from "/objects/module-controls.json";
+import ControlUtil from "./controls";
+
 class Mixer {
     constructor() {
         this.channels = [];
@@ -83,6 +86,50 @@ class Mixer {
         }
 
         return state;
+    }
+
+    /**
+     * unlike Patch.saveControlState saveEffectState uses the module name as
+     * the key, meaning that it does not support the use of duplicate modules.
+     * this is unlikely to be a problem as effects currently consist of
+     * single distinct modules.
+     */
+    saveEffectState() {
+        const state = {};
+
+        for (let module of this.modules) {
+            let moduleName = module.name;
+            state[moduleName] = {};
+
+            let controls =
+                moduleName in moduleControls ? moduleControls[moduleName] : [];
+
+            for (let control of controls) {
+                state[moduleName][control.property] =
+                    ControlUtil.getControlValue(module, control);
+            }
+        }
+
+        return state;
+    }
+
+    /**
+     * similar to Patch.loadEffectState using module.name as the state key
+     */
+    loadEffectState(state) {
+        for (let module of this.modules) {
+            let moduleName = module.name;
+            let controlValues = state[moduleName];
+
+            let controls =
+                moduleName in moduleControls ? moduleControls[moduleName] : [];
+
+            for (let control of controls) {
+                const properties = {};
+                properties[control.property] = controlValues[control.property];
+                module.set(properties);
+            }
+        }
     }
 
     loadState(state) {

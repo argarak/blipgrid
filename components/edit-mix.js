@@ -66,6 +66,11 @@ class EditMix extends LitElement {
         document.addEventListener("solo", (e) => this._onSolo(e));
     }
 
+    redraw() {
+        this.controls = this.drawControls();
+        this.requestUpdate();
+    }
+
     createMuteButton(trackIndex) {
         let button = document.createElement("button");
         button.classList.add("muteBtn");

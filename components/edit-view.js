@@ -70,6 +70,14 @@ class EditView extends LitElement {
         this.switchView(this.views[0]);
     }
 
+    redraw() {
+        for (let view of this.views) {
+            if (!view.viewElement) continue;
+            if (!view.viewElement.value) continue;
+            view.viewElement.value.redraw();
+        }
+    }
+
     registerTrack(track) {
         this.track = track;
         if (this.ready) {
