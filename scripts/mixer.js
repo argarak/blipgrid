@@ -65,20 +65,34 @@ class Mixer {
         let state = {};
         let trackIndex = 0;
         for (let channelSend of this.effectSends) {
-            state[trackIndex] = {};
+            state[trackIndex] = {
+                master: {},
+                effect: {},
+            };
             for (const [key, value] of Object.entries(channelSend)) {
-                state[trackIndex][key] = value.gain.value;
+                state[trackIndex].effect[key] = value.gain.value;
             }
             trackIndex++;
         }
+
+        trackIndex = 0;
+        for (let channel of this.channels) {
+            state[trackIndex].master.volume = channel.volume.value;
+            state[trackIndex].master.pan = channel.pan.value;
+            trackIndex++;
+        }
+
         return state;
     }
 
     loadState(state) {
-        for (let [trackIndex, effectGains] of Object.entries(state)) {
-            const entries = Object.entries(effectGains);
+        for (let [trackIndex, mixerType] of Object.entries(state)) {
+            const effects = Object.entries(mixerType.effect);
 
-            for (let [effectName, effectGain] of entries) {
+            this.channels[trackIndex].volume.value = mixerType.master.volume;
+            this.channels[trackIndex].pan.value = mixerType.master.pan;
+
+            for (let [effectName, effectGain] of effects) {
                 if (!effectGain) {
                     this.effectSends[trackIndex][effectName].gain.value =
                         -Infinity;

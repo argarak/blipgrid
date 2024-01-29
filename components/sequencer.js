@@ -342,7 +342,12 @@ class Sequencer extends LitElement {
         for (let trackIndex = 0; trackIndex < this.numTracks; trackIndex++) {
             let tab = document.createElement("div");
             tab.classList.add("trackTab");
-            tab.innerText = trackIndex + 1;
+
+            let numberLabel = document.createElement("div");
+            numberLabel.classList.add("numberLabel");
+            numberLabel.innerText = trackIndex + 1;
+
+            tab.appendChild(numberLabel);
 
             if (trackIndex === this.selectedTrack) tab.classList.add("active");
             if (this.sequence[trackIndex].mute) tab.classList.add("mute");

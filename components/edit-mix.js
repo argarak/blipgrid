@@ -71,7 +71,7 @@ class EditMix extends LitElement {
         button.classList.add("muteBtn");
         button.textContent = "M";
         button.title = "Mute Channel";
-        button.addEventListener("click", (e) => {
+        button.addEventListener("click", () => {
             this.mixer.toggleMute(trackIndex);
         });
         this.muteButtons.push(button);

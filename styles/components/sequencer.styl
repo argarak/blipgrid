@@ -7,8 +7,7 @@
 #trackTabs
   display flex
   flex-direction row
-  width 100%
-  margin-bottom 10px
+  width 450px
   justify-content space-around
 
   .trig
@@ -32,18 +31,25 @@
 
 .trackTab
   background var(--surface-background)
-  height 100%
-  padding 5px 25px
+  height 40px
+  padding 0px 5px
   width 100%
   display flex
   align-items center
   justify-content center
+  flex-direction column
   border-bottom 1px var(--surface-active) solid
+
+  box-sizing border-box
 
   transition all .1s ease-in-out
   cursor pointer
   user-select none
 
+  .trackLabel
+    font-size 11px
+
+  
 #stepsContainer
   display flex
   flex-direction row
