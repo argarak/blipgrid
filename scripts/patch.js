@@ -10,6 +10,8 @@ const modulesTable = {
     AmplitudeEnvelope: Tone.AmplitudeEnvelope,
     Noise: Tone.Noise,
     Filter: Tone.Filter,
+    Gain: Tone.Gain,
+    Multiply: Tone.Multiply,
 };
 
 class Patch {

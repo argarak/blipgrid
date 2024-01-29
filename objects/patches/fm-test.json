@@ -1,57 +1,50 @@
 {
-    "name": "basic melodic synth",
+    "name": "simple fm",
     "modules": [
         {
             "id": 0,
             "type": "Oscillator",
             "start": true,
-            "toDestination": false
+            "toDestination": false,
+            "independent": false
         },
+
         {
             "id": 1,
             "type": "AmplitudeEnvelope",
             "start": false,
             "toDestination": true
         },
+
         {
             "id": 2,
-            "type": "Filter",
-            "start": false,
-            "toDestination": false
-        },
-        {
-            "id": 3,
-            "type": "FrequencyEnvelope",
-            "start": false,
-            "toDestination": false
+            "type": "Oscillator",
+            "start": true,
+            "toDestination": false,
+            "independent": false
         },
 
         {
-            "id": 4,
-            "type": "Oscillator",
-            "start": true,
+            "id": 3,
+            "type": "Gain",
+            "start": false,
             "toDestination": false
         }
     ],
     "connects": [
         {
-            "input": { "id": 0, "property": null },
-            "output": { "id": 2, "property": null }
-        },
-
-        {
             "input": { "id": 2, "property": null },
-            "output": { "id": 1, "property": null }
+            "output": { "id": 3, "property": null }
         },
 
         {
             "input": { "id": 3, "property": null },
-            "output": { "id": 2, "property": "frequency" }
+            "output": { "id": 0, "property": "frequency" }
         },
 
         {
-            "input": { "id": 4, "property": null },
-            "output": { "id": 0, "property": "frequency" }
+            "input": { "id": 0, "property": null },
+            "output": { "id": 1, "property": null }
         }
     ],
     "defaults": [{ "id": 1, "property": "sustain", "value": 0 }]

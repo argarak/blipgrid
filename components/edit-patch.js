@@ -32,7 +32,10 @@ class EditPatch extends LitElement {
                 console.error(`could not find patch ${e.detail.patch}!`);
                 return;
             }
-            this.patch.loadControlState(e.detail.preset.controls);
+
+            if (e.detail.preset) {
+                this.patch.loadControlState(e.detail.preset.controls);
+            }
             this.controls = this.drawControls();
             this.name = e.detail.patch;
             this.requestUpdate();

@@ -60,6 +60,16 @@ class PresetDialog extends LitElement {
             catLabel.innerText = cat;
             catElement.appendChild(catLabel);
 
+            let presetButton = document.createElement("button");
+            presetButton.classList.add("presetBtn");
+            presetButton.innerText = "default";
+
+            presetButton.addEventListener("click", (e) =>
+                this._onPresetClick(e, cat, null),
+            );
+
+            catElement.appendChild(presetButton);
+
             for (let preset of presets.default[cat]) {
                 let presetButton = document.createElement("button");
                 presetButton.classList.add("presetBtn");
