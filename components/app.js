@@ -48,6 +48,11 @@ class App extends LitElement {
         this.displayWelcome();
     }
 
+    _onNewClick(e) {
+        e.target.blur();
+        SaveManager.newProject();
+    }
+
     _onDownloadClick(e) {
         e.target.blur();
         SaveManager.downloadProject();
@@ -72,18 +77,19 @@ class App extends LitElement {
     }
 
     render() {
+        // <button>
+        //     <span class="material-icons">save</span> Save to
+        //     Browser
+        // </button>
+        // <button>
+        //     <span class="material-icons">file_open</span>
+        //     Load from Browser
+        // </button>
+
         const dropmenu = html`
             <div class="dropmenu" aria-label="submenu">
-                <button>
+                <button @click=${this._onNewClick}>
                     <span class="material-icons">add</span> New
-                </button>
-                <button>
-                    <span class="material-icons">save</span> Save to
-                    Browser
-                </button>
-                <button>
-                    <span class="material-icons">file_open</span>
-                    Load from Browser
                 </button>
                 <button @click=${this._onDownloadClick}>
                     <span class="material-icons">download</span>
@@ -178,7 +184,7 @@ class App extends LitElement {
 
         const mixer = State.mixer();
 
-        //this.displayWelcome();
+        this.displayWelcome();
         KeyHandler.start();
 
         localforage.getItem("theme").then((value) => {

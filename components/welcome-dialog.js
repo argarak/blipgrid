@@ -22,6 +22,7 @@ class WelcomeDialog extends LitElement {
     _onUploadClick(e) {
         e.target.blur();
         SaveManager.uploadProject();
+        this.close();
     }
 
     render() {
@@ -84,7 +85,7 @@ class WelcomeDialog extends LitElement {
                 </select>
             </div>
             <div id="projectActions">
-                <button>
+                <button @click=${this._onNewClick}>
                     <span class="material-icons">add</span> create new project
                 </button>
                 <button @click=${this._onUploadClick}>
@@ -123,6 +124,12 @@ class WelcomeDialog extends LitElement {
             ${unsafeCSS(dialogStyle.default)}
         `,
     ];
+
+    _onNewClick(e) {
+        e.target.blur();
+        SaveManager.newProject();
+        this.close();
+    }
 
     _onThemeSelect(e) {
         let theme = e.target.value;

@@ -1,5 +1,7 @@
 import * as Tone from "tone";
 
+import emptyState from "/objects/empty-state.json";
+
 import State from "/scripts/state";
 import localforage from "localforage";
 
@@ -12,6 +14,14 @@ class SaveManager {
     static saveVersion = 0;
 
     static projectFileType = ".blip";
+
+    static newProject() {
+        this.loadProject(emptyState);
+        const projectSettingsDialog = document.createElement(
+            "ui-project-settings-dialog",
+        );
+        document.body.appendChild(projectSettingsDialog);
+    }
 
     static saveProject() {
         const project = {};
