@@ -41,7 +41,7 @@ class TriggerGrid extends LitElement {
 
     constructor() {
         super();
-        this.length = 64;
+        this.length = 32;
         this.step = this.length;
 
         this.noteboxes = this.populateGrid();

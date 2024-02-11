@@ -139,7 +139,7 @@ class Sequencer extends LitElement {
         // holds currently programmed sequencer
         this.sequence = {};
 
-        let defaultLength = 64;
+        let defaultLength = 32;
 
         for (let trackIndex = 0; trackIndex < this.numTracks; trackIndex++) {
             this.sequence[trackIndex] = {
@@ -191,7 +191,7 @@ class Sequencer extends LitElement {
         // holds currently programmed sequencer
         this.sequence = {};
 
-        let defaultLength = 64;
+        let defaultLength = 32;
 
         for (let trackIndex = 0; trackIndex < this.numTracks; trackIndex++) {
             let trackAlgorithm = null;
@@ -207,6 +207,7 @@ class Sequencer extends LitElement {
                 // TODO error here
             }
 
+            // FIXME: this makes everything slow
             const trackPatch = new Patch(patches[trackIndex], trackIndex);
             trackPatch.loadControlState(controls[trackIndex]);
 

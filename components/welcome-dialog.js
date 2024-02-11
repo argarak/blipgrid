@@ -11,6 +11,18 @@ import localforage from "localforage";
 
 import SaveManager from "/scripts/save-manager";
 
+const rawExamples = import.meta.glob("/examples/*.blip", {
+    query: "?raw",
+    import: "default",
+    eager: true,
+});
+
+const examples = [];
+
+for (let example of Object.keys(rawExamples)) {
+    examples.push(JSON.parse(rawExamples[example]));
+}
+
 class WelcomeDialog extends LitElement {
     dialog = createRef();
 
@@ -22,6 +34,12 @@ class WelcomeDialog extends LitElement {
     _onUploadClick(e) {
         e.target.blur();
         SaveManager.uploadProject();
+        this.close();
+    }
+
+    _onFileClick(e, example) {
+        e.target.blur();
+        SaveManager.loadProject(example);
         this.close();
     }
 
@@ -54,23 +72,38 @@ class WelcomeDialog extends LitElement {
             </div>
         `;
 
-        const fileContainer = html`
-            <div id="fileContainer">
-                <div class="file">
-                    <div class="fileActions">
-                        <button class="btn">
-                            <span class="material-icons">delete</span>
-                        </button>
-                        <button class="btn">
-                            <span class="material-icons">download</span>
-                        </button>
-                    </div>
-                    <div class="fileName">FM Test</div>
-                    <div class="fileAuthor">by argarak</div>
-                    <div class="fileDateTime">2023/12/08 17:15</div>
-                </div>
-            </div>
-        `;
+        const fileElements = [];
+
+        for (let example of examples) {
+            let date = new Date(example.date);
+
+            // <div class="fileActions">
+            //   <button class="btn">
+            //     <span class="material-icons">delete</span>
+            //   </button>
+            //   <button class="btn">
+            //     <span class="material-icons">download</span>
+            //   </button>
+            // </div>
+
+            const fileElement = html`
+                <button
+                    class="file"
+                    @click=${(e) => this._onFileClick(e, example)}
+                >
+                    <div class="fileName">${example.name}</div>
+                    <div class="fileAuthor">by ${example.author}</div>
+                    <div class="fileDateTime">${date.toUTCString()}</div>
+                </button>
+            `;
+            fileElements.push(fileElement);
+        }
+
+        const fileContainer = html` <div id="fileContainer">
+            ${fileElements}
+        </div>`;
+
+        // <div class="tab active">saved projects</div>
 
         const mainpanel = html`
             <div id="themeSelectContainer">
@@ -95,8 +128,7 @@ class WelcomeDialog extends LitElement {
             </div>
             <div id="filePickerContainer">
                 <div id="viewTabs">
-                    <div class="tab active">saved projects</div>
-                    <div class="tab">open example</div>
+                    <div class="tab active">open example</div>
                 </div>
 
                 ${fileContainer}
