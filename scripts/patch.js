@@ -94,6 +94,12 @@ class Patch {
         }
     }
 
+    dispose() {
+        for (let module of this.modules) {
+            module.dispose();
+        }
+    }
+
     getControlValue(module, control) {
         if (typeof module[control.property] === "object") {
             return module[control.property].value;

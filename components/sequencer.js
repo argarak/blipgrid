@@ -188,6 +188,12 @@ class Sequencer extends LitElement {
     loadState(patches, controls, state) {
         this.selectedTrack = 0;
 
+        // clean up patch modules before loading more
+        // i think this have fixed the slowdown when loading new projects
+        for (let trackIndex = 0; trackIndex < this.numTracks; trackIndex++) {
+            this.sequence[trackIndex].patch.dispose();
+        }
+
         // holds currently programmed sequencer
         this.sequence = {};
 
@@ -207,7 +213,6 @@ class Sequencer extends LitElement {
                 // TODO error here
             }
 
-            // FIXME: this makes everything slow
             const trackPatch = new Patch(patches[trackIndex], trackIndex);
             trackPatch.loadControlState(controls[trackIndex]);
 
