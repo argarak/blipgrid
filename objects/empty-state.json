@@ -1,7 +1,7 @@
 {
   "name": "new project",
   "author": "",
-  "date": 1706541354925,
+  "date": 1708542070928,
   "version": 0,
   "bpm": 120,
   "swing": 0,
@@ -24,42 +24,42 @@
   "sequencer": {
     "0": {
       "mod": [],
-      "length": 64,
+      "length": 32,
       "algorithm": "euclidean"
     },
     "1": {
       "mod": [],
-      "length": 64,
+      "length": 32,
       "algorithm": "euclidean"
     },
     "2": {
       "mod": [],
-      "length": 64,
+      "length": 32,
       "algorithm": "euclidean"
     },
     "3": {
       "mod": [],
-      "length": 64,
+      "length": 32,
       "algorithm": "euclidean"
     },
     "4": {
       "mod": [],
-      "length": 64,
+      "length": 32,
       "algorithm": "euclidean"
     },
     "5": {
       "mod": [],
-      "length": 64,
+      "length": 32,
       "algorithm": "euclidean"
     },
     "6": {
       "mod": [],
-      "length": 64,
+      "length": 32,
       "algorithm": "euclidean"
     },
     "7": {
       "mod": [],
-      "length": 64,
+      "length": 32,
       "algorithm": "euclidean"
     }
   },
@@ -885,7 +885,6 @@
       },
       "Noise_5": {
         "volume": 0,
-        "playbackRate": 1,
         "type": "white"
       },
       "Filter_6": {
@@ -943,7 +942,6 @@
       },
       "Noise_5": {
         "volume": 0,
-        "playbackRate": 1,
         "type": "white"
       },
       "Filter_6": {
@@ -1001,7 +999,6 @@
       },
       "Noise_5": {
         "volume": 0,
-        "playbackRate": 1,
         "type": "white"
       },
       "Filter_6": {
@@ -1059,7 +1056,6 @@
       },
       "Noise_5": {
         "volume": 0,
-        "playbackRate": 1,
         "type": "white"
       },
       "Filter_6": {
