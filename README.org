@@ -1,0 +1,8 @@
+[[./public/android-chrome-192x192.png]]
+
+* blipgrid
+blipgrid is a unique web-app music sequencer and composition tool
+
+user guide/documentation coming soon!
+
+changes are automatically built and published to [[https://blipgrid.app/]]
