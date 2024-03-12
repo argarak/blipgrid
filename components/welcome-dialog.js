@@ -44,6 +44,15 @@ class WelcomeDialog extends LitElement {
     }
 
     render() {
+        // <button>
+        //     <span class="material-icons">info</span> user guide
+        // </button>
+        // <a href="https://argarak.me" target="_blank">
+        // <button>
+        //     <span class="material-icons">open_in_new</span> visit
+        //     argarak.me
+        // </button>
+        // </a>
         const leftpanel = html`
             <div id="blipicon">${this.blipboxes}</div>
             <h1>blip— grid</h1>
@@ -54,19 +63,10 @@ class WelcomeDialog extends LitElement {
             </div>
 
             <div id="leftbuttons">
-                <button>
-                    <span class="material-icons">info</span> user guide
-                </button>
                 <a href="${packageMeta.repository}" target="_blank">
                     <button>
                         <span class="material-icons">open_in_new</span> code
                         repository
-                    </button>
-                </a>
-                <a href="https://argarak.me" target="_blank">
-                    <button>
-                        <span class="material-icons">open_in_new</span> visit
-                        argarak.me
                     </button>
                 </a>
             </div>
@@ -86,13 +86,13 @@ class WelcomeDialog extends LitElement {
             //   </button>
             // </div>
 
+            // <div class="fileAuthor">by ${example.author}</div>
             const fileElement = html`
                 <button
                     class="file"
                     @click=${(e) => this._onFileClick(e, example)}
                 >
                     <div class="fileName">${example.name}</div>
-                    <div class="fileAuthor">by ${example.author}</div>
                     <div class="fileDateTime">${date.toUTCString()}</div>
                 </button>
             `;

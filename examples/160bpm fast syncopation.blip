@@ -1,7 +1,7 @@
 {
   "name": "160bpm fast syncopation",
-  "author": "argarak",
-  "date": 1707687502803,
+  "author": "",
+  "date": 1709729881240,
   "version": 0,
   "bpm": 160,
   "swing": 0,
@@ -962,7 +962,6 @@
       },
       "Noise_5": {
         "volume": -79.99999999999997,
-        "playbackRate": 1,
         "type": "white"
       },
       "Filter_6": {
@@ -998,7 +997,6 @@
       },
       "Noise_5": {
         "volume": -5.999980895881677,
-        "playbackRate": 0,
         "type": "white"
       },
       "Filter_6": {
@@ -1034,7 +1032,6 @@
       },
       "Noise_5": {
         "volume": -5.999980895881677,
-        "playbackRate": 0,
         "type": "white"
       },
       "Filter_6": {
@@ -1046,7 +1043,7 @@
     "3": {
       "Oscillator_0": {
         "volume": 0,
-        "frequency": 55,
+        "frequency": 46.2493028389543,
         "type": "square"
       },
       "AmplitudeEnvelope_1": {
@@ -1073,12 +1070,12 @@
         "baseFrequency": 22
       },
       "Oscillator_1": {
-        "volume": -79.99999999999999,
+        "volume": -79.99999999999997,
         "frequency": 0,
         "type": "sine"
       },
       "Oscillator_2": {
-        "volume": -79.99999999999999,
+        "volume": -79.99999999999997,
         "frequency": 180,
         "type": "sine"
       },
@@ -1092,7 +1089,6 @@
       },
       "Noise_5": {
         "volume": -5.999980895881677,
-        "playbackRate": 0,
         "type": "white"
       },
       "Filter_6": {
@@ -1104,7 +1100,7 @@
     "5": {
       "Oscillator_0": {
         "volume": 0,
-        "frequency": 369.9944227116344,
+        "frequency": 293.6647679174076,
         "type": "sine"
       },
       "AmplitudeEnvelope_1": {
@@ -1113,7 +1109,7 @@
       },
       "Oscillator_2": {
         "volume": 0,
-        "frequency": 369.9944227116344,
+        "frequency": 293.6647679174076,
         "type": "sine"
       },
       "Gain_3": {
@@ -1123,7 +1119,7 @@
     "6": {
       "Oscillator_0": {
         "volume": 0,
-        "frequency": 493.8833012561242,
+        "frequency": 587.3295358348151,
         "type": "triangle"
       },
       "AmplitudeEnvelope_1": {
@@ -1169,7 +1165,6 @@
       },
       "Noise_5": {
         "volume": 0,
-        "playbackRate": 1,
         "type": "white"
       },
       "Filter_6": {
@@ -1182,7 +1177,7 @@
   "mixer": {
     "0": {
       "master": {
-        "volume": 0,
+        "volume": -3.2892246720947744,
         "pan": 0
       },
       "effect": {
@@ -1194,7 +1189,7 @@
     },
     "1": {
       "master": {
-        "volume": 0,
+        "volume": -1.704242688311438,
         "pan": 0
       },
       "effect": {
@@ -1206,7 +1201,7 @@
     },
     "2": {
       "master": {
-        "volume": -1.3764516236952884,
+        "volume": -2.6485763488138185,
         "pan": 0
       },
       "effect": {
@@ -1218,11 +1213,11 @@
     },
     "3": {
       "master": {
-        "volume": -0.626667109343913,
+        "volume": -6.324815634038286,
         "pan": 0
       },
       "effect": {
-        "chorus": -6.2506121259349765,
+        "chorus": -6.250612125934976,
         "chebyshev": null,
         "reverb": null,
         "delay": null
@@ -1242,7 +1237,7 @@
     },
     "5": {
       "master": {
-        "volume": 0,
+        "volume": -7.182839153871299,
         "pan": 0
       },
       "effect": {
@@ -1254,19 +1249,19 @@
     },
     "6": {
       "master": {
-        "volume": -0.945476837556512,
+        "volume": -6.429551532376749,
         "pan": 0
       },
       "effect": {
         "chorus": -3.6415196065803452,
         "chebyshev": null,
-        "reverb": -15.138557176360079,
+        "reverb": -3.039187582913598,
         "delay": -3.2892246720947744
       }
     },
     "7": {
       "master": {
-        "volume": null,
+        "volume": 0,
         "pan": 0
       },
       "effect": {

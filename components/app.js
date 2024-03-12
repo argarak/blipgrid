@@ -38,6 +38,13 @@ class App extends LitElement {
         else btnPlay.classList.remove("active");
     }
 
+    _onStopClick() {
+        const seq = State.sequencer();
+        Tone.Transport.stop();
+        seq.step = -1;
+        seq.requestUpdate();
+    }
+
     displayWelcome() {
         this.welcomeDialog = document.createElement("ui-welcome-dialog");
         document.body.appendChild(this.welcomeDialog);
@@ -147,7 +154,11 @@ class App extends LitElement {
                         <button class="btn" id="btnLoop">
                             <span class="material-icons">repeat</span>
                         </button>
-                        <button class="btn" id="btnStop">
+                        <button
+                            class="btn"
+                            id="btnStop"
+                            @click=${this._onStopClick}
+                        >
                             <span class="material-icons">stop</span>
                         </button>
                     </div>

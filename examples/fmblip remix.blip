@@ -1,7 +1,7 @@
 {
-  "name": "fm plinky thing",
+  "name": "fmblip remix",
   "author": "",
-  "date": 1707686458182,
+  "date": 1710250538759,
   "version": 0,
   "bpm": 120,
   "swing": 0,
@@ -10,29 +10,30 @@
     "note": 29
   },
   "scale": {
-    "name": "aeolian",
+    "name": "dorian",
     "semitones": [
       0,
       2,
       3,
       5,
       7,
-      8,
+      9,
       10
     ]
   },
   "sequencer": {
     "0": {
       "mod": [
-        10,
-        3
+        0,
+        34,
+        16
       ],
       "length": 32,
-      "algorithm": "euclidean"
+      "algorithm": "sine threshold"
     },
     "1": {
       "mod": [
-        10,
+        12,
         5
       ],
       "length": 32,
@@ -63,8 +64,11 @@
       "algorithm": "euclidean"
     },
     "5": {
-      "mod": [],
-      "length": 32,
+      "mod": [
+        2,
+        2
+      ],
+      "length": 7,
       "algorithm": "euclidean"
     },
     "6": {
@@ -82,12 +86,12 @@
     "0": {
       "mod": [
         18,
-        11,
-        0
+        34,
+        2
       ],
       "algorithm": "modulo motion",
-      "rangeStart": 21,
-      "rangeEnd": 108
+      "rangeStart": 23,
+      "rangeEnd": 35
     },
     "1": {
       "mod": [
@@ -118,9 +122,13 @@
       "rangeEnd": 108
     },
     "5": {
-      "mod": [],
+      "mod": [
+        17,
+        7,
+        0
+      ],
       "algorithm": "modulo motion",
-      "rangeStart": 21,
+      "rangeStart": 25,
       "rangeEnd": 108
     },
     "6": {
@@ -624,74 +632,36 @@
       ]
     },
     "5": {
-      "name": "basic percussive synth",
+      "name": "simple fm",
       "modules": [
         {
           "id": 0,
-          "type": "FrequencyEnvelope",
-          "start": false,
-          "toDestination": false
-        },
-        {
-          "id": 1,
           "type": "Oscillator",
           "start": true,
           "toDestination": false,
-          "independent": true
+          "independent": false
+        },
+        {
+          "id": 1,
+          "type": "AmplitudeEnvelope",
+          "start": false,
+          "toDestination": true
         },
         {
           "id": 2,
           "type": "Oscillator",
           "start": true,
           "toDestination": false,
-          "independent": true
+          "independent": false
         },
         {
           "id": 3,
-          "type": "AmplitudeEnvelope",
-          "start": false,
-          "toDestination": true
-        },
-        {
-          "id": 4,
-          "type": "AmplitudeEnvelope",
+          "type": "Gain",
           "start": false,
           "toDestination": false
-        },
-        {
-          "id": 5,
-          "type": "Noise",
-          "start": true,
-          "toDestination": false
-        },
-        {
-          "id": 6,
-          "type": "Filter",
-          "start": false,
-          "toDestination": true
         }
       ],
       "connects": [
-        {
-          "input": {
-            "id": 0,
-            "property": null
-          },
-          "output": {
-            "id": 1,
-            "property": "frequency"
-          }
-        },
-        {
-          "input": {
-            "id": 1,
-            "property": null
-          },
-          "output": {
-            "id": 3,
-            "property": null
-          }
-        },
         {
           "input": {
             "id": 2,
@@ -704,40 +674,30 @@
         },
         {
           "input": {
-            "id": 5,
+            "id": 3,
             "property": null
           },
           "output": {
-            "id": 4,
-            "property": null
+            "id": 0,
+            "property": "frequency"
           }
         },
         {
           "input": {
-            "id": 4,
+            "id": 0,
             "property": null
           },
           "output": {
-            "id": 6,
+            "id": 1,
             "property": null
           }
         }
       ],
       "defaults": [
         {
-          "id": 3,
+          "id": 1,
           "property": "sustain",
           "value": 0
-        },
-        {
-          "id": 4,
-          "property": "sustain",
-          "value": 0
-        },
-        {
-          "id": 0,
-          "property": "baseFrequency",
-          "value": 10
         }
       ]
     },
@@ -926,26 +886,26 @@
     "0": {
       "Oscillator_0": {
         "volume": 0,
-        "frequency": 415.3046975799451,
-        "type": "sine"
+        "frequency": 293.6647679174076,
+        "type": "triangle"
       },
       "AmplitudeEnvelope_1": {
         "attack": 0.01,
-        "decay": 0.26335000000000003
+        "decay": 1
       },
       "Oscillator_2": {
         "volume": 0,
-        "frequency": 415.3046975799451,
-        "type": "sine"
+        "frequency": 293.6647679174076,
+        "type": "triangle"
       },
       "Gain_3": {
-        "gain": 720
+        "gain": 510
       }
     },
     "1": {
       "Oscillator_0": {
         "volume": 0,
-        "frequency": 51.91308719749314,
+        "frequency": 87.30705785825097,
         "type": "square"
       },
       "AmplitudeEnvelope_1": {
@@ -959,9 +919,9 @@
       },
       "FrequencyEnvelope_3": {
         "attack": 0.01,
-        "decay": 0.14455000000000004,
-        "sustain": 0.115,
-        "baseFrequency": 55
+        "decay": 0.13465000000000005,
+        "sustain": 0.1,
+        "baseFrequency": 45
       }
     },
     "2": {
@@ -991,7 +951,6 @@
       },
       "Noise_5": {
         "volume": -79.99999999999997,
-        "playbackRate": 1,
         "type": "white"
       },
       "Filter_6": {
@@ -1023,11 +982,10 @@
       },
       "AmplitudeEnvelope_4": {
         "attack": 0.01,
-        "decay": 0.30295000000000005
+        "decay": 0.6544
       },
       "Noise_5": {
         "volume": -5.999980895881677,
-        "playbackRate": 0,
         "type": "white"
       },
       "Filter_6": {
@@ -1044,12 +1002,12 @@
         "baseFrequency": 22
       },
       "Oscillator_1": {
-        "volume": -79.99999999999999,
+        "volume": -79.99999999999997,
         "frequency": 0,
         "type": "sine"
       },
       "Oscillator_2": {
-        "volume": -79.99999999999999,
+        "volume": -79.99999999999997,
         "frequency": 180,
         "type": "sine"
       },
@@ -1059,53 +1017,35 @@
       },
       "AmplitudeEnvelope_4": {
         "attack": 0.01,
-        "decay": 0.030700000000000026
+        "decay": 0.020800000000000027
       },
       "Noise_5": {
         "volume": -5.999980895881677,
-        "playbackRate": 0,
         "type": "white"
       },
       "Filter_6": {
-        "frequency": 2950,
-        "Q": 3.3,
+        "frequency": 4900,
+        "Q": 2.1,
         "type": "bandpass"
       }
     },
     "5": {
-      "FrequencyEnvelope_0": {
-        "attack": 0.01,
-        "decay": 0.1,
-        "sustain": 0.5,
-        "baseFrequency": 10
-      },
-      "Oscillator_1": {
+      "Oscillator_0": {
         "volume": 0,
-        "frequency": 0,
+        "frequency": 698.4564628660078,
         "type": "sine"
+      },
+      "AmplitudeEnvelope_1": {
+        "attack": 0.01,
+        "decay": 0.27820000000000006
       },
       "Oscillator_2": {
         "volume": 0,
-        "frequency": 440,
+        "frequency": 698.4564628660078,
         "type": "sine"
       },
-      "AmplitudeEnvelope_3": {
-        "attack": 0.01,
-        "decay": 0.1
-      },
-      "AmplitudeEnvelope_4": {
-        "attack": 0.01,
-        "decay": 0.1
-      },
-      "Noise_5": {
-        "volume": 0,
-        "playbackRate": 1,
-        "type": "white"
-      },
-      "Filter_6": {
-        "frequency": 350,
-        "Q": 1,
-        "type": "lowpass"
+      "Gain_3": {
+        "gain": 451
       }
     },
     "6": {
@@ -1157,7 +1097,6 @@
       },
       "Noise_5": {
         "volume": 0,
-        "playbackRate": 1,
         "type": "white"
       },
       "Filter_6": {
@@ -1170,19 +1109,19 @@
   "mixer": {
     "0": {
       "master": {
-        "volume": -1.8143969311208676,
+        "volume": -6.850760087171077,
         "pan": 0
       },
       "effect": {
-        "chorus": -79.99999999999999,
-        "chebyshev": null,
+        "chorus": 0.000020653100890443027,
+        "chebyshev": -79.99999999999997,
         "reverb": 0.000020653100890443027,
-        "delay": -2.518448560521919
+        "delay": -12.459399382535878
       }
     },
     "1": {
       "master": {
-        "volume": -1.9250035547229918,
+        "volume": -5.356128818049881,
         "pan": 0
       },
       "effect": {
@@ -1194,7 +1133,7 @@
     },
     "2": {
       "master": {
-        "volume": 0,
+        "volume": -2.372042037445155,
         "pan": 0
       },
       "effect": {
@@ -1206,7 +1145,7 @@
     },
     "3": {
       "master": {
-        "volume": 0,
+        "volume": -0.945476837556512,
         "pan": 0
       },
       "effect": {
@@ -1230,14 +1169,14 @@
     },
     "5": {
       "master": {
-        "volume": 0,
+        "volume": -8.86634046906991,
         "pan": 0
       },
       "effect": {
         "chorus": null,
         "chebyshev": null,
-        "reverb": null,
-        "delay": null
+        "reverb": -11.631004364172197,
+        "delay": -6.645940591502635
       }
     },
     "6": {
@@ -1273,11 +1212,11 @@
       "spread": 180
     },
     "Chebyshev": {
-      "order": 26
+      "order": 14
     },
     "Reverb": {
-      "decay": 15.258999999999999,
-      "preDelay": 0.01
+      "decay": 27.069499999999998,
+      "preDelay": 0.35
     },
     "FeedbackDelay": {
       "delayTime": 0.375,
