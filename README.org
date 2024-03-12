@@ -1,4 +1,4 @@
-[[./public/android-chrome-192x192.png]]
+[[./public/apple-touch-icon.png]]
 
 * blipgrid
 blipgrid is a unique web-app music sequencer and composition tool
