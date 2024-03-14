@@ -57,17 +57,27 @@ export default [
             );
         },
     },
-
-    {
-        name: "worble",
-        mods: [
-            {
-                name: "x",
-                integerMode: false,
-            },
-        ],
-        fn: (t, seqlen, mod) => {
-            return Math.sin(t ** mod[0] * 2) > mod[0] / seqlen;
-        },
-    },
 ];
+
+// {
+//     name: "worble",
+//     mods: [
+//         {
+//             name: "x",
+//             integerMode: true,
+//         },
+
+//         {
+//             name: "y",
+//             integerMode: true,
+//         },
+
+//         {
+//             name: "z",
+//             integerMode: true,
+//         },
+//     ],
+//     fn: (t, seqlen, mod) => {
+//         return Math.pow(t % mod[1], mod[2]) > mod[0] * 4;
+//     },
+// },

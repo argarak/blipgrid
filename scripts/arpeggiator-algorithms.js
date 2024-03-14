@@ -47,14 +47,15 @@ export default [
                 min: 1,
             },
             {
-                name: "octave",
+                name: "phase",
                 integerMode: true,
-                min: 1,
+                min: -64,
             },
         ],
         fn: (t, scale, mod) => {
             return (
-                Math.abs(Math.round(Math.sin(t * mod[0]) * 64)) % scale.length
+                Math.abs(Math.round(Math.sin(t * mod[0] + mod[1]) * 64)) %
+                scale.length
             );
         },
     },
