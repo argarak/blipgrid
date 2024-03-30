@@ -6,3 +6,11 @@ blipgrid is a unique web-app music sequencer and composition tool
 user guide/documentation coming soon!
 
 changes are automatically built and published to [[https://blipgrid.app/]]
+
+* running locally
+
+1. clone or download the source, navigate to source directory.
+2. ensure you have =yarn= installed on your system.
+3. run =yarn install= to download dependencies.
+4. run =yarn dev= to run the development server.
+5. otherwise, run =yarn build= to build the project. the output files will be generated in the =dist= directory. building the project means you can host the files on a normal web server.
